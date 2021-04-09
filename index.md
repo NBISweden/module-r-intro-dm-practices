@@ -9,9 +9,17 @@ FIXME: home page introduction
 
 {% comment %} This is a comment in Liquid {% endcomment %}
 
-> ## Prerequisites
+> ## Getting Started
 >
-> FIXME
+> To get started, follow the directions on the **[Setup page](setup.html)** 
+> to download data and install required software. To most effectively use these
+> materials, please make sure to install everything *before* working through
+> the content.
 {: .prereq}
+
+<!--- ## For Instructors
+> If you are teaching this lesson in a workshop, please see the
+> [Instructor notes](guide/).
+{: .prereq}--->
 
 {% include links.md %}
