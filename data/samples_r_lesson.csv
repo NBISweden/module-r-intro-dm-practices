@@ -1,0 +1,101 @@
+animal_id,month,day,year,mouse_line,strain,developmental_stage,sex,organism_part,genotype,experiment_type,researcher
+800793,1,6,2018,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+804396,1,7,2019,Vegfr,C57BL/6,adult,M,lung,wild type,sequencing assay,Sam
+805431,1,12,2018,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Sam
+805992,1,13,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+808935,1,14,2020,Alk3,BALB/cJ,adult,M,NA,wild type,behaviour,Kim
+810875,1,16,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+812308,1,19,2018,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+814334,1,19,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+816649,1,20,2018,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Sam
+819947,1,24,2019,Vegfr,C57BL/6,adult,M,lung,wild type,sequencing assay,Alex
+820421,1,31,2019,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Sam
+821756,2,30,2018,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+877817,4,13,2019,Vegfr,C57BL/6,adult,M,lung,wild type,sequencing assay,Alex
+821844,2,7,2018,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Sam
+826176,2,14,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+832626,2,16,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+834217,2,18,2020,Alk3,BALB/cJ,adult,M,lung,mutant,sequencing assay,Kim
+835936,2,18,2020,Vegfr,C57BL/6,adult,F,lung,wild type,sequencing assay,Sam
+836507,2,23,2020,Vegfr,C57BL/6,adult,M,lung,mutant,sequencing assay,Sam
+837913,2,27,2020,Vegfr,C57BL/6,adult,M,lung,wild type,sequencing assay,Sam
+842068,2,27,2020,Vegfr,C57BL/6,pup,F,lung,mutant,IHC,Sam
+843132,3,0,2018,Vegfr,C57BL/6,pup,F,lung,mutant,IHC,Sam
+844834,3,7,2018,Alk3,BALB/cJ,pup,F,lung,wild type,IHC,Kim
+845290,3,7,2019,Alk3,BALB/cJ,adult,M,lung,mutant,sequencing assay,Kim
+855000,3,9,2019,Alk3,BALB/cJ,adult,F,lung,wild type,sequencing assay,Kim
+856721,3,9,2020,Alk3,BALB/cJ,adult,M,lung,mutant,sequencing assay,Kim
+862100,3,17,2018,Alk3,BALB/cJ,pup,M,lung,wild type,IHC,Kim
+863932,3,21,2018,Vegfr,C57BL/6,embryo,NA,lung,wild type,culture,Sam
+864387,3,23,2018,Alk3,BALB/cJ,embryo,NA,lung,wild type,culture,Kim
+865043,3,29,2019,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+865149,3,30,2019,Alk3,BALB/cJ,adult,M,NA,mutant,behaviour,Kim
+866205,4,1,2018,Alk3,BALB/cJ,adult,M,NA,wild type,behaviour,Kim
+867481,4,10,2018,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+867794,4,10,2020,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+875004,4,11,2019,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+876139,4,13,2018,Alk3,BALB/cJ,adult,M,NA,wild type,behaviour,Kim
+890389,4,22,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+886043,4,17,2019,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Alex
+821080,2,3,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+889891,4,21,2018,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+890412,4,22,2020,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Alex
+891135,4,25,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+891731,4,30,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+892354,5,1,2019,Alk3,BALB/cJ,adult,M,lung,wild type,sequencing assay,Kim
+893041,5,3,2019,Vegfr,C57BL/6,adult,F,lung,wild type,sequencing assay,Alex
+893257,5,3,2020,Vegfr,C57BL/6,adult,M,lung,mutant,sequencing assay,Alex
+893290,5,8,2018,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+896197,5,9,2018,Vegfr,C57BL/6,pup,F,lung,mutant,IHC,Sam
+898035,5,15,2020,Vegfr,C57BL/6,pup,F,lung,mutant,IHC,Alex
+899372,5,18,2018,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Alex
+903535,5,25,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+904417,5,28,2019,Alk3,BALB/cJ,adult,F,lung,wild type,sequencing assay,Kim
+905633,6,4,2018,Vegfr,C57BL/6,adult,M,lung,mutant,sequencing assay,Sam
+909250,6,4,2020,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+909687,6,6,2020,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+910503,6,7,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+910988,6,7,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+916800,6,7,2020,Alk3,BALB/cJ,adult,M,NA,mutant,behaviour,Kim
+917874,6,15,2020,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+918189,6,22,2020,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+918674,6,28,2020,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+919295,7,3,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+920470,7,4,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+920574,7,7,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+924436,7,12,2018,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+925791,7,15,2018,Vegfr,C57BL/6,embryo,NA,lung,wild type,culture,Sam
+928254,7,23,2020,Vegfr,C57BL/6,embryo,NA,lung,wild type,culture,Sam
+928944,7,25,2019,Vegfr,C57BL/6,embryo,NA,lung,wild type,culture,Sam
+932353,7,26,2019,Vegfr,C57BL/6,embryo,NA,lung,mutant,culture,Sam
+934662,7,27,2018,Vegfr,C57BL/6,adult,F,lung,mutant,sequencing assay,Sam
+935401,8,3,2019,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+935845,8,10,2018,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+939519,8,10,2020,Vegfr,C57BL/6,embryo,NA,lung,wild type,culture,Sam
+941458,8,11,2020,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+941646,8,23,2020,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Alex
+942097,8,24,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+942925,8,31,2020,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+943018,9,2,2019,Vegfr,C57BL/6,pup,F,lung,wild type,IHC,Sam
+944091,9,10,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+945336,9,15,2018,Alk3,BALB/cJ,pup,M,lung,wild type,IHC,Kim
+946315,9,16,2018,Alk3,BALB/cJ,adult,M,NA,wild type,behaviour,Kim
+951520,9,27,2019,Alk3,BALB/cJ,adult,M,NA,mutant,behaviour,Kim
+951658,10,3,2019,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+957895,10,8,2020,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+958065,10,11,2019,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+958342,10,13,2018,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+959920,10,25,2018,Alk3,BALB/cJ,adult,F,NA,wild type,behaviour,Kim
+969452,10,29,2019,Alk3,BALB/cJ,adult,M,NA,wild type,behaviour,Kim
+971991,11,1,2019,Alk3,BALB/cJ,adult,M,NA,mutant,behaviour,Kim
+977235,11,2,2019,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+979356,11,3,2019,Vegfr,C57BL/6,adult,F,lung,mutant,sequencing assay,Sam
+980584,11,9,2018,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+983907,11,14,2019,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+985280,11,21,2019,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+985570,12,18,2018,Alk6,C57BL/6,embryo,NA,brain,knockout,culture,Jo
+986267,12,20,2019,Alk3,BALB/cJ,adult,F,NA,mutant,behaviour,Kim
+996829,12,20,2019,Alk3,BALB/cJ,adult,M,NA,mutant,behaviour,Kim
+996946,12,23,2019,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
+999154,12,25,2018,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Sam
+999979,12,29,2018,Vegfr,C57BL/6,pup,M,lung,wild type,IHC,Alex
