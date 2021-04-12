@@ -522,7 +522,7 @@ group. In other words, `gene_counts %>% count(sample)` is equivalent to:
 ```{r, purl = FALSE}
 gene_counts %>%
     group_by(sample) %>%
-    summarise(n = n())
+    summarize(n = n())
 ```
 
 We can also combine `count()` with other functions such as `filter()`. Here

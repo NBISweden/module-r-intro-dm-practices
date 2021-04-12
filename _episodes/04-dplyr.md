@@ -959,7 +959,7 @@ group. In other words, `gene_counts %>% count(sample)` is equivalent to:
 ~~~
 gene_counts %>%
     group_by(sample) %>%
-    summarise(n = n())
+    summarize(n = n())
 ~~~
 {: .language-r}
 
