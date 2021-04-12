@@ -392,7 +392,7 @@ you're doing.
 
 One thing that makes R powerful is the ability to create custom functions.
 Functions not only allow you to reuse arbitrary code chunks, they are also
-helpful when you want to structure your code and make it more readable.
+excellent for structuring your code and make it more readable.
 
 Let's create a simple function that converts temperatures from
 [Fahrenheit to Celsius](https://en.wikipedia.org/wiki/Temperature_conversion_formulas#Fahrenheit):
@@ -620,18 +620,21 @@ We can do this over and over again to grow a vector, or assemble a dataset.
 As we program, this may be useful to add results that we are collecting or
 calculating.
 
-An **atomic vector** is the simplest R **data type** and is a linear vector of a single type. Above, we saw 
-2 of the 6 main **atomic vector** types  that R
-uses: `"character"` and `"numeric"` (or `"double"`). These are the basic building blocks that
-all R objects are built from. The other 4 **atomic vector** types are:
+An **atomic vector** is the simplest R **data type** and is a linear vector of a
+single type. Above, we saw 2 of the 6 main **atomic vector** types  that R
+uses: `"character"` and `"numeric"` (or `"double"`). These are the basic
+building blocks that all R objects are built from. The other 4 **atomic vector**
+types are:
 
 * `"logical"` for `TRUE` and `FALSE` (the boolean data type)
-* `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's an integer)
+* `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's
+  an integer)
 * `"complex"` to represent complex numbers with real and imaginary parts (e.g.,
   `1 + 4i`) and that's all we're going to say about them
 * `"raw"` for bitstreams that we won't discuss further
 
-You can check the type of your vector using the `typeof()` function and inputting your vector as the argument.
+You can check the type of your vector using the `typeof()` function and
+inputting your vector as the argument.
 
 Vectors are one of the many **data structures** that R uses. Other important
 ones are lists (`list`), matrices (`matrix`), data frames (`data.frame`),
@@ -641,8 +644,8 @@ factors (`factor`) and arrays (`array`).
 > ## Challenge
 >
 > * We’ve seen that atomic vectors can be of type character,
->   numeric (or double), integer, and logical. But what happens if we try to mix these types in
->   a single vector?
+>   numeric (or double), integer, and logical. But what happens if we try to mix
+>   these types in a single vector?
 > 
 >> ## Answer
 >>
@@ -925,10 +928,10 @@ As R was designed to analyze datasets, it includes the concept of missing data
 in vectors as `NA`.
 
 When doing operations on numbers, most functions will return `NA` if the data
-you are working with include missing values. This feature
-makes it harder to overlook the cases where you are dealing with missing data.
-You can add the argument `na.rm = TRUE` to calculate the result as if the missing
-values were removed (`rm` stands for ReMoved) first.
+you are working with include missing values. This feature makes it harder to
+overlook the cases where you are dealing with missing data. You can add the
+argument `na.rm = TRUE` to calculate the result as if the missing values were
+removed (`rm` stands for ReMoved) first.
 
 
 ~~~
@@ -1040,11 +1043,13 @@ heights[complete.cases(heights)]
 [1] 2 4 4 6
 ~~~
 {: .output}
-Recall that you can use the `typeof()` function to find the type of your atomic vector.
+Recall that you can use the `typeof()` function to find the type of your atomic
+vector.
 
 > ## Challenge
 >
-> 1. Using this vector of heights in inches, create a new vector, `heights_no_na`, with the NAs removed.
+> 1. Using this vector of heights in inches, create a new vector,
+>    `heights_no_na`, with the NAs removed.
 >
 >     ```r
 >     heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
