@@ -422,7 +422,7 @@ The `!` symbol negates the result, so we're asking for every row where weight
 >
 > Create a new data frame from the `gene_counts_wide` data that meets the
 > following criteria: contains only the `gene` column and a new column called
-> `log_cnt` with the common logarithm of the `cnt` values in the `A_Wt` column.
+> `log_A_Wt` with the common logarithm of the `cnt` values in the `A_Wt` column.
 >
 > **Hint**: You can use the `log10()` function to calculate the common
 > logarithm values.
@@ -430,9 +430,9 @@ The `!` symbol negates the result, so we're asking for every row where weight
 >> ## Solution
 >>
 >> ```{r, purl=FALSE}
-gene_counts %>%
-  select(gene, A_Wt) %>%
-  mutate(log_cnt = log10(A_Wt))
+gene_counts_wide %>%
+  mutate(log_A_Wt = log10(A_Wt)) %>%
+  select(gene, log_A_Wt)
 ```
 > {: .solution}
 {: .challenge}
