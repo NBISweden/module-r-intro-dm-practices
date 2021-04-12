@@ -34,10 +34,10 @@ source: Rmd
 
 ## Loading the samples data
 
-We are investigating gene expression in mice under varying conditions and want
-to keep track of the animals included in the experiments. The dataset is stored
-as a comma separated value (CSV) file. Each row holds information for a single
-animal, and the columns represent:
+We are investigating gene expression in mice and want to keep track of animals
+included in different experiments. The dataset is stored as a comma separated
+value (CSV) file. Each row holds information for a single animal, and the
+columns represent:
 
 | Column                | Description                                                                                         |
 |-----------------------|-----------------------------------------------------------------------------------------------------|
@@ -60,25 +60,19 @@ We are going to use the R function `download.file()` to download the CSV file
 that contains data from Figshare, and we will use `read_csv()` to load the
 content of the CSV file into R.
 
-<!-- 
 Inside the `download.file` command, the first entry is a character string with the
-source URL ("https://ndownloader.figshare.com/files/2292169"). 
-This source URL downloads a CSV file from figshare. The text after the comma
-("data_raw/portal_data_joined.csv") is the destination of the file on your local
-machine. You'll need to have a folder on your machine called "data_raw" where 
-you'll download the file. So this command downloads a file from Figshare, names 
-it "portal_data_joined.csv" and adds it to a preexisting folder named "data_raw".
+source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv"). 
+This source URL downloads a CSV file from FitHub. The text after the comma
+("data_raw/samples.csv") is the destination of the file on your local machine.
+You'll need to have a folder on your machine called "data_raw" where 
+you'll download the file. So this command downloads a file from the web, names 
+it "samples.csv" and adds it to a preexisting folder named "data_raw".
 
 
 ~~~
-download.file(url = "TODO", destfile = "data_raw/samples.csv")
-~~~
-{: .language-r}
--->
-
-
-~~~
-download.file(url = "TODO", destfile = "data_raw/samples.csv")
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv",
+  destfile = "data_raw/samples_r_lesson.csv")
 ~~~
 {: .language-r}
 
@@ -115,7 +109,7 @@ frames later):
 
 
 ~~~
-samples <- read_csv("data_raw/samples.csv")
+samples <- read_csv("data_raw/samples_r_lesson.csv")
 ~~~
 {: .language-r}
 
@@ -139,13 +133,12 @@ cols(
 ~~~
 {: .output}
 
-You will see the message `Parsed with column specification`, followed by each
-column name and its data type. When you execute `read_csv` on a data file, it
-looks through the first 1000 rows of each column and guesses its data type.
-For example, in this dataset, `read_csv()` reads `animal_id` as `col_double`
-(a numeric data type), and `mouse_line` as `col_character`. You have the option
-to specify the data type for a column manually by using the `col_types` argument
-in `read_csv`.
+You will see the text `Column specification`, followed by each column name and
+its data type. When you execute `read_csv` on a data file, it looks through the
+first 1000 rows of each column and guesses its data type. For example, in this
+dataset, `read_csv()` reads `animal_id` as `col_double` (a numeric data type),
+and `mouse_line` as `col_character`. You have the option to specify the data
+type for a column manually by using the `col_types` argument in `read_csv`.
 
 We can see the contents of the first few lines of the data by typing its name:
 `samples`. By default, this will show show you as many rows and columns of the
@@ -350,20 +343,18 @@ objects besides `data.frame`.
 >>   .. )
 >> ~~~
 >> {: .output}
->> 100 rows and 12 columns
->>
+>> * The obkect `samples` is of class `data.frame`, or more specifically a
+>>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
+>> * Rows and columns: 100 rows and 12 columns
 > {: .solution}
 {: .challenge}
 
 
 ## Indexing and subsetting data frames
 
-
-
 Our samples data frame has rows and columns (it has 2 dimensions), if we want to
 extract some specific data from it, we need to specify the "coordinates" we
 want from it. Row numbers come first, followed by column numbers.
-
 
 
 ~~~
@@ -511,7 +502,7 @@ You can also exclude certain indices of a data frame using the "`-`" sign:
 
 
 ~~~
-samples[, -1]       # The whole data frame, except the first column
+samples[, -1]       # the whole data frame, except the first column
 ~~~
 {: .language-r}
 
@@ -539,7 +530,7 @@ samples[, -1]       # The whole data frame, except the first column
 
 
 ~~~
-samples[-(7:100), ] # Equivalent to head(samples)
+samples[-(7:100), ] # equivalent to head(samples)
 ~~~
 {: .language-r}
 
@@ -616,36 +607,13 @@ samples[, "animal_id"]
 ~~~
 {: .output}
 
-When we are extracting a subset of a data frame of class `tibble`, we normally
-get back an object of the same class. If we want to get the result as a vector
-instead of as a one-column data frame, we can use double square brackets:
+When we extract a subset from a data frame of class `tibble`, we normally
+get back an object of the same class. To get one-column subsets returned as
+vectors, we can use double square brackets:
 
 
 ~~~
-samples[[1]]
-~~~
-{: .language-r}
-
-
-
-~~~
-  [1] 800793 804396 805431 805992 808935 810875 812308 814334 816649 819947
- [11] 820421 821756 877817 821844 826176 832626 834217 835936 836507 837913
- [21] 842068 843132 844834 845290 855000 856721 862100 863932 864387 865043
- [31] 865149 866205 867481 867794 875004 876139 890389 886043 821080 889891
- [41] 890412 891135 891731 892354 893041 893257 893290 896197 898035 899372
- [51] 903535 904417 905633 909250 909687 910503 910988 916800 917874 918189
- [61] 918674 919295 920470 920574 924436 925791 928254 928944 932353 934662
- [71] 935401 935845 939519 941458 941646 942097 942925 943018 944091 945336
- [81] 946315 951520 951658 957895 958065 958342 959920 969452 971991 977235
- [91] 979356 980584 983907 985280 985570 986267 996829 996946 999154 999979
-~~~
-{: .output}
-
-
-
-~~~
-samples[["animal_id"]]
+samples[[1]]              # first column as vector
 ~~~
 {: .language-r}
 
@@ -668,7 +636,30 @@ samples[["animal_id"]]
 
 
 ~~~
-samples[[1,1]]
+samples[["animal_id"]]    # named column as vector
+~~~
+{: .language-r}
+
+
+
+~~~
+  [1] 800793 804396 805431 805992 808935 810875 812308 814334 816649 819947
+ [11] 820421 821756 877817 821844 826176 832626 834217 835936 836507 837913
+ [21] 842068 843132 844834 845290 855000 856721 862100 863932 864387 865043
+ [31] 865149 866205 867481 867794 875004 876139 890389 886043 821080 889891
+ [41] 890412 891135 891731 892354 893041 893257 893290 896197 898035 899372
+ [51] 903535 904417 905633 909250 909687 910503 910988 916800 917874 918189
+ [61] 918674 919295 920470 920574 924436 925791 928254 928944 932353 934662
+ [71] 935401 935845 939519 941458 941646 942097 942925 943018 944091 945336
+ [81] 946315 951520 951658 957895 958065 958342 959920 969452 971991 977235
+ [91] 979356 980584 983907 985280 985570 986267 996829 996946 999154 999979
+~~~
+{: .output}
+
+
+
+~~~
+samples[[1, 1]]           # first element in the first column as vector        
 ~~~
 {: .language-r}
 
@@ -682,7 +673,7 @@ samples[[1,1]]
 
 
 ~~~
-samples[[1, "animal_id"]]
+samples[[1, "animal_id"]] # first element in the named column as vector
 ~~~
 {: .language-r}
 
@@ -697,7 +688,7 @@ We can also access an individual column as a vector by using a dollar sign, `$`:
 
 
 ~~~
-samples$animal_id
+samples$animal_id         # named column as vector
 ~~~
 {: .language-r}
 
@@ -1034,7 +1025,7 @@ plot(samples$sex)
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-03-unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="432" style="display: block; margin: auto;" />
 
 However, as we saw when we used `summary(samples$sex)`, there are 23 individuals
 for which the sex information hasn't been recorded. To show them in the plot, we
@@ -1119,7 +1110,7 @@ Levels: F M unknown
 
 Now we can plot the data again, using `plot(sex)`.
 
-<img src="../fig/rmd-03-unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="432" style="display: block; margin: auto;" />
 
 > ## Challenge
 >
@@ -1137,7 +1128,7 @@ Now we can plot the data again, using `plot(sex)`.
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-03-unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="432" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-03-unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="432" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
