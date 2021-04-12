@@ -478,7 +478,7 @@ quick glance at the number of observations represented by each factor
 level. Let's look at the number of males and females captured over the course of
 the experiment:
 
-```{r, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+```{r barplot-1, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 plot(samples$sex)
 ```
 
@@ -502,7 +502,7 @@ head(sex)
 
 Now we can plot the data again, using `plot(sex)`.
 
-```{r, echo = FALSE, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+```{r barplot-2, echo = FALSE, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 plot(sex)
 ```
 
@@ -514,7 +514,7 @@ plot(sex)
 >
 >> ## Solution
 >>
->> ```{r, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+>> ```{r barplot-3, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 levels(sex)[1:2] <- c("female", "male")
 sex <- factor(sex, levels = c("unknown", "female", "male"))
 plot(sex)

@@ -1025,7 +1025,7 @@ plot(samples$sex)
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-03-unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-barplot-1-1.png" title="plot of chunk barplot-1" alt="plot of chunk barplot-1" width="432" style="display: block; margin: auto;" />
 
 However, as we saw when we used `summary(samples$sex)`, there are 23 individuals
 for which the sex information hasn't been recorded. To show them in the plot, we
@@ -1110,7 +1110,7 @@ Levels: F M unknown
 
 Now we can plot the data again, using `plot(sex)`.
 
-<img src="../fig/rmd-03-unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-barplot-2-1.png" title="plot of chunk barplot-2" alt="plot of chunk barplot-2" width="432" style="display: block; margin: auto;" />
 
 > ## Challenge
 >
@@ -1128,7 +1128,7 @@ Now we can plot the data again, using `plot(sex)`.
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-03-unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="432" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-03-barplot-3-1.png" title="plot of chunk barplot-3" alt="plot of chunk barplot-3" width="432" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
