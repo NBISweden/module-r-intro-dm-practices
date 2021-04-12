@@ -171,18 +171,18 @@ below.
     location for it. This will be your **working directory** for the rest of the
     day (e.g., `~/r_intro`).
 4.  Click on `Create Project`.
-5.  (Optional) Set Preferences to 'Never' save workspace in RStudio.
+5.  (Optional) Set Preferences to "Never' save workspace in RStudio.
 
 A workspace is your current working environment in R which includes any
 user-defined object. By default, all of these objects will be saved, and
 automatically loaded, when you reopen your project. Saving a workspace to
 `.RData` can be cumbersome, especially if you are working with larger datasets,
 and it can lead to hard to debug errors by having objects in memory you forgot
-you had. To turn that off, go to Tools --\> 'Global Options' and select the
-'Never' option for 'Save workspace to .RData' on exit.'
+you had. To turn that off, go to Tools --\> "Global Options" and select the
+"Never" option for "Save workspace to .RData" on exit.
 
-![Set 'Save workspace to .RData on exit' to
-'Never'](../fig/rstudio-preferences.png)
+![Set "Save workspace to .RData on exit" to
+"Never"](../fig/rstudio-preferences.png)
 
 ### Organizing your working directory
 
@@ -285,7 +285,7 @@ commands.
 
 If R is still waiting for you to enter more data because it isn't complete yet,
 the console will show a `+` prompt. It means that you haven't finished entering
-a complete command. This is because you have not 'closed' a parenthesis or
+a complete command. This is because you have not "closed" a parenthesis or
 quotation, i.e. you don't have the same number of left-parentheses as
 right-parentheses, or the same number of opening and closing quotation marks.
 When this happens, and you thought you finished typing your command, click
