@@ -318,6 +318,24 @@ fahrenheit_to_celsius(212)
 We've successfully called the function that we defined, and we have access to
 the value that we returned.
 
+> ## Challenge
+>
+> Write a function that returns the sum of two arguments given to it.
+>
+>> ## Solution
+>>
+>> ```{r, purl = FALSE}
+# Calculate the sum of x and y
+add_two_args <- function(x, y) { x + y }
+
+# Call the function
+add_two_args(9, 7)
+```
+>>
+> {: .solution}
+{: .challenge}
+
+
 ## Vectors and data types
 
 A vector is the most common and basic data type in R, and is pretty much
