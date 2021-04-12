@@ -453,7 +453,7 @@ group into a single-row summary of that group. `group_by()` takes as arguments
 the column names that contain the **categorical** variables for which you want
 to calculate the summary statistics. So to compute the mean `weight` by sex:
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
   group_by(genotype) %>%
   summarize(mean = mean(cnt))
@@ -461,7 +461,7 @@ gene_counts %>%
 
 You can also group by multiple columns:
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt)) %>% 
@@ -472,7 +472,7 @@ Once the data are grouped, you can also summarize multiple variables at the same
 time (and not necessarily on the same variable). For instance, we could add a
 column indicating the minimum count for each genotype for each gene:
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
@@ -484,7 +484,7 @@ It is sometimes useful to rearrange the result of a query to inspect the values.
 For instance, we can sort on `min_cnt` to put the lowest numbers first:
 
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
@@ -495,7 +495,7 @@ gene_counts %>%
 To sort in descending order, we need to add the `desc()` function. If we want
 to sort the results by decreasing order of mean count:
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
@@ -519,7 +519,7 @@ The `count()` function is shorthand for something we've already seen: grouping
 by a variable, and summarizing it by counting the number of observations in that
 group. In other words, `gene_counts %>% count(sample)` is equivalent to:  
 
-```{r, purl = FALSE}
+```{r, message = FALSE, purl = FALSE}
 gene_counts %>%
     group_by(sample) %>%
     summarize(n = n())
@@ -584,7 +584,7 @@ gene_counts %>%
 >
 >> ## Solution
 >>
->> ```{r, purl=FALSE}
+>> ```{r, message = FALSE, purl=FALSE}
 gene_counts %>%
     group_by(gene, genotype) %>%
     summarize(

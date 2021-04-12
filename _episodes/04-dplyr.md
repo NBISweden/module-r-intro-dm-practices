@@ -726,10 +726,22 @@ The `!` symbol negates the result, so we're asking for every row where weight
 >> 
 >> 
 >> ~~~
->> Error: Can't subset columns that don't exist.
->> ✖ Column `A_Wt` doesn't exist.
+>> # A tibble: 43,280 x 2
+>>    gene          log_A_Wt
+>>    <chr>            <dbl>
+>>  1 0610005C13Rik    0.699
+>>  2 0610007P14Rik    2.76 
+>>  3 0610009B22Rik    2.12 
+>>  4 0610009E02Rik    1.11 
+>>  5 0610009L18Rik    1.56 
+>>  6 0610009O20Rik    2.88 
+>>  7 0610010F05Rik    2.30 
+>>  8 0610010K14Rik    0.301
+>>  9 0610011F06Rik    2.49 
+>> 10 0610012D04Rik    0.602
+>> # … with 43,270 more rows
 >> ~~~
->> {: .error}
+>> {: .output}
 > {: .solution}
 {: .challenge}
 
@@ -782,13 +794,6 @@ gene_counts %>%
 
 
 ~~~
-`summarise()` has grouped output by 'gene'. You can override using the `.groups` argument.
-~~~
-{: .output}
-
-
-
-~~~
 # A tibble: 6 x 3
 # Groups:   gene [3]
   gene          genotype    mean
@@ -815,13 +820,6 @@ gene_counts %>%
   head()
 ~~~
 {: .language-r}
-
-
-
-~~~
-`summarise()` has grouped output by 'gene'. You can override using the `.groups` argument.
-~~~
-{: .output}
 
 
 
@@ -856,13 +854,6 @@ gene_counts %>%
 
 
 ~~~
-`summarise()` has grouped output by 'gene'. You can override using the `.groups` argument.
-~~~
-{: .output}
-
-
-
-~~~
 # A tibble: 86,560 x 4
 # Groups:   gene [43,280]
    gene          genotype  mean   min
@@ -893,13 +884,6 @@ gene_counts %>%
   arrange(desc(min))
 ~~~
 {: .language-r}
-
-
-
-~~~
-`summarise()` has grouped output by 'gene'. You can override using the `.groups` argument.
-~~~
-{: .output}
 
 
 
@@ -1140,13 +1124,6 @@ the *albigula* species that are not specified for its sex (i.e. `NA`).
 >>     )
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
->> ~~~
->> `summarise()` has grouped output by 'gene'. You can override using the `.groups` argument.
->> ~~~
->> {: .output}
 >> 
 >> 
 >> 
