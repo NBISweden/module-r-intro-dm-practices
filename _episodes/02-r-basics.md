@@ -390,9 +390,9 @@ you're doing.
 
 ### Creating functions
 
-One thing that makes R powerful is the ability to create custom functions.
-Functions not only allow you to reuse arbitrary code chunks, they are also
-excellent for structuring your code and make it more readable.
+One thing that makes R powerful is the ability to write user-defined functions.
+Functions not only allow you to reuse arbitrary code chunks, they are also great
+for structuring your code and making the code more readable.
 
 Let's create a simple function that converts temperatures from
 [Fahrenheit to Celsius](https://en.wikipedia.org/wiki/Temperature_conversion_formulas#Fahrenheit):
