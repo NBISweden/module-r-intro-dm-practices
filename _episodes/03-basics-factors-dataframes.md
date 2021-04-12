@@ -343,7 +343,7 @@ objects besides `data.frame`.
 >>   .. )
 >> ~~~
 >> {: .output}
->> * The obkect `samples` is of class `data.frame`, or more specifically a
+>> * The object `samples` is of class `data.frame`, or more specifically a
 >>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
 >> * Rows and columns: 100 rows and 12 columns
 > {: .solution}
