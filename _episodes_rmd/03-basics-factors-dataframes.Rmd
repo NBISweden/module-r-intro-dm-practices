@@ -1,6 +1,6 @@
 ---
 title: "R Basics continued - factors and data frames"
-teaching: 45
+teaching: 40
 exercises: 20
 questions:
 - "How do I get started with tabular data (e.g. spreadsheets) in R?"
@@ -217,7 +217,7 @@ Note: most of these functions are "generic", they can be used on other types of
 objects besides `data.frame`.
 
 
-> ## Challenge
+> ## Challenge 3.1
 >
 > Based on the output of `str(samples)`, can you answer the following questions?
 >
@@ -297,7 +297,7 @@ samples$animal_id         # named column as vector
 In RStudio, you can use the autocompletion feature to get the full and correct
 names of the columns.
 
-> ## Challenge
+> ## Challenge 3.2
 >
 > 1. Create a `data.frame` (`samples_20`) containing only the data in
 >    row 20 of the `samples` dataset.
@@ -409,7 +409,7 @@ this information built in. It is particularly helpful when there are many levels
 (like the species names in our example dataset).
 
 
-> ## Challenge
+> ## Challenge 3.3
 >
 > 1. Change the columns `strain` and `organism_part` in the `samples`
 >    data frame into a factor.
@@ -523,20 +523,20 @@ plot(sex)
 {: .challenge}
 
 
-> ## Challenge
+> ## Challenge 3.4
 >
 > 1. We have seen how data frames are created when using `read_csv()`, but they
->   can also be created by hand with the `data.frame()` function.  There are a
->   few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
->   Don't hesitate to experiment!
+>    can also be created by hand with the `data.frame()` function.  There are a
+>    few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
+>    Don't hesitate to experiment!
 >
->     ```{r, eval=FALSE, purl=FALSE}
->     animal_data <- data.frame(
->               animal = c(dog, cat, sea cucumber, sea urchin),
->               feel = c("furry", "squishy", "spiny"),
->               weight = c(45, 8 1.1, 0.8)
->               )
->     ```
+>    ```{r, eval=FALSE, purl=FALSE}
+>    animal_data <- data.frame(
+>              animal = c(dog, cat, sea cucumber, sea urchin),
+>              feel = c("furry", "squishy", "spiny"),
+>              weight = c(45, 8 1.1, 0.8)
+>              )
+>    ```
 >
 > 2. Can you predict the class for each of the columns in the following example?
 >    Check your guesses using `str(country_climate)`:

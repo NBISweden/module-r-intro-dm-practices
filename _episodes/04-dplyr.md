@@ -32,6 +32,8 @@ keypoints:
 - "Use `filter()` to choose data based on values."
 - "Use `group_by()` and `summarize()` to work with subsets of data."
 - "Use `mutate()` to create new variables."
+- "Use `pivot_wider()` to transform rows into columns."
+- "Use `pivot_longer()` to transform columns into rows."
 source: Rmd
 ---
 
@@ -123,13 +125,13 @@ library(tidyverse)
 {: .language-r}
 
 ~~~
-gene_counts <- read_tsv("data_raw/gene_counts_r_lesson.tsv")
+cnts <- read_tsv("data_raw/gene_counts_r_lesson.tsv")
 ~~~
 {: .language-r}
 
 ~~~
 
-── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 cols(
   gene = col_character(),
   sample = col_character(),
@@ -142,7 +144,7 @@ cols(
 
 ~~~
 ## inspect the data
-str(gene_counts)
+str(cnts)
 ~~~
 {: .language-r}
 
@@ -167,7 +169,7 @@ spec_tbl_df[,4] [259,680 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 
 ~~~
 ## preview the data
-view(gene_counts)
+view(cnts)
 ~~~
 {: .language-r}
 
@@ -185,12 +187,12 @@ Next, we're going to learn some of the most common **`dplyr`** functions:
 ## Selecting columns and filtering rows
 
 To select columns of a data frame, use `select()`. The first argument
-to this function is the data frame (`gene_counts`), and the subsequent
+to this function is the data frame (`cnts`), and the subsequent
 arguments are the columns to keep.
 
 
 ~~~
-select(gene_counts, gene, sample, cnt)
+select(cnts, gene, sample, cnt)
 ~~~
 {: .language-r}
 
@@ -199,18 +201,18 @@ the variable to exclude it.
 
 
 ~~~
-select(gene_counts, -sample, -genotype)
+select(cnts, -sample, -genotype)
 ~~~
 {: .language-r}
 
-This will select all the variables in `gene_counts` except `sample`
+This will select all the variables in `cnts` except `sample`
 and `genotype`.
 
 To choose rows based on a specific criterion, use `filter()`:
 
 
 ~~~
-filter(gene_counts, sample == "A")
+filter(cnts, sample == "A")
 ~~~
 {: .language-r}
 
@@ -244,8 +246,8 @@ to the next function, like this:
 
 
 ~~~
-gene_counts_A <- filter(gene_counts, sample == "A")
-gene_counts_sml <- select(gene_counts_A, gene, genotype, cnt)
+cnts_A <- filter(cnts, sample == "A")
+cnts_A_sml <- select(cnts_A, gene, genotype, cnt)
 ~~~
 {: .language-r}
 
@@ -257,8 +259,8 @@ You can also nest functions (i.e. one function inside of another), like this:
 
 
 ~~~
-gene_counts_sml <- select(
-  filter(gene_counts, sample == "A"), gene, genotype, cnt)
+cnts_A_sml <- select(
+  filter(cnts, sample == "A"), gene, genotype, cnt)
 ~~~
 {: .language-r}
 
@@ -276,7 +278,7 @@ are made available via the **`magrittr`** package, installed automatically with
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   filter(sample == "A") %>%
   select(gene, genotype, cnt)
 ~~~
@@ -302,7 +304,7 @@ gene_counts %>%
 ~~~
 {: .output}
 
-In the above code, we use the pipe to send the `gene_counts` dataset first
+In the above code, we use the pipe to send the `cnts` dataset first
 through `filter()` to keep rows where `sample` equals `"A"`, then through
 `select()` to keep only the `gene`, `genotype`, and `cnt` columns. Since
 `%>%` takes the object on its left and passes it as the first argument to the
@@ -310,7 +312,7 @@ function on its right, we don't need to explicitly include the data frame as an
 argument to the `filter()` and `select()` functions any more.
 
 Some may find it helpful to read the pipe like the word "then". For instance,
-in the above example, we took the data frame `gene_counts`, *then* we `filter`ed
+in the above example, we took the data frame `cnts`, *then* we `filter`ed
 for rows with `sample == "A"`, *then* we `select`ed columns `gene`, `genotype`,
 and `cnt`. The **`dplyr`** functions by themselves are somewhat simple,
 but by combining them into linear workflows with the pipe, we can accomplish
@@ -321,11 +323,11 @@ can assign it a new name:
 
 
 ~~~
-gene_counts_sml <- gene_counts %>%
+cnts_A_sml <- cnts %>%
   filter(sample == "A") %>%
   select(gene, genotype, cnt)
 
-gene_counts_sml
+cnts_A_sml
 ~~~
 {: .language-r}
 
@@ -351,16 +353,16 @@ gene_counts_sml
 
 Note that the final data frame is the leftmost part of this expression.
 
-> ## Challenge
+> ## Challenge 4.1
 >
-> Using pipes, subset the `gene_counts` data to include only counts for wild
-> type genotypes above 10,000 and retain only the columns `gene` and `cnt`.
+> Using pipes, subset the `cnts` data to include only counts for wild type
+> genotypes above 10,000 and retain only the columns `gene` and `cnt`.
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> gene_counts %>%
+>> cnts %>%
 >>   filter(cnt > 10000 & genotype == "Wt") %>%
 >>   select(gene, cnt)
 >> ~~~
@@ -422,7 +424,7 @@ the 6 counts for one gene in the same row.
 
 
 ~~~
-gene_counts %>% pivot_wider(
+cnts %>% pivot_wider(
   id_cols = gene,
   names_from = sample,
   values_from = cnt
@@ -455,14 +457,14 @@ add this information to the column names as well.
 
 
 ~~~
-gene_counts_wide <- gene_counts %>%
+cnts_wide <- cnts %>%
   pivot_wider(
     id_cols = gene,
     names_from = c(sample, genotype),
     values_from = cnt
 )
 
-str(gene_counts_wide)
+str(cnts_wide)
 ~~~
 {: .language-r}
 
@@ -480,14 +482,14 @@ tibble[,7] [43,280 × 7] (S3: tbl_df/tbl/data.frame)
 ~~~
 {: .output}
 
-We store the data frame under the name `gene_counts_wide` so that we can use it
+We store the data frame under the name `cnts_wide` so that we can use it
 later in this episode.
 
 
 #### pivot_longer
 
 The opposing situation could occur if we had been provided with data in the
-form of `gene_counts_wide`, where the sample labels are column names, but we 
+form of `cnts_wide`, where the sample labels are column names, but we 
 wish to treat them as values of a sample variable instead.
 
 In this situation we are gathering the column names and turning them into a
@@ -505,7 +507,7 @@ associated with the key.
 
 
 ~~~
-gene_counts_wide %>% pivot_longer(
+cnts_wide %>% pivot_longer(
     cols = A_Wt:F_Hom,
     names_to = c("sample", "genotype"),
     names_sep = "_",
@@ -538,16 +540,16 @@ Since we are transforming column names into two new variables, we must specify a
 string separator using the `names_sep` argument.
 
 
-> ## Challenge
+> ## Challenge 4.2
 >
-> Reshape the `gene_counts` data frame with samples as rows and the three genes
+> Reshape the `cnts` data frame with samples as rows and the three genes
 > "Hopx", "Rpl21" and "Calr" as columns.
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> gene_counts %>%
+>> cnts %>%
 >>   filter(gene %in% c("Hopx", "Rpl21", "Calr")) %>%
 >>   pivot_wider(
 >>     id_cols = sample,
@@ -582,11 +584,11 @@ columns, for example to do unit conversions, or to find the ratio of values in
 two columns. For this we'll use `mutate()`.
 
 Let's start by calculating the difference between `D_Hom` and `E_Hom` variables
-in the `gene_counts_wide` data frame:
+in the `cnts_wide` data frame:
 
 
 ~~~
-gene_counts_wide %>%
+cnts_wide %>%
   mutate(diff_DE = D_Hom - E_Hom)
 ~~~
 {: .language-r}
@@ -616,7 +618,7 @@ same call of `mutate()`:
 
 
 ~~~
-gene_counts_wide %>%
+cnts_wide %>%
   mutate(diff_DE = D_Hom - E_Hom,
          diff_DE_pct = diff_DE / D_Hom * 100)
 ~~~
@@ -649,7 +651,7 @@ is loaded).
 
 
 ~~~
-gene_counts_wide %>%
+cnts_wide %>%
   mutate(diff_DE = D_Hom - E_Hom,
          diff_DE_pct = diff_DE / D_Hom * 100) %>%
   head()
@@ -677,7 +679,7 @@ in the chain:
 
 
 ~~~
-gene_counts_wide %>%
+cnts_wide %>%
   mutate(diff_DE = D_Hom - E_Hom,
          diff_DE_pct = diff_DE / D_Hom * 100) %>%
   filter(!is.na(diff_DE_pct)) %>%
@@ -704,9 +706,9 @@ gene_counts_wide %>%
 The `!` symbol negates the result, so we're asking for every row where weight
 *is not* an `NA` (or `NaN`).
 
-> ## Challenge
+> ## Challenge 4.3
 >
-> Create a new data frame from the `gene_counts_wide` data that meets the
+> Create a new data frame from the `cnts_wide` data that meets the
 > following criteria: contains only the `gene` column and a new column called
 > `log_A_Wt` with the common logarithm of the `cnt` values in the `A_Wt` column.
 >
@@ -717,7 +719,7 @@ The `!` symbol negates the result, so we're asking for every row where weight
 >>
 >> 
 >> ~~~
->> gene_counts_wide %>%
+>> cnts_wide %>%
 >>   mutate(log_A_Wt = log10(A_Wt)) %>%
 >>   select(gene, log_A_Wt)
 >> ~~~
@@ -763,7 +765,7 @@ to calculate the summary statistics. So to compute the mean `weight` by sex:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   group_by(genotype) %>%
   summarize(mean = mean(cnt))
 ~~~
@@ -784,7 +786,7 @@ You can also group by multiple columns:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt)) %>% 
   head()
@@ -813,7 +815,7 @@ column indicating the minimum count for each genotype for each gene:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
             min = min(cnt)) %>%
@@ -843,7 +845,7 @@ For instance, we can sort on `min_cnt` to put the lowest numbers first:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
             min = min(cnt)) %>%
@@ -877,7 +879,7 @@ to sort the results by decreasing order of mean count:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   group_by(gene, genotype) %>%
   summarize(mean = mean(cnt),
             min = min(cnt)) %>%
@@ -915,7 +917,7 @@ each sample, we would do:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
     count(sample) 
 ~~~
 {: .language-r}
@@ -937,11 +939,11 @@ gene_counts %>%
 
 The `count()` function is shorthand for something we've already seen: grouping
 by a variable, and summarizing it by counting the number of observations in that
-group. In other words, `gene_counts %>% count(sample)` is equivalent to:  
+group. In other words, `cnts %>% count(sample)` is equivalent to:  
 
 
 ~~~
-gene_counts %>%
+cnts %>%
     group_by(sample) %>%
     summarize(n = n())
 ~~~
@@ -967,7 +969,7 @@ we will count for each sample the number of genes with more than 10,000 reads.
 
 
 ~~~
-gene_counts %>%
+cnts %>%
     filter(cnt > 10000) %>%
     count(gene) 
 ~~~
@@ -1000,7 +1002,7 @@ first and the second factor as the arguments of `count()`:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   filter(cnt > 10000) %>%
   count(gene, genotype) 
 ~~~
@@ -1033,7 +1035,7 @@ order of the levels of the genotypes and (ii) in descending order of the count:
 
 
 ~~~
-gene_counts %>%
+cnts %>%
   filter(cnt > 10000) %>%
   count(gene, genotype) %>%
   arrange(genotype, desc(n))
@@ -1064,16 +1066,16 @@ From the table above, we may learn that, for instance, there are 75 observations
 the *albigula* species that are not specified for its sex (i.e. `NA`).
 
 
-> ## Challenge
+> ## Challenge 4.4
 >
-> * For each sample in the `gene_counts` data frame, how many of the genes have
+> * For each sample in the `cnts` data frame, how many of the genes have
 >   zero reads?
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> gene_counts %>%
+>> cnts %>%
 >>   filter(cnt == 0) %>%
 >>   count(gene) 
 >> ~~~
@@ -1111,7 +1113,7 @@ the *albigula* species that are not specified for its sex (i.e. `NA`).
 >>
 >> 
 >> ~~~
->> gene_counts %>%
+>> cnts %>%
 >>     group_by(gene, genotype) %>%
 >>     summarize(
 >>         mean = mean(cnt),
@@ -1167,11 +1169,32 @@ modify it. In contrast, our script will generate the contents of the `data`
 directory, so even if the files it contains are deleted, we can always
 re-generate them.
 
-To write the `gene_counts_wide` data frame that we prepared earlier to a file,
-we can do the following:
+We will conclude this episode by generating two CSV files with a small dataset that
+we will use in the next episode on plotting:
 
 
 ~~~
-write_csv(gene_counts_wide, file = "data/gene_counts_wide.csv")
+# Create a vector with a subset of genes
+genes_subset <- c(
+  "Rbpj", "Nop10", "Nsun2", "Cxcl5", "Cfdp1", "Furin", "Adcy8", "Grin1",
+  "Itpka", "Ippk", "Aff2", "Rab43", "Ofd1", "Edem2", "Xlr4c", "Mpc2",
+  "Ect2l", "Pcgf1", "Nov", "Sys1", "Ackr2", "Acat1", "Phkg2", "Hecw2",
+  "Ctps", "Arl5b", "Wnt3a", "Evc", "Wibg", "Axl", "Usp19", "Agbl2",
+  "Eif3f", "Mark4", "Sbk2", "Eri3", "Tab1", "Cd276", "Sox9", "Ces2e",
+  "Htra3", "Foxj2", "Arl4d", "Wdr1", "Taco1", "Aebp2", "Nemf", "Fpgt",
+  "Helq", "Nudt6")
+
+# Filter out subset of genes
+cnts_sml_wide <- cnts_wide %>%
+  filter(gene %in% genes_subset)
+
+cnts_sml_long <- cnts %>%
+  filter(gene %in% genes_subset)
+
+# Write data frame to CSV
+write_csv(cnts_sml_wide, file = "gene_counts_sml_wide.csv")
+
+# Write data frame to CSV
+write_csv(cnts_sml_long, file = "gene_counts_sml_long.csv")
 ~~~
 {: .language-r}

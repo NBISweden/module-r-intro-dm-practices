@@ -3,7 +3,7 @@
 # Instead, please edit 01-introduction.md in _episodes_rmd/
 title: "Introducing R and RStudio IDE"
 teaching: 15
-exercises: 0
+exercises: 5
 questions:
 - "Why use R?"
 - "Why use RStudio and how does it differ from R?"
@@ -108,11 +108,12 @@ Anyone can inspect the source code to see how R works. Because of this
 transparency, there is less chance for mistakes, and if you (or someone else)
 find some, you can report and fix bugs.
 
-> ## Discussion: Your experience
+> ## Discussion: Your experience and expectations
 >
-> What has motivated you to learn R? Have you had a research question for which
-> spreadsheet programs such as Excel have proven difficult to use, or where the
-> size of the data set created issues?
+> * What has motivated you to learn R? Have you had a research question for which
+>   spreadsheet programs such as Excel have proven difficult to use, or where the
+>   size of the data set created issues?
+> * In what situations do you imagine that using R will be most valuable to you? 
 {: .discussion}
 
 ## Knowing your way around RStudio
@@ -434,7 +435,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] knitr_1.31
+[1] knitr_1.32
 
 loaded via a namespace (and not attached):
 [1] compiler_4.0.4 magrittr_2.0.1 tools_4.0.4    stringi_1.5.3  highr_0.8     

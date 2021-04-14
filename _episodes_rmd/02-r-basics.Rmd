@@ -1,7 +1,7 @@
 ---
 title: "R Basics"
-teaching: 35
-exercises: 10
+teaching: 40
+exercises: 20
 questions:
 - "What are the basic features of the R language?"
 - "What are the most common objects in R?"
@@ -175,7 +175,7 @@ out one line, you can put the cursor at any location of that line (i.e. no need
 to select the whole line), then press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + 
 <kbd>C</kbd>.
 
-> ## Challenge
+> ## Challenge 2.1
 >
 > What are the values after each statement in the following?
 >
@@ -318,7 +318,7 @@ fahrenheit_to_celsius(212)
 We've successfully called the function that we defined, and we have access to
 the value that we returned.
 
-> ## Challenge
+> ## Challenge 2.2
 >
 > Write a function that returns the sum of two arguments given to it.
 >
@@ -423,7 +423,7 @@ ones are lists (`list`), matrices (`matrix`), data frames (`data.frame`),
 factors (`factor`) and arrays (`array`).
 
 
-> ## Challenge
+> ## Challenge 2.3
 >
 > * We’ve seen that atomic vectors can be of type character,
 >   numeric (or double), integer, and logical. But what happens if we try to mix
@@ -562,7 +562,7 @@ animals %in% c("rat", "cat", "dog", "duck", "goat")
 animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
 ```
 
-> ## Challenge (optional)
+> ## Challenge 2.4 (optional)
 >
 > * Can you figure out why `"four" > "five"` returns `TRUE`?
 > 
@@ -613,7 +613,7 @@ heights[complete.cases(heights)]
 Recall that you can use the `typeof()` function to find the type of your atomic
 vector.
 
-> ## Challenge
+> ## Challenge 2.5
 >
 > 1. Using this vector of heights in inches, create a new vector,
 >    `heights_no_na`, with the NAs removed.
