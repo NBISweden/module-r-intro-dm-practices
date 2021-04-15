@@ -8,7 +8,7 @@ root: .
 The instructional content of this lesson an adaptation of previous works and is made available under [CC-BY 4.0][cc-by-human] 
 by [NBIS - National Bioinformatics Infrastructure Sweden](https://nbis.se) 2020–{{ 'now' | date: "%Y"}}.
 
-Adaptation of lesson [Data Organization in Spreadsheets for Ecologists](https://datacarpentry.org/spreadsheet-ecology-lesson/)<br>
+Adaptation of lesson [Data Analysis and Visualization in R for Ecologists](https://datacarpentry.org/R-ecology-lesson/)<br>
 Licensed under [CC-BY 4.0][cc-by-human] 2018–{{ 'now' | date: "%Y"}}
 by <a href="{{ site.carpentries_site }}">The Carpentries</a><br>
 Licensed under [CC-BY 4.0][cc-by-human] 2016–2018
