@@ -5,9 +5,9 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 ---
 
 This lesson gives an introduction to R and how to work with tidy data. It also
-include some content on literate programming.
+includes some content on literate programming.
 
-This lesson builds to a large extent on the Data Carpentry's lessons
+The material builds to a large extent on the Data Carpentry's lessons
 "Data Analysis and Visualization in R for Ecologists" and "Intro to R and
 RStudio for Genomics" and to some extent also on the Software Carpentry's lesson
 "Programming with R".
