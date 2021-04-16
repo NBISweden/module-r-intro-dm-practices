@@ -1,22 +1,53 @@
 # To build this lesson
 ## Install dependencies
 ```
-$ conda env update -n name-of-your-env -f environment.yml
-$ conda activate name-of-your-env
-$ gem install bundler
-$ bundle install
+conda env update -n name-of-your-env -f environment.yml
+conda activate name-of-your-env
+gem install bundler
+bundle install
 ```
 
-## Build lesson
+## Build lesson using make
 ```
-$ conda activate name-of-your-env
-$ make site
+conda activate name-of-your-env
+make site
+```
+
+## Build episodes using Rscript
+```
+conda activate name-of-your-env
+# Rscript -e "source('bin/generate_md_episodes.R')" _episodes/{lesson}.md _episodes_rmd/{lesson}.Rmd
+Rscript -e "source('bin/generate_md_episodes.R')" _episodes/01-introduction.md _episodes_rmd/01-introduction.Rmd
+```
+
+## Build all episodes using R
+```{R}
+rmd_files <- Sys.glob(file.path(getwd(), '_episodes_rmd', '*.Rmd'))
+
+for (rmd_file_path in rmd_files){
+  rmd_file_name <- basename(rmd_file_path)
+  episode_name <- substr(rmd_file_name,1,nchar(rmd_file_name)-nchar(".Rmd"))
+  md_file_name <- paste(episode_name, '.md', sep="")
+  md_file_path <- file.path(getwd(),'_episodes',md_file_name)
+
+  system(
+    paste(
+      "Rscript -e \"source('bin/generate_md_episodes.R')\" \"", 
+      rmd_file_path, 
+      "\" \"", 
+      md_file_path,
+      "\"",
+      sep=""
+    )
+  )
+}
+
 ```
 
 ## Preview lesson locally
 ```
 $ conda activate name-of-your-env
-$ make serve
+$ bundle exec jekyll serve
 ```
 
 # FIXME Lesson title
