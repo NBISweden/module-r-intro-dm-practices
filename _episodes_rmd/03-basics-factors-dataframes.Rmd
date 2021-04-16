@@ -19,12 +19,12 @@ objectives:
 keypoints:
 - "It is easy to import data into R from tabular formats including Excel.
   However, you still need to check that R has imported and interpreted your
-  data correctly"
+  data correctly."
 - "There are best practices for organizing your data (keeping it tidy) and R
-  is great for this"
+  is great for this."
 - "Base R has many useful functions for manipulating your data, but all of R's
   capabilities are greatly enhanced by software packages developed by the
-  community"
+  community."
 source: Rmd
 ---
 
@@ -63,7 +63,7 @@ content of the CSV file into R.
 
 Inside the `download.file` command, the first entry is a character string with the
 source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv"). 
-This source URL downloads a CSV file from FitHub. The text after the comma
+This source URL downloads a CSV file from GitHub. The text after the comma
 ("data_raw/samples.csv") is the destination of the file on your local machine.
 You'll need to have a folder on your machine called "data_raw" where 
 you'll download the file. So this command downloads a file from the web, names 
@@ -86,7 +86,7 @@ Packages in R are basically sets of additional functions that let you do more
 stuff. The functions we've been using so far, like `round()`, `sqrt()`, or
 `c()`, come built into R; packages give you access to additional functions. 
 Before you use a package for the first time you need to install it on your 
-machine, and then you should import it in every subsequent R session when you 
+machine, and then you load it into every subsequent R session when you 
 need it. 
 
 To install the **`tidyverse`** package, we can type
@@ -121,7 +121,7 @@ type for a column manually by using the `col_types` argument in `read_csv`.
 
 We can see the contents of the first few lines of the data by typing its name:
 `samples`. By default, this will show show you as many rows and columns of the
-data as fit on your screen. If you wanted to the first 50 rows, you could type
+data as fit on your screen. If you want to see the first 50 rows, you could type
 `print(samples, n = 50)`. We can also extract the first few lines of this
 data using the function `head()`:
 
@@ -154,7 +154,7 @@ view(samples)
 > Check out the help for `read_csv()` by typing `?read_csv` to learn more. 
 >
 > In addition to the above versions of the csv format, you should develop the
-> habits of looking at and record some parameters of your csv files. For
+> habits of looking at some parameters of your csv files. For
 > instance, the character encoding, control characters used for line ending,
 > date format (if the date is not splitted into three variables), and the
 > presence of unexpected [newlines](https://en.wikipedia.org/wiki/Newline) are
@@ -314,7 +314,7 @@ names of the columns.
 >    frame. Store the content of this row in an object named `samples_middle`.
 >
 > 4. Combine `nrow()` with the `-` notation above to reproduce the behavior of
->    `head(samples)`, keeping just the first through 6th rows of the samples
+>    `head(samples)`, keeping just the first 6 rows of the samples
 >    dataset.
 >
 >> ## Solution
@@ -430,7 +430,7 @@ nlevels(samples$strain)
 >>
 >> * How many brain samples? There are 16 "brain" values in the `organism_part`
      column.
->> * how many mouse strains? There are 2 strains in the `strain` column.
+>> * How many mouse strains? There are 2 strains in the `strain` column.
 > {: .solution}
 {: .challenge}
 
@@ -595,7 +595,7 @@ We are going to use the `ymd()` function from the package **`lubridate`**
 When you load the **`tidyverse`** (`library(tidyverse)`), the core packages
 (the packages used in most data analyses) get loaded. **`lubridate`** however
 does not belong to the core tidyverse, so you have to load it explicitly with
-`library(lubridate)`
+`library(lubridate)`.
 
 Start by loading the required package:
 

@@ -22,7 +22,7 @@ objectives:
 keypoints:
 - "Effectively using R is a journey of months or years. Still you don't have to
   be an expert to use R and you can start using and analyzing your data with
-  about a day's worth of training"
+  about a day's worth of training."
 - "It is important to understand how data are organized by R in a given object
   type and how the mode of that type (e.g. numeric, character, logical, etc.)
   will determine how R will operate on that data."
@@ -67,9 +67,9 @@ not in every context. Because of the [slight](https://blog.revolutionanalytics.c
 in syntax, it is good practice to always use `<-` for assignments.
 
 In RStudio, typing <kbd>Alt</kbd> + <kbd>-</kbd> (push <kbd>Alt</kbd> at the
-same time as the <kbd>-</kbd> key) will write ` <- ` in a single keystroke in a
+same time as the <kbd>-</kbd> key) will write ` <- ` in a single keystroke on a
 PC, while typing <kbd>Option</kbd> + <kbd>-</kbd> (push <kbd>Option</kbd> at the
-same time as the <kbd>-</kbd> key) does the same in a Mac.
+same time as the <kbd>-</kbd> key) does the same on a Mac.
 
 Objects can be given almost any name such as `x`, `chromosome_position`, or
 `gene_id`. Here are some further guidelines on naming objects:
@@ -104,7 +104,7 @@ Objects can be given almost any name such as `x`, `chromosome_position`, or
 > programming languages. Depending on the context, `object` and `variable` can
 > have drastically different meanings. However, in this lesson, the two words
 > are used synonymously. For more information see:
-> [https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects]
+> [https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects)
 
 
 When assigning a value to an object, R does not print anything. You can force R
@@ -131,7 +131,7 @@ gc_content <- 51
 ```
 
 This means that assigning a value to one object does not change the values of
-other objects  For example, let's store the AT-content in a new object,
+other objects. For example, let's store the AT-content in a new object,
 `at_content`:
 
 ```{r, purl = FALSE}
@@ -144,7 +144,7 @@ and then change `gc_content` to 62.
 gc_content <- 62
 ```
 
-What do you think is the current content of the object `at_content`?
+What do you think is the current content of the object `at_content`, 
 38 or 49?
 
 ### Saving your code
@@ -263,7 +263,7 @@ round(digits = 2, x = 3.14159)
 ```
 
 It's good practice to put the non-optional arguments (like the number you're
-rounding) first in your function call, and to then specify the names of all
+rounding) first in your function call, and then specify the names of all
 optional arguments.  If you don't, someone reading your code might have to look
 up the definition of a function with unfamiliar arguments to understand what
 you're doing.
@@ -288,8 +288,8 @@ fahrenheit_to_celsius <- function(temp_fahrenheit) {
 
 We define `fahrenheit_to_celsius` by assigning it to the output of `function`.
 The list of argument names are contained within parentheses.
-Next, the body of the function--the statements that are executed when it
-runs--is contained within curly braces (`{}`). The statements in the body are
+Next, the body of the function -- the statements that are executed when it
+runs -- is contained within curly braces (`{}`). The statements in the body are
 indented by two spaces, which makes the code easier to read but does not affect
 how the code operates.
 
@@ -431,7 +431,7 @@ factors (`factor`) and arrays (`array`).
 > 
 >> ## Answer
 >>
->> R implicitly converts them to all be the same type
+>> R implicitly converts them all to be the same type
 > {: .solution}
 >
 > * What will happen in each of these examples? (hint: use `class()`
@@ -536,8 +536,8 @@ weight_g[weight_g <= 30 | weight_g == 55]
 weight_g[weight_g >= 30 & weight_g == 21]
 ```
 
-Here, `>` for "greater than", `<` stands for "less than", `<=` for "less than
-or equal to", and `==` for "equal to". The double equal sign `==` is a test for
+Here, `>` stands for "greater than", `<` stands for "less than", `<=` stands for "less than
+or equal to", and `==` stands for "equal to". The double equal sign `==` is a test for
 numerical equality between the left and right hand sides, and should not be
 confused with the single `=` sign, which performs variable assignment (similar
 to `<-`).
@@ -625,7 +625,7 @@ vector.
 >
 > 3. Use R to figure out how many people in the set are taller than 67 inches.
 >
->> ## solution
+>> ## Solution
 >>
 >> ```{r}
 heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)

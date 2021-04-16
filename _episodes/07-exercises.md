@@ -155,7 +155,7 @@ source: Rmd
 >
 > 3. Use R to figure out how many people in the set are taller than 67 inches.
 >
->> ## solution
+>> ## Solution
 >>
 >> 
 >> ~~~
@@ -340,7 +340,7 @@ cols(
 >    frame. Store the content of this row in an object named `samples_middle`.
 >
 > 4. Combine `nrow()` with the `-` notation above to reproduce the behavior of
->    `head(samples)`, keeping just the first through 6th rows of the samples
+>    `head(samples)`, keeping just the first 6 rows of the samples
 >    dataset.
 >
 >> ## Solution
@@ -407,7 +407,7 @@ cols(
 >>
 >> * How many brain samples? There are 16 "brain" values in the `organism_part`
      column.
->> * how many mouse strains? There are 2 strains in the `strain` column.
+>> * How many mouse strains? There are 2 strains in the `strain` column.
 > {: .solution}
 {: .challenge}
 
@@ -656,7 +656,7 @@ cols(
 >
 > * Use `group_by()` and `summarize()` to find the mean and standard deviation
 >   of the number of reads for each genotype and gene. Then reshape the data
->   so that the mean and standard deviation for for the two genotypes are
+>   so that the mean and standard deviation for the two genotypes are
 >   displayed in separate columns.
 >
 >   **Hint:** calculate the standard deviation with the `sd()` function.
@@ -814,12 +814,11 @@ head(cnts_sml_wide)
 > - What are the relative strengths and weaknesses of a hexagonal bin plot
 >   compared to a scatter plot? Examine the above scatter plot and compare it
 >   with the hexagonal bin plot that you created.
-```
 {: .challenge}
 
 > ## Challenge 5.2
 >
-> Use what you just learned to create a scatter plot the gene category against
+> Use what you just learned to create a scatter plot of the gene category against
 > the counts for sample `A_Wt`. Is this a good way to show this type of data?
 >
 >> ## Solution

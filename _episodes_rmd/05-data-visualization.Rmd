@@ -69,9 +69,9 @@ change or if we decide to change from a bar plot to a scatterplot. This helps in
 creating publication quality plots with minimal amounts of adjustments and 
 tweaking.
 
-**`ggplot2`** plots work best with data in the 'long' format, i.e., a column for
+**`ggplot2`** plots work best with data in the 'long' format, i.e. a column for
 every dimension, and a row for every observation. Well-structured data will save
-you lots of time when making figures with **`ggplot2`**
+you lots of time when making figures with **`ggplot2`**.
 
 ggplot graphics are built layer by layer by adding new elements. Adding layers
 in this fashion allows for extensive flexibility and customization of plots.
@@ -84,7 +84,7 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>()
 ```
 
 - use the `ggplot()` function and bind the plot to a specific data frame using 
-  the `data` argument
+  the `data` argument:
 
 ```{r, eval = FALSE, purl = FALSE}
 ggplot(data = cnts_sml_wide)
@@ -92,8 +92,8 @@ ggplot(data = cnts_sml_wide)
 
 - define an aesthetic mapping (using the aesthetic (`aes`) function), by 
   selecting the variables to be plotted and specifying how to present them in
-  the graph, e.g., as x/y positions or characteristics such as size, shape,
-  color, etc.      
+  the graph, e.g. as x/y positions, or characteristics such as size, shape,
+  color, etc:      
 
 ```{r, eval = FALSE, purl = FALSE}
 ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom))
@@ -141,7 +141,7 @@ cnts_plot +
 **Notes**
 
 - Anything you put in the `ggplot()` function can be seen by any geom layers
-  that you add (i.e., these are universal plot settings). This includes the x- 
+  that you add (i.e. these are universal plot settings). This includes the x- 
   and y-axis you set up in `aes()`.
 - You can also specify aesthetics for a given geom independently of the
   aesthetics defined globally in the `ggplot()` function.
@@ -168,7 +168,7 @@ cnts_plot
 > hexagonal binning of observations. The plot space is tessellated into
 > hexagons. Each hexagon is assigned a color based on the number of observations
 > that fall within its boundaries. To use hexagonal binning with **`ggplot2`**, 
-> irst install the R package `hexbin` from CRAN:
+> first install the R package `hexbin` from CRAN:
 >
 >
 > ```{r, eval = FALSE}
@@ -186,7 +186,6 @@ cnts_plot
 > - What are the relative strengths and weaknesses of a hexagonal bin plot
 >   compared to a scatter plot? Examine the above scatter plot and compare it
 >   with the hexagonal bin plot that you created.
-```
 {: .challenge}
 
 
@@ -228,7 +227,7 @@ ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
 
 > ## Challenge 5.2
 >
-> Use what you just learned to create a scatter plot the gene category against
+> Use what you just learned to create a scatter plot of the gene category against
 > the counts for sample `A_Wt`. Is this a good way to show this type of data?
 >
 >> ## Solution
@@ -256,7 +255,7 @@ ggplot(data = cnts_sml_wide,
 Another useful way to visualize and compare distributions across groups is the
 boxplot. Here we will use the `cnts_sml_long` data frame that have all the
 counts in a single column. We will first create a boxplot that visualizes the
-distribution of counts within each sample.
+distribution of counts within each sample:
 
 ```{r boxplot, purl=FALSE}
 ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
@@ -391,7 +390,7 @@ ggplot(cnts_Mpc2, aes(x = sample, y = cnt)) +
 ```
 
 In the code above, we used the argument `stat = "identity"` instead of the
-default value `bin`. This means that the height of the bar will represented by
+default value `bin`. This means that the height of the bar will be represented by
 the count in each category.
 
 We can improve the plot by using different fill colors for the genotypes:
@@ -450,7 +449,7 @@ cnts_sml_long %>%
 ```
 
 You can also create more advanced layouts using the `facet_grid()` function.
-We can for example arrange the plots vertically insted of horizontally:
+We can for example arrange the plots vertically instead of horizontally:
 
 
 ```{r facet-in-rows, purl = FALSE}
@@ -646,7 +645,7 @@ cnts_sml_long %>%
 > * See if you can change the thickness of the lines.
 > * Can you find a way to change the name of the legend? What about its labels?
 > * Try using a different color palette (see
->   [http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/]).
+>   [http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/)).
 {: .challenge
 
 ## Arranging plots

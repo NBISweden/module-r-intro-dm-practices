@@ -197,7 +197,7 @@ You can make a hyperlink like this:
 
 You can include an image file like this: `![caption](http://url/for/file)`
 
-You can do subscripts (e.g., F~2~) with `F~2` and superscripts (e.g.,
+You can do subscripts (e.g. F~2) with `F~2` and superscripts (e.g.,
 F^2^) with `F^2^`.
 
 If you know how to write equations in
@@ -289,7 +289,7 @@ knitr::opts_chunk$set(fig.path="Figs/", message=FALSE, warning=FALSE,
 
 The `fig.path` option defines where the figures will be saved. The `/`
 here is really important; without it, the figures would be saved in
-the standard place but just with names that being with `Figs`.
+the standard place but just with names that begin with `Figs`.
 
 If you have multiple R Markdown files in a common directory, you might
 want to use `fig.path` to define separate prefixes for the figure file
