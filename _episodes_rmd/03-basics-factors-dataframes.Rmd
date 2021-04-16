@@ -1,6 +1,6 @@
 ---
 title: "R Basics continued - factors and data frames"
-teaching: 45
+teaching: 40
 exercises: 20
 questions:
 - "How do I get started with tabular data (e.g. spreadsheets) in R?"
@@ -35,10 +35,10 @@ knitr_fig_path("03-")
 
 ## Loading the samples data
 
-We are investigating gene expression in mice under varying conditions and want
-to keep track of the animals included in the experiments. The dataset is stored
-as a comma separated value (CSV) file. Each row holds information for a single
-animal, and the columns represent:
+We are investigating gene expression in mice and want to keep track of animals
+included in different experiments. The dataset is stored as a comma separated
+value (CSV) file. Each row holds information for a single animal, and the
+columns represent:
 
 | Column                | Description                                                                                         |
 |-----------------------|-----------------------------------------------------------------------------------------------------|
@@ -61,22 +61,18 @@ We are going to use the R function `download.file()` to download the CSV file
 that contains data from Figshare, and we will use `read_csv()` to load the
 content of the CSV file into R.
 
-<!-- 
 Inside the `download.file` command, the first entry is a character string with the
-source URL ("https://ndownloader.figshare.com/files/2292169"). 
-This source URL downloads a CSV file from figshare. The text after the comma
-("data_raw/portal_data_joined.csv") is the destination of the file on your local
-machine. You'll need to have a folder on your machine called "data_raw" where 
-you'll download the file. So this command downloads a file from Figshare, names 
-it "portal_data_joined.csv" and adds it to a preexisting folder named "data_raw".
+source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv"). 
+This source URL downloads a CSV file from FitHub. The text after the comma
+("data_raw/samples.csv") is the destination of the file on your local machine.
+You'll need to have a folder on your machine called "data_raw" where 
+you'll download the file. So this command downloads a file from the web, names 
+it "samples.csv" and adds it to a preexisting folder named "data_raw".
 
 ```{r, eval=FALSE, purl=TRUE}
-download.file(url = "TODO", destfile = "data_raw/samples.csv")
-```
--->
-
-```{r, eval=FALSE, purl=TRUE}
-download.file(url = "TODO", destfile = "data_raw/samples.csv")
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv",
+  destfile = "data_raw/samples_r_lesson.csv")
 ```
 
 
@@ -109,20 +105,19 @@ Now we can use the functions from the **`tidyverse`** package. Let's use
 frames later):
 
 ```{r, eval = FALSE,  purl = FALSE}
-samples <- read_csv("data_raw/samples.csv")
+samples <- read_csv("data_raw/samples_r_lesson.csv")
 ```
 ```{r, echo = FALSE, eval = TRUE, purl = FALSE}
 # silently read in CSV file with samples
 samples <- read_csv("../data/samples_r_lesson.csv")
 ```
 
-You will see the message `Parsed with column specification`, followed by each
-column name and its data type. When you execute `read_csv` on a data file, it
-looks through the first 1000 rows of each column and guesses its data type.
-For example, in this dataset, `read_csv()` reads `animal_id` as `col_double`
-(a numeric data type), and `mouse_line` as `col_character`. You have the option
-to specify the data type for a column manually by using the `col_types` argument
-in `read_csv`.
+You will see the text `Column specification`, followed by each column name and
+its data type. When you execute `read_csv` on a data file, it looks through the
+first 1000 rows of each column and guesses its data type. For example, in this
+dataset, `read_csv()` reads `animal_id` as `col_double` (a numeric data type),
+and `mouse_line` as `col_character`. You have the option to specify the data
+type for a column manually by using the `col_types` argument in `read_csv`.
 
 We can see the contents of the first few lines of the data by typing its name:
 `samples`. By default, this will show show you as many rows and columns of the
@@ -222,7 +217,7 @@ Note: most of these functions are "generic", they can be used on other types of
 objects besides `data.frame`.
 
 
-> ## Challenge
+> ## Challenge 3.1
 >
 > Based on the output of `str(samples)`, can you answer the following questions?
 >
@@ -234,23 +229,18 @@ objects besides `data.frame`.
 >> ```{r, purl=FALSE}
 str(samples)
 ```
->> 100 rows and 12 columns
->>
+>> * The object `samples` is of class `data.frame`, or more specifically a
+>>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
+>> * Rows and columns: 100 rows and 12 columns
 > {: .solution}
 {: .challenge}
 
 
 ## Indexing and subsetting data frames
 
-```{r, echo=FALSE, purl=TRUE}
-
-## Indexing and subsetting data frames
-```
-
 Our samples data frame has rows and columns (it has 2 dimensions), if we want to
 extract some specific data from it, we need to specify the "coordinates" we
 want from it. Row numbers come first, followed by column numbers.
-
 
 ```{r, purl=FALSE}
 # first element in the first column of the data frame
@@ -275,8 +265,8 @@ or decreasing order, test `1:10` and `10:1` for instance.
 You can also exclude certain indices of a data frame using the "`-`" sign:
 
 ```{r, purl=FALSE}
-samples[, -1]       # The whole data frame, except the first column
-samples[-(7:100), ] # Equivalent to head(samples)
+samples[, -1]       # the whole data frame, except the first column
+samples[-(7:100), ] # equivalent to head(samples)
 ```
 
 Data frames can be subset by calling indices (as shown previously), but also by
@@ -287,27 +277,27 @@ samples["animal_id"]
 samples[, "animal_id"]
 ```
 
-When we are extracting a subset of a data frame of class `tibble`, we normally
-get back an object of the same class. If we want to get the result as a vector
-instead of as a one-column data frame, we can use double square brackets:
+When we extract a subset from a data frame of class `tibble`, we normally
+get back an object of the same class. To get one-column subsets returned as
+vectors, we can use double square brackets:
 
 ```{r, purl=FALSE}
-samples[[1]]
-samples[["animal_id"]]
-samples[[1,1]]
-samples[[1, "animal_id"]]
+samples[[1]]              # first column as vector
+samples[["animal_id"]]    # named column as vector
+samples[[1, 1]]           # first element in the first column as vector        
+samples[[1, "animal_id"]] # first element in the named column as vector
 ```
 
 We can also access an individual column as a vector by using a dollar sign, `$`:
 
 ```{r, purl=FALSE}
-samples$animal_id
+samples$animal_id         # named column as vector
 ```
 
 In RStudio, you can use the autocompletion feature to get the full and correct
 names of the columns.
 
-> ## Challenge
+> ## Challenge 3.2
 >
 > 1. Create a `data.frame` (`samples_20`) containing only the data in
 >    row 20 of the `samples` dataset.
@@ -419,7 +409,7 @@ this information built in. It is particularly helpful when there are many levels
 (like the species names in our example dataset).
 
 
-> ## Challenge
+> ## Challenge 3.3
 >
 > 1. Change the columns `strain` and `organism_part` in the `samples`
 >    data frame into a factor.
@@ -488,7 +478,7 @@ quick glance at the number of observations represented by each factor
 level. Let's look at the number of males and females captured over the course of
 the experiment:
 
-```{r, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+```{r barplot-1, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 plot(samples$sex)
 ```
 
@@ -512,7 +502,7 @@ head(sex)
 
 Now we can plot the data again, using `plot(sex)`.
 
-```{r, echo = FALSE, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+```{r barplot-2, echo = FALSE, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 plot(sex)
 ```
 
@@ -524,7 +514,7 @@ plot(sex)
 >
 >> ## Solution
 >>
->> ```{r, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+>> ```{r barplot-3, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
 levels(sex)[1:2] <- c("female", "male")
 sex <- factor(sex, levels = c("unknown", "female", "male"))
 plot(sex)
@@ -533,20 +523,20 @@ plot(sex)
 {: .challenge}
 
 
-> ## Challenge
+> ## Challenge 3.4
 >
 > 1. We have seen how data frames are created when using `read_csv()`, but they
->   can also be created by hand with the `data.frame()` function.  There are a
->   few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
->   Don't hesitate to experiment!
+>    can also be created by hand with the `data.frame()` function.  There are a
+>    few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
+>    Don't hesitate to experiment!
 >
->     ```{r, eval=FALSE, purl=FALSE}
->     animal_data <- data.frame(
->               animal = c(dog, cat, sea cucumber, sea urchin),
->               feel = c("furry", "squishy", "spiny"),
->               weight = c(45, 8 1.1, 0.8)
->               )
->     ```
+>    ```{r, eval=FALSE, purl=FALSE}
+>    animal_data <- data.frame(
+>              animal = c(dog, cat, sea cucumber, sea urchin),
+>              feel = c("furry", "squishy", "spiny"),
+>              weight = c(45, 8 1.1, 0.8)
+>              )
+>    ```
 >
 > 2. Can you predict the class for each of the columns in the following example?
 >    Check your guesses using `str(country_climate)`:

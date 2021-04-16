@@ -3,7 +3,14 @@ layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
-FIXME: home page introduction
+
+This lesson gives an introduction to R and how to work with tidy data. It also
+includes some content on literate programming.
+
+The material builds to a large extent on the Data Carpentry's lessons
+"Data Analysis and Visualization in R for Ecologists" and "Intro to R and
+RStudio for Genomics" and to some extent also on the Software Carpentry's lesson
+"Programming with R".
 
 <!-- this is an html comment -->
 

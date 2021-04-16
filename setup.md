@@ -14,7 +14,7 @@ title: Setup
 > ## Data
 >
 > Download the following files and put them somewhere you'll remember:
-> * [gene_expression_counts_r_lesson.tsv](data/gene_expression_counts_r_lesson.tsv)
+> * [gene_counts_r_lesson.tsv](data/gene_counts_r_lesson.tsv)
 > * [samples_r_lesson.csv](data/samples_r_lesson.csv)
 >
 {: .prereq}
