@@ -9,13 +9,13 @@ objectives:
 - "Select certain columns in a data frame with the **`dplyr`** function
   `select`."
 - "Extract certain rows in a data frame according to logical (boolean)
-  conditions with the **`dplyr`** function `filter` ."
+  conditions with the **`dplyr`** function `filter`."
 - "Link the output of one **`dplyr`** function to the input of another function
   with the 'pipe' operator `%>%`."
 - "Add new columns to a data frame that are functions of existing columns with
   `mutate`."
 - "Use the split-apply-combine concept for data analysis."
-- Use `summarize`, `group_by`, and `count` to split a data frame into groups of
+- "Use `summarize`, `group_by`, and `count` to split a data frame into groups of
   observations, apply summary statistics for each group, and then combine the
   results."
 - "Describe the concept of a wide and a long table format and for which purpose
@@ -43,7 +43,7 @@ knitr_fig_path("04-")
 # Data manipulation using **`dplyr`** and **`tidyr`**
 
 Bracket subsetting is handy, but it can be cumbersome and difficult to read,
-especially for complicated operations. Enter **`dplyr`**. **`dplyr`** is a
+especially for complicated operations. **`dplyr`** is a
 package for making tabular data manipulation easier. It pairs nicely with
 **`tidyr`** which enables you to swiftly convert between different data formats
 for plotting and analysis.
@@ -63,12 +63,12 @@ doing data analysis with some of the functions that come with R:
 
 You should already have installed and loaded the **`tidyverse`** package. 
 If we haven't already done so, we can type `install.packages("tidyverse")`
-straight into the console. Then, to load the package type `library(tidyverse)`
+straight into the console. Then, to load the package type `library(tidyverse)`.
 
 ## What are **`dplyr`** and **`tidyr`**?
 
 The package **`dplyr`** provides easy tools for the most common data
-manipulationvtasks. It is built to work directly with data frames, with many
+manipulation tasks. It is built to work directly with data frames, with many
 common tasks optimized by being written in a compiled language (C++). An
 additional feature is the ability to work directly with data stored in an
 external database. The benefits of doing this are that the data can be managed
@@ -77,7 +77,7 @@ and only the results of the query are returned.
 
 This addresses a common problem with R in that all operations are conducted
 in-memory and thus the amount of data you can work with is limited by available
-memory. The database connections essentially remove that limitation in that you
+memory. The database connections essentially remove this limitation in that you
 can connect to a database of many hundreds of GB, conduct queries on it
 directly, and pull back into R only what you need for analysis.
 
@@ -98,7 +98,7 @@ In this episode, we will use data on gene expressions stored in the
 We will read in our data using the `read_tsv()` function from the tidyverse
 package **`readr`**.
 
-Each line in the file holds the number of reads from are overlapping a
+Each line in the file holds the number of reads overlapping a
 particular gene. Counts are given for 6 individual samples. The dataset consists
 of the following columns:
 
@@ -281,11 +281,11 @@ We can do these of transformations with the functions `pivot_wider()` and
 `pivot_wider()` takes four principal arguments:
 
 1. the data
-2. the *id_cols* with the set of variables that uniquely identifies each
-   observation.
-3. the *names_from* variable to get the output column names from
-4. the *values_from* column variable whose values will fill the new column
-   variables.
+2. *id_cols* with the set of variables that uniquely identifies each
+   observation
+3. *names_from* variable to get the output column names from
+4. *values_from* column variable whose values will fill the new column
+   variables
 
 
 Let's use `pivot_wider()` to transform the gene count data so that we get all
@@ -331,10 +331,10 @@ names.
 `pivot_longer()` takes four principal arguments:
 
 1. the data
-2. the *cols* with the set of columns we want transform into a variable.
-3. the *names_to* column variable we wish to create and fill with values 
-associated with the key.
-4. the *values_to* column variable we want to fill with the values.
+2. *cols* with the set of columns we want transform into a variable
+3. *names_to* column variable we wish to create and fill with values 
+associated with the key
+4. *values_to* column variable we want to fill with the values
 
 ```{r, purl=FALSE}
 cnts_wide %>% pivot_longer(
@@ -394,8 +394,8 @@ cnts_wide %>%
 
 If this runs off your screen and you just want to see the first few rows, you
 can use a pipe to view the `head()` of the data. (Pipes work with 
-non-**`dplyr`** functions, too, as long as the **`dplyr`** or `magrittr` package
-is loaded).
+non-**`dplyr`** functions too, as long as the **`dplyr`** or `magrittr` package
+is loaded.)
 
 ```{r, purl = FALSE}
 cnts_wide %>%
@@ -579,7 +579,7 @@ cnts %>%
 >
 > * Use `group_by()` and `summarize()` to find the mean and standard deviation
 >   of the number of reads for each genotype and gene. Then reshape the data
->   so that the mean and standard deviation for for the two genotypes are
+>   so that the mean and standard deviation for the two genotypes are
 >   displayed in separate columns.
 >
 >   **Hint:** calculate the standard deviation with the `sd()` function.
