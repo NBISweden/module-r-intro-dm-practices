@@ -10,6 +10,8 @@ dependencies:
   - r-remotes
   - r-renv
   - ruby>=2.7.1
+  - c-compiler
+  - cxx-compiler
   #- rb-bundler # This and *many* other ruby gems are out of date, use gem install rb-bundler
   #- rb-github-pages # This and *many* other ruby gems are out of date, use bundle install
 #Run:
