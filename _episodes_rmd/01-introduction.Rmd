@@ -133,9 +133,9 @@ generate. RStudio can also be used for other things (e.g., version control,
 developing packages, writing Shiny apps) that we will not cover during the
 workshop.
 
-![RStudio interface screenshot. Clockwise from top left: Source,
+[![RStudio interface screenshot. Clockwise from top left: Source,
 Environment/History, Files/Plots/Packages/Help/Viewer,
-Console.](../fig/rstudio-screenshot.png)
+Console.](../fig/rstudio-screenshot.png)](../fig/rstudio-screenshot.png)
 
 RStudio is divided into 4 "Panes": the **Source** for your scripts and documents
 (top-left, in the default layout), your **Environment/History** (top-right)
@@ -173,7 +173,7 @@ below.
     location for it. This will be your **working directory** for the rest of the
     day (e.g., `~/r_intro`).
 4.  Click on `Create Project`.
-5.  (Optional) Set Preferences to "Never' save workspace in RStudio.
+5.  (Optional) Set Preferences to "Never" save workspace in RStudio.
 
 A workspace is your current working environment in R which includes any
 user-defined object. By default, all of these objects will be saved, and
@@ -221,11 +221,34 @@ we will use `data/` for when we learn how to export data as CSV files, and a
 We are going to keep the script in the root of our working directory because we
 are only going to use one file and it will make things easier.
 
+### Creating a README file
+
+It is good practice to create a [README text file](https://www.makeareadme.com)
+at the top level of your working directory to provide the context of the files
+in the directory. Making this a habit can save you many hours of work, as it
+will allow you to quickly get into a project again after being away from it. You
+may also find a README file helpful when you collaborate with others around a
+bunch of files.
+
+1.  Under the `File` menu, first click on `New File`, and then select
+    `Text File`.
+2.  Enter the text "Course material for learning R" into the new file.
+3.  Save the file to your working directory and call it simply `README`.
+
 Your working directory should now look like this:
 
 ```{r, results='markup',fig.cap="How it should look like at the beginning of this lesson", echo=FALSE, purl=FALSE, out.width='100%', fig.align='center'}
 knitr::include_graphics("../fig/r-starting-how-it-should-look-like.png")
 ```
+
+> ## Writing the README file in Markdown
+>
+> While READMEs can be written in any text file format, it is nowadays very
+> common to use the [Markdown language](https://www.markdownguide.org)
+> (the files are then usaully named "README.md"). Markdown is a lightweight
+> markup language that makes it relatively easy to add text formatting using a
+> plain-text editor.
+{: .callout}
 
 ### The working directory
 

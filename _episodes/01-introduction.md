@@ -49,7 +49,7 @@ The learning curve might be steeper than with other software, but with R, the
 results of your analysis do not rely on remembering a succession of pointing and
 clicking, but instead on a series of written commands, and that's a good thing!
 So, if you want to redo your analysis because you collected more data, you don't
-have to remember which button you clicked in which order to obtain your results;
+have to remember which button you clicked in which order to obtain your results,
 you just have to run your script again.
 
 Working with scripts makes the steps you used in your analysis clear, and the
@@ -132,9 +132,9 @@ generate. RStudio can also be used for other things (e.g., version control,
 developing packages, writing Shiny apps) that we will not cover during the
 workshop.
 
-![RStudio interface screenshot. Clockwise from top left: Source,
+[![RStudio interface screenshot. Clockwise from top left: Source,
 Environment/History, Files/Plots/Packages/Help/Viewer,
-Console.](../fig/rstudio-screenshot.png)
+Console.](../fig/rstudio-screenshot.png)](../fig/rstudio-screenshot.png)
 
 RStudio is divided into 4 "Panes": the **Source** for your scripts and documents
 (top-left, in the default layout), your **Environment/History** (top-right)
@@ -172,7 +172,7 @@ below.
     location for it. This will be your **working directory** for the rest of the
     day (e.g., `~/r_intro`).
 4.  Click on `Create Project`.
-5.  (Optional) Set Preferences to "Never' save workspace in RStudio.
+5.  (Optional) Set Preferences to "Never" save workspace in RStudio.
 
 A workspace is your current working environment in R which includes any
 user-defined object. By default, all of these objects will be saved, and
@@ -209,7 +209,7 @@ create directories (folders) for **scripts**, **data**, and **documents**.
 
 For this workshop, we will need a `data_raw/` folder to store our raw data, and
 we will use `data/` for when we learn how to export data as CSV files, and a
-`../fig/` folder for the figures that we will save.
+`fig/` folder for the figures that we will save.
 
 -   Under the `Files` tab on the right of the screen, click on `New Folder` and
     create a folder named `data_raw` within your newly created working directory
@@ -220,9 +220,32 @@ we will use `data/` for when we learn how to export data as CSV files, and a
 We are going to keep the script in the root of our working directory because we
 are only going to use one file and it will make things easier.
 
+### Creating a README file
+
+It is good practice to create a [README text file](https://www.makeareadme.com)
+at the top level of your working directory to provide the context of the files
+in the directory. Making this a habit can save you many hours of work, as it
+will allow you to quickly get into a project again after being away from it. You
+may also find a README file helpful when you collaborate with others around a
+bunch of files.
+
+1.  Under the `File` menu, first click on `New File`, and then select
+    `Text File`.
+2.  Enter the text "Course material for learning R" into the new file.
+3.  Save the file to your working directory and call it simply `README`.
+
 Your working directory should now look like this:
 
 <img src="../fig/r-starting-how-it-should-look-like.png" title="How it should look like at the beginning of this lesson" alt="How it should look like at the beginning of this lesson" width="100%" style="display: block; margin: auto;" />
+
+> ## Writing the README file in Markdown
+>
+> While READMEs can be written in any text file format, it is nowadays very
+> common to use the [Markdown language](https://www.markdownguide.org)
+> (the files are then usaully named "README.md"). Markdown is a lightweight
+> markup language that makes it relatively easy to add text formatting using a
+> plain-text editor.
+{: .callout}
 
 ### The working directory
 
@@ -275,7 +298,7 @@ At some point in your analysis you may want to check the content of a variable
 or the structure of an object, without necessarily keeping a record of it in
 your script. You can type these commands and execute them directly in the
 console. RStudio provides the <kbd>Ctrl</kbd> + <kbd>1</kbd> and
-<kbd>Ctrl</kbd> + <kbd>2</kbd> shortcuts allow you to jump between the
+<kbd>Ctrl</kbd> + <kbd>2</kbd> shortcuts to allow you to jump between the
 script and the console panes.
 
 If R is ready to accept commands, the R console shows a `>` prompt. If it
@@ -420,13 +443,12 @@ sessionInfo()
 
 
 ~~~
-R version 4.0.4 (2021-02-15)
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.1.1 (2021-08-10)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
 Running under: macOS Big Sur 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+BLAS/LAPACK: /Users/markus/anaconda3/envs/dm-course-env/lib/libopenblasp-r0.3.17.dylib
 
 locale:
 [1] sv_SE.UTF-8/sv_SE.UTF-8/sv_SE.UTF-8/C/sv_SE.UTF-8/sv_SE.UTF-8
@@ -435,11 +457,11 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] knitr_1.32
+[1] knitr_1.35
 
 loaded via a namespace (and not attached):
-[1] compiler_4.0.4 magrittr_2.0.1 tools_4.0.4    stringi_1.5.3  highr_0.8     
-[6] stringr_1.4.0  xfun_0.22      evaluate_0.14 
+[1] compiler_4.1.1 magrittr_2.0.1 tools_4.1.1    stringi_1.7.5  highr_0.9     
+[6] stringr_1.4.0  xfun_0.26      evaluate_0.14 
 ~~~
 {: .output}
 
