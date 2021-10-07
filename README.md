@@ -44,6 +44,12 @@ for (rmd_file_path in rmd_files){
 
 ```
 
+## Build all lesson using a one-liner shell command
+
+```
+ls _episodes_rmd/*.Rmd | sed 'p;s/_rmd\(..*\).Rmd/\1.md/' | xargs -n2 Rscript -e "source('bin/generate_md_episodes.R')"
+```
+
 ## Preview lesson locally
 ```
 $ conda activate name-of-your-env
