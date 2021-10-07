@@ -16,8 +16,8 @@ make site
 ## Build episodes using Rscript
 ```
 conda activate name-of-your-env
-# Rscript -e "source('bin/generate_md_episodes.R')" _episodes/{lesson}.md _episodes_rmd/{lesson}.Rmd
-Rscript -e "source('bin/generate_md_episodes.R')" _episodes/01-introduction.md _episodes_rmd/01-introduction.Rmd
+# Rscript -e "source('bin/generate_md_episodes.R')" _episodes_rmd/{lesson}.Rmd  _episodes/{lesson}.md 
+Rscript -e "source('bin/generate_md_episodes.R')" _episodes_rmd/01-introduction.Rmd _episodes/01-introduction.md
 ```
 
 ## Build all episodes using R
