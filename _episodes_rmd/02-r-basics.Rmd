@@ -180,12 +180,12 @@ to select the whole line), then press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> +
 > What are the values after each statement in the following?
 >
 > ```{r, purl = FALSE}
-mass <- 47.5            # mass?
-age  <- 122             # age?
-mass <- mass * 2.0      # mass?
-age  <- age - 20        # age?
-mass_index <- mass/age  # mass_index?
-```
+> mass <- 47.5            # mass?
+> age  <- 122             # age?
+> mass <- mass * 2.0      # mass?
+> age  <- age - 20        # age?
+> mass_index <- mass/age  # mass_index?
+> ```
 {: .challenge}
 
 ### Functions and their arguments
@@ -325,12 +325,12 @@ the value that we returned.
 >> ## Solution
 >>
 >> ```{r, purl = FALSE}
-# Calculate the sum of x and y
-add_two_args <- function(x, y) { x + y }
-
-# Call the function
-add_two_args(9, 7)
-```
+>> # Calculate the sum of x and y
+>> add_two_args <- function(x, y) { x + y }
+>>
+>> # Call the function
+>> add_two_args(9, 7)
+>> ```
 >>
 > {: .solution}
 {: .challenge}
@@ -628,22 +628,22 @@ vector.
 >> ## Solution
 >>
 >> ```{r}
-heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
-
-# 1.
-heights_no_na <- heights[!is.na(heights)] 
-# or
-heights_no_na <- na.omit(heights)
-# or
-heights_no_na <- heights[complete.cases(heights)]
-
-# 2.
-median(heights, na.rm = TRUE)
-
-# 3.
-heights_above_67 <- heights_no_na[heights_no_na > 67]
-length(heights_above_67)
-```
+>> heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+>> 
+>> # 1.
+>> heights_no_na <- heights[!is.na(heights)] 
+>> # or
+>> heights_no_na <- na.omit(heights)
+>> # or
+>> heights_no_na <- heights[complete.cases(heights)]
+>> 
+>> # 2.
+>> median(heights, na.rm = TRUE)
+>> 
+>> # 3.
+>> heights_above_67 <- heights_no_na[heights_no_na > 67]
+>> length(heights_above_67)
+>> ```
 > {: .solution}
 {: .challenge}
 
