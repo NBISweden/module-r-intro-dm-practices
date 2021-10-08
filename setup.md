@@ -16,8 +16,8 @@ title: Setup
 > ## Data
 >
 > Download the following files and put them somewhere you'll remember:
-> * [covid_samples.tsv](data/covid_samples.tsv)
-> * [sequencing.tsv](data/covid_sequencing.tsv)
+> * [covid_samples.csv](data/covid_samples.csv)
+> * [sequencing.csv](data/covid_sequencing.csv)
 >
 > The data is taken from the following study:
 > 
