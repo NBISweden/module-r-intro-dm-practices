@@ -490,11 +490,11 @@ the value that we returned.
 
 ## Vectors and data types
 
-A vector is the most common and basic data type in R, and is pretty much
-the workhorse of R. A vector is composed by a series of values, which can be
-either numbers or characters. We can assign a series of values to a vector using
-the `c()` function. For example we can create a vector of animal weights and
-assign it to a new object `weight_g`:
+A vector is the most common and basic data type in R, and is pretty much the
+workhorse of R. A vector is composed by a series of values, which can be either
+numbers or characters. We can assign a series of values to a vector using the
+`c()` function. For example we can create a vector of animal weights and assign
+it to a new object `weight_g`:
 
 
 ~~~
@@ -530,8 +530,8 @@ The quotes around "mouse", "rat", etc. are essential here. Without the quotes R
 will assume objects have been created called `mouse`, `rat` and `dog`. As these
 objects don't exist in R's memory, there will be an error message.
 
-There are many functions that allow you to inspect the content of a
-vector. `length()` tells you how many elements are in a particular vector:
+There are many functions that allow you to inspect the content of a vector.
+`length()` tells you how many elements are in a particular vector:
 
 
 ~~~
@@ -592,8 +592,7 @@ class(animals)
 {: .output}
 
 The function `str()` provides an overview of the structure of an object and its
-elements. It is a useful function when working with large and complex
-objects:
+elements. It is a useful function when working with large and complex objects:
 
 
 ~~~
@@ -624,6 +623,7 @@ str(animals)
 
 You can use the `c()` function to add other elements to your vector:
 
+
 ~~~
 weight_g <- c(weight_g, 90) # add to the end of the vector
 weight_g <- c(30, weight_g) # add to the beginning of the vector
@@ -638,20 +638,19 @@ weight_g
 ~~~
 {: .output}
 
-In the first line, we take the original vector `weight_g`,
-add the value `90` to the end of it, and save the result back into
-`weight_g`. Then we add the value `30` to the beginning, again saving the result
-back into `weight_g`.
+In the first line, we take the original vector `weight_g`, add the value `90` to
+the end of it, and save the result back into `weight_g`. Then we add the value
+`30` to the beginning, again saving the result back into `weight_g`.
 
-We can do this over and over again to grow a vector, or assemble a dataset.
-As we program, this may be useful to add results that we are collecting or
+We can do this over and over again to grow a vector, or assemble a dataset. As
+we program, this may be useful to add results that we are collecting or
 calculating.
 
 An **atomic vector** is the simplest R **data type** and is a linear vector of a
-single type. Above, we saw 2 of the 6 main **atomic vector** types  that R
-uses: `"character"` and `"numeric"` (or `"double"`). These are the basic
-building blocks that all R objects are built from. The other 4 **atomic vector**
-types are:
+single type. Above, we saw 2 of the 6 main **atomic vector** types  that R uses:
+`"character"` and `"numeric"` (or `"double"`). These are the basic building
+blocks that all R objects are built from. The other 4 **atomic vector** types
+are:
 
 * `"logical"` for `TRUE` and `FALSE` (the boolean data type)
 * `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's
@@ -670,17 +669,17 @@ factors (`factor`) and arrays (`array`).
 
 > ## Challenge 2.3
 >
-> * We’ve seen that atomic vectors can be of type character,
->   numeric (or double), integer, and logical. But what happens if we try to mix
->   these types in a single vector?
+> * We’ve seen that atomic vectors can be of type character, numeric (or
+>   double), integer, and logical. But what happens if we try to mix these types
+>   in a single vector?
 > 
 >> ## Answer
 >>
 >> R implicitly converts them all to be the same type
 > {: .solution}
 >
-> * What will happen in each of these examples? (hint: use `class()`
->   to check the data type of your objects):
+> * What will happen in each of these examples? (hint: use `class()` to check
+>   the data type of your objects):
 >
 >     ```r
 >     num_char <- c(1, 2, 3, "a")
@@ -878,11 +877,11 @@ numeric(0)
 ~~~
 {: .output}
 
-Here, `>` stands for "greater than", `<` stands for "less than", `<=` stands for "less than
-or equal to", and `==` stands for "equal to". The double equal sign `==` is a test for
-numerical equality between the left and right hand sides, and should not be
-confused with the single `=` sign, which performs variable assignment (similar
-to `<-`).
+Here, `>` stands for "greater than", `<` stands for "less than", `<=` stands
+for "less than or equal to", and `==` stands for "equal to". The double equal
+sign `==` is a test for numerical equality between the left and right hand
+sides, and should not be confused with the single `=` sign, which performs
+variable assignment (similar to `<-`).
 
 A common task is to search for certain strings in a vector.  One could use the
 "or" operator `|` to test for equality to multiple values, but this can quickly
