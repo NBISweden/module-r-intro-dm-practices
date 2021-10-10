@@ -11,29 +11,19 @@ objectives:
 - "Select certain columns in a data frame with the **`dplyr`** function
   `select`."
 - "Extract certain rows in a data frame according to logical (boolean)
-  conditions with the **`dplyr`** function `filter` ."
+  conditions with the **`dplyr`** function `filter`."
 - "Link the output of one **`dplyr`** function to the input of another function
   with the 'pipe' operator `%>%`."
-- "Add new columns to a data frame that are functions of existing columns with
-  `mutate`."
 - "Use the split-apply-combine concept for data analysis."
-- Use `summarize`, `group_by`, and `count` to split a data frame into groups of
+- "Use `summarize`, `group_by`, and `count` to split a data frame into groups of
   observations, apply summary statistics for each group, and then combine the
   results."
-- "Describe the concept of a wide and a long table format and for which purpose
-  those formats are useful."
-- "Describe what key-value pairs are."
-- "Reshape a data frame from long to wide format and back with the `spread` and
-  `gather` commands from the **`tidyr`** package."
 - "Export a data frame to a .csv file."
 keypoints:
 - "Use the `dplyr` package to manipulate dataframes."
 - "Use `select()` to choose variables from a dataframe."
 - "Use `filter()` to choose data based on values."
 - "Use `group_by()` and `summarize()` to work with subsets of data."
-- "Use `mutate()` to create new variables."
-- "Use `pivot_wider()` to transform rows into columns."
-- "Use `pivot_longer()` to transform columns into rows."
 source: Rmd
 ---
 
@@ -42,10 +32,9 @@ source: Rmd
 # Data manipulation using **`dplyr`** and **`tidyr`**
 
 Bracket subsetting is handy, but it can be cumbersome and difficult to read,
-especially for complicated operations. Enter **`dplyr`**. **`dplyr`** is a
-package for making tabular data manipulation easier. It pairs nicely with
-**`tidyr`** which enables you to swiftly convert between different data formats
-for plotting and analysis.
+especially for complicated operations. **`dplyr`** is a package for making
+tabular data manipulation easier. It pairs nicely with **`tidyr`** which enables
+you to swiftly convert between different data formats for plotting and analysis.
 
 The **`tidyverse`** package is an "umbrella-package" that installs **`tidyr`**,
 **`dplyr`**, and several other packages useful for data analysis, such as 
@@ -62,12 +51,12 @@ doing data analysis with some of the functions that come with R:
 
 You should already have installed and loaded the **`tidyverse`** package. 
 If we haven't already done so, we can type `install.packages("tidyverse")`
-straight into the console. Then, to load the package type `library(tidyverse)`
+straight into the console. Then, to load the package type `library(tidyverse)`.
 
 ## What are **`dplyr`** and **`tidyr`**?
 
 The package **`dplyr`** provides easy tools for the most common data
-manipulationvtasks. It is built to work directly with data frames, with many
+manipulation tasks. It is built to work directly with data frames, with many
 common tasks optimized by being written in a compiled language (C++). An
 additional feature is the ability to work directly with data stored in an
 external database. The benefits of doing this are that the data can be managed
@@ -76,7 +65,7 @@ and only the results of the query are returned.
 
 This addresses a common problem with R in that all operations are conducted
 in-memory and thus the amount of data you can work with is limited by available
-memory. The database connections essentially remove that limitation in that you
+memory. The database connections essentially remove this limitation in that you
 can connect to a database of many hundreds of GB, conduct queries on it
 directly, and pull back into R only what you need for analysis.
 
@@ -86,34 +75,21 @@ where we have one row per measurement. Sometimes we want a data frame where each
 measurement type has its own column, and rows are instead more aggregated groups
 (e.g., a time period, an experimental unit like a plot or a batch number).
 Moving back and forth between these formats is non-trivial, and **`tidyr`**
-gives you tools for this and more sophisticated  data manipulation.
+gives you tools for this and more sophisticated data manipulation.
 
 To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want
 to check out this [handy data transformation with **`dplyr`** cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
 and this [one about **`tidyr`**](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).
 
-In this episode, we will use data on gene expressions stored in the
-[TSV (tab-separated values) format](https://en.wikipedia.org/wiki/Tab-separated_values).
-We will read in our data using the `read_tsv()` function from the tidyverse
-package **`readr`**.
-
-Each line in the file holds the number of reads from are overlapping a
-particular gene. Counts are given for 6 individual samples. The dataset consists
-of the following columns:
-
-| Column   | Description                            |
-|----------|----------------------------------------|
-| gene     | name of gene                           |
-| sample   | 1-letter label for the sample (A to F) |
-| genotype | "Wt" (wild type) or "Hom" (homozygous) |
-| cnt      | number of reads overlapping the gene   |
-
+In this episode, we will use the SARS-CoV-2 samples dataset that was introduced
+in the previous episode. You can read the data using the `read_csv()` function
+from the tidyverse package **`readr`**.
 
 
 ~~~
 download.file(
-  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/gene_counts_r_lesson.csv",
-  destfile = "data_raw/gene_counts_r_lesson.csv")
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/covid_samples.csv",
+  destfile = "data_raw/covid_samples.csv")
 ~~~
 {: .language-r}
 
@@ -124,52 +100,87 @@ library(tidyverse)
 ~~~
 {: .language-r}
 
+We can then read the data into memory:
+
+
 ~~~
-cnts <- read_tsv("data_raw/gene_counts_r_lesson.tsv")
+samples <- read_csv("data_raw/covid_samples.csv")
 ~~~
 {: .language-r}
 
 ~~~
-
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-cols(
-  gene = col_character(),
-  sample = col_character(),
-  genotype = col_character(),
-  cnt = col_double()
-)
+Rows: 29 Columns: 8
 ~~~
 {: .output}
 
 
+
+~~~
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (5): patient_id, country, region, disease_outcome, sex
+dbl  (2): age, ct
+date (1): collection_date
+~~~
+{: .output}
+
+
+
+~~~
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+~~~
+{: .output}
+
+Like in the previous episode, we transform the columns `disease_outcome` and
+`sex` into factors:
+
+
+~~~
+samples$disease_outcome <- factor(samples$disease_outcome)
+samples$sex <- factor(samples$sex)
+~~~
+{: .language-r}
+
+
 ~~~
 ## inspect the data
-str(cnts)
+str(samples)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-spec_tbl_df[,4] [259,680 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ gene    : chr [1:259680] "0610005C13Rik" "0610005C13Rik" "0610005C13Rik" "0610005C13Rik" ...
- $ sample  : chr [1:259680] "A" "B" "C" "D" ...
- $ genotype: chr [1:259680] "Wt" "Wt" "Wt" "Hom" ...
- $ cnt     : num [1:259680] 5 0 0 0 0 1 582 587 549 862 ...
+spec_tbl_df [29 × 8] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ patient_id     : chr [1:29] "OAS-29_1" "OAS-29_10" "OAS-29_11" "OAS-29_12" ...
+ $ collection_date: Date[1:29], format: "2020-03-31" "2020-03-31" ...
+ $ country        : chr [1:29] "Italy" "Italy" "Italy" "Italy" ...
+ $ region         : chr [1:29] "Turin" "Turin" "Turin" "Turin" ...
+ $ age            : num [1:29] 48 35 59 60 83 21 44 55 81 63 ...
+ $ disease_outcome: Factor w/ 2 levels "dead","recovered": 1 NA 2 2 1 1 2 2 1 2 ...
+ $ sex            : Factor w/ 2 levels "female","male": 1 2 2 1 1 2 1 2 1 1 ...
+ $ ct             : num [1:29] 41.5 15.3 25.3 27 25.3 ...
  - attr(*, "spec")=
   .. cols(
-  ..   gene = col_character(),
-  ..   sample = col_character(),
-  ..   genotype = col_character(),
-  ..   cnt = col_double()
+  ..   patient_id = col_character(),
+  ..   collection_date = col_date(format = ""),
+  ..   country = col_character(),
+  ..   region = col_character(),
+  ..   age = col_double(),
+  ..   disease_outcome = col_character(),
+  ..   sex = col_character(),
+  ..   ct = col_double()
   .. )
+ - attr(*, "problems")=<externalptr> 
 ~~~
 {: .output}
 
 
 ~~~
 ## preview the data
-view(cnts)
+view(samples)
 ~~~
 {: .language-r}
 
@@ -177,8 +188,6 @@ Next, we're going to learn some of the most common **`dplyr`** functions:
 
 - `select()`: subset columns
 - `filter()`: subset rows on conditions
-- `pivot_wider()`: transform rows into columns
-- `pivot_longer()`: transform columns into rows
 - `mutate()`: create new columns by using information from other columns
 - `group_by()` and `summarize()`: create summary statistics on grouped data
 - `arrange()`: sort results
@@ -187,12 +196,12 @@ Next, we're going to learn some of the most common **`dplyr`** functions:
 ## Selecting columns and filtering rows
 
 To select columns of a data frame, use `select()`. The first argument
-to this function is the data frame (`cnts`), and the subsequent
+to this function is the data frame (`samples`), and the subsequent
 arguments are the columns to keep.
 
 
 ~~~
-select(cnts, gene, sample, cnt)
+select(samples, patient_id, sex, ct)
 ~~~
 {: .language-r}
 
@@ -201,38 +210,43 @@ the variable to exclude it.
 
 
 ~~~
-select(cnts, -sample, -genotype)
+select(samples, -collection_date, -country)
 ~~~
 {: .language-r}
 
-This will select all the variables in `cnts` except `sample`
-and `genotype`.
+This will select all the variables in `samples` except `collection_date`
+and `country`.
 
 To choose rows based on a specific criterion, use `filter()`:
 
 
 ~~~
-filter(cnts, sample == "A")
+filter(samples, sex == "female")
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 43,280 x 4
-   gene          sample genotype   cnt
-   <chr>         <chr>  <chr>    <dbl>
- 1 0610005C13Rik A      Wt           5
- 2 0610007P14Rik A      Wt         582
- 3 0610009B22Rik A      Wt         132
- 4 0610009E02Rik A      Wt          13
- 5 0610009L18Rik A      Wt          36
- 6 0610009O20Rik A      Wt         761
- 7 0610010F05Rik A      Wt         201
- 8 0610010K14Rik A      Wt           2
- 9 0610011F06Rik A      Wt         307
-10 0610012D04Rik A      Wt           4
-# … with 43,270 more rows
+# A tibble: 16 × 8
+   patient_id collection_date country region   age disease_outcome sex       ct
+   <chr>      <date>          <chr>   <chr>  <dbl> <fct>           <fct>  <dbl>
+ 1 OAS-29_1   2020-03-31      Italy   Turin     48 dead            female  41.5
+ 2 OAS-29_12  2020-03-31      Italy   Turin     60 recovered       female  27  
+ 3 OAS-29_13  2020-03-31      Italy   Turin     83 dead            female  25.3
+ 4 OAS-29_15  2020-04-01      Italy   Turin     44 recovered       female  33.7
+ 5 OAS-29_17  2020-03-31      Italy   Turin     81 dead            female  35.7
+ 6 OAS-29_18  2020-04-01      Italy   Turin     63 recovered       female  19.3
+ 7 OAS-29_19  2020-04-01      Italy   Turin     78 dead            female  26.7
+ 8 OAS-29_2   2020-03-31      Italy   Turin     24 dead            female  37  
+ 9 OAS-29_22  2020-04-08      Italy   Turin     56 recovered       female  28.3
+10 OAS-29_25  2020-04-08      Italy   Turin     80 recovered       female  30.7
+11 OAS-29_26  2020-04-08      Italy   Turin     19 <NA>            female  36.7
+12 OAS-29_28  2020-04-07      Italy   Turin     30 recovered       female  37.5
+13 OAS-29_3   2020-03-31      Italy   Turin     41 dead            female  39  
+14 OAS-29_6   2020-03-31      Italy   Turin     59 dead            female  30  
+15 OAS-29_8   2020-03-31      Italy   Turin     76 dead            female  30  
+16 OAS-29_9   2020-03-31      Italy   Turin     49 dead            female  18.3
 ~~~
 {: .output}
 
@@ -246,8 +260,8 @@ to the next function, like this:
 
 
 ~~~
-cnts_A <- filter(cnts, sample == "A")
-cnts_A_sml <- select(cnts_A, gene, genotype, cnt)
+samples_female <- filter(samples, sex == "female")
+samples_female_sml <- select(samples_female, patient_id, sex, ct)
 ~~~
 {: .language-r}
 
@@ -259,8 +273,8 @@ You can also nest functions (i.e. one function inside of another), like this:
 
 
 ~~~
-cnts_A_sml <- select(
-  filter(cnts, sample == "A"), gene, genotype, cnt)
+samples_female <- select(
+  filter(samples, sex == "female"), patient_id, sex, ct)
 ~~~
 {: .language-r}
 
@@ -270,7 +284,7 @@ selecting).
 
 The last option, *pipes*, are a recent addition to R. Pipes let you take the
 output of one function and send it directly to the next, which is useful when
-you need to do many things to the same dataset.  Pipes in R look like `%>%` and
+you need to do many things to the same dataset. Pipes in R look like `%>%` and
 are made available via the **`magrittr`** package, installed automatically with
 **`dplyr`**. If you use RStudio, you can type the pipe with <kbd>Ctrl</kbd> +
 <kbd>Shift</kbd> + <kbd>M</kbd> if you have a PC or <kbd>Cmd</kbd> +
@@ -278,76 +292,86 @@ are made available via the **`magrittr`** package, installed automatically with
 
 
 ~~~
-cnts %>%
-  filter(sample == "A") %>%
-  select(gene, genotype, cnt)
+samples %>%
+  filter(sex == "female") %>%
+  select(patient_id, sex, ct)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 43,280 x 3
-   gene          genotype   cnt
-   <chr>         <chr>    <dbl>
- 1 0610005C13Rik Wt           5
- 2 0610007P14Rik Wt         582
- 3 0610009B22Rik Wt         132
- 4 0610009E02Rik Wt          13
- 5 0610009L18Rik Wt          36
- 6 0610009O20Rik Wt         761
- 7 0610010F05Rik Wt         201
- 8 0610010K14Rik Wt           2
- 9 0610011F06Rik Wt         307
-10 0610012D04Rik Wt           4
-# … with 43,270 more rows
+# A tibble: 16 × 3
+   patient_id sex       ct
+   <chr>      <fct>  <dbl>
+ 1 OAS-29_1   female  41.5
+ 2 OAS-29_12  female  27  
+ 3 OAS-29_13  female  25.3
+ 4 OAS-29_15  female  33.7
+ 5 OAS-29_17  female  35.7
+ 6 OAS-29_18  female  19.3
+ 7 OAS-29_19  female  26.7
+ 8 OAS-29_2   female  37  
+ 9 OAS-29_22  female  28.3
+10 OAS-29_25  female  30.7
+11 OAS-29_26  female  36.7
+12 OAS-29_28  female  37.5
+13 OAS-29_3   female  39  
+14 OAS-29_6   female  30  
+15 OAS-29_8   female  30  
+16 OAS-29_9   female  18.3
 ~~~
 {: .output}
 
-In the above code, we use the pipe to send the `cnts` dataset first
-through `filter()` to keep rows where `sample` equals `"A"`, then through
-`select()` to keep only the `gene`, `genotype`, and `cnt` columns. Since
-`%>%` takes the object on its left and passes it as the first argument to the
-function on its right, we don't need to explicitly include the data frame as an
-argument to the `filter()` and `select()` functions any more.
+In the above code, we use the pipe to send the `samples` dataset first through
+`filter()` to keep rows where `sex` equals `"female"`, then through `select()`
+to keep only the `patient_id`, `sex`, and `ct` columns. Since `%>%` takes the
+object on its left and passes it as the first argument to the function on its
+right, we don't need to explicitly include the data frame as an argument to the
+`filter()` and `select()` functions any more.
 
 Some may find it helpful to read the pipe like the word "then". For instance,
-in the above example, we took the data frame `cnts`, *then* we `filter`ed
-for rows with `sample == "A"`, *then* we `select`ed columns `gene`, `genotype`,
-and `cnt`. The **`dplyr`** functions by themselves are somewhat simple,
-but by combining them into linear workflows with the pipe, we can accomplish
-more complex manipulations of data frames.
+in the above example, we took the data frame `samples`, *then* we `filter`ed for
+rows with `sex == "female"`, *then* we `select`ed columns `patient_id`, `sex`,
+and `ct`. The **`dplyr`** functions by themselves are somewhat simple, but by
+combining them into linear workflows with the pipe, we can accomplish more
+complex manipulations of data frames.
 
 If we want to create a new object with this smaller version of the data, we
 can assign it a new name:
 
 
 ~~~
-cnts_A_sml <- cnts %>%
-  filter(sample == "A") %>%
-  select(gene, genotype, cnt)
+samples_female <- samples %>%
+  filter(sex == "female") %>%
+  select(patient_id, sex, ct)
 
-cnts_A_sml
+samples_female
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 43,280 x 3
-   gene          genotype   cnt
-   <chr>         <chr>    <dbl>
- 1 0610005C13Rik Wt           5
- 2 0610007P14Rik Wt         582
- 3 0610009B22Rik Wt         132
- 4 0610009E02Rik Wt          13
- 5 0610009L18Rik Wt          36
- 6 0610009O20Rik Wt         761
- 7 0610010F05Rik Wt         201
- 8 0610010K14Rik Wt           2
- 9 0610011F06Rik Wt         307
-10 0610012D04Rik Wt           4
-# … with 43,270 more rows
+# A tibble: 16 × 3
+   patient_id sex       ct
+   <chr>      <fct>  <dbl>
+ 1 OAS-29_1   female  41.5
+ 2 OAS-29_12  female  27  
+ 3 OAS-29_13  female  25.3
+ 4 OAS-29_15  female  33.7
+ 5 OAS-29_17  female  35.7
+ 6 OAS-29_18  female  19.3
+ 7 OAS-29_19  female  26.7
+ 8 OAS-29_2   female  37  
+ 9 OAS-29_22  female  28.3
+10 OAS-29_25  female  30.7
+11 OAS-29_26  female  36.7
+12 OAS-29_28  female  37.5
+13 OAS-29_3   female  39  
+14 OAS-29_6   female  30  
+15 OAS-29_8   female  30  
+16 OAS-29_9   female  18.3
 ~~~
 {: .output}
 
@@ -355,393 +379,30 @@ Note that the final data frame is the leftmost part of this expression.
 
 > ## Challenge 4.1
 >
-> Using pipes, subset the `cnts` data to include only counts for wild type
-> genotypes above 10,000 and retain only the columns `gene` and `cnt`.
+> Using pipes, subset the `samples` data to include only males with Ct values
+> (column `ct`) greater than or equal to 35, and retain only the columns
+> `patient_id` and `disease_outcome`.
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> cnts %>%
->>   filter(cnt > 10000 & genotype == "Wt") %>%
->>   select(gene, cnt)
+>> samples %>%
+>>  filter(sex == "male" & ct >= 35) %>%
+>>  select(patient_id, disease_outcome)
 >> ~~~
 >> {: .language-r}
 >> 
 >> 
 >> 
 >> ~~~
->> # A tibble: 399 x 2
->>    gene     cnt
->>    <chr>  <dbl>
->>  1 Abca3  10111
->>  2 Ace    13834
->>  3 Ace    16353
->>  4 Ace    16830
->>  5 Actb   68901
->>  6 Actb   62553
->>  7 Actb   68037
->>  8 Acvrl1 10195
->>  9 Ager   51453
->> 10 Ager   47068
->> # … with 389 more rows
->> ~~~
->> {: .output}
-> {: .solution}
-{: .challenge}
-
-
-### Reshaping with pivot_wider and pivot_longer
-
-You may need to alter the shape of a dataset before you can analyze it.
-A general recommendation for tidy data is that you should put each observation 
-in its own row, and each variable (i.e. the thing you are measuring) in a
-separate column. What you count as an observation depends on the question you
-are addressing, and you need to reshape your data accordingly. You can read
-more about the principles behind tidy data in Data Carpentry's
-[spreadsheet lesson](https://datacarpentry.org/spreadsheet-ecology-lesson/01-format-data/).
-
-There are basically two ways to reshape data frames. One is to turn rows into
-columns by transforming values of a variable to column names. The other is to 
-turn columns into rows by transforming column names into values of a variable.
-We can do these of transformations with the functions `pivot_wider()` and
-`pivot_longer()`, respectively.
-
-#### pivot_wider
-
-`pivot_wider()` takes four principal arguments:
-
-1. the data
-2. the *id_cols* with the set of variables that uniquely identifies each
-   observation.
-3. the *names_from* variable to get the output column names from
-4. the *values_from* column variable whose values will fill the new column
-   variables.
-
-
-Let's use `pivot_wider()` to transform the gene count data so that we get all
-the 6 counts for one gene in the same row.
-
-
-~~~
-cnts %>% pivot_wider(
-  id_cols = gene,
-  names_from = sample,
-  values_from = cnt
-)
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 43,280 x 7
-   gene              A     B     C     D     E     F
-   <chr>         <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
- 1 0610005C13Rik     5     0     0     0     0     1
- 2 0610007P14Rik   582   587   549   862   755   836
- 3 0610009B22Rik   132    95   119   197   233   200
- 4 0610009E02Rik    13     6     9     7    18    17
- 5 0610009L18Rik    36    25    32    39    41    58
- 6 0610009O20Rik   761   855   792  1295  1352  1233
- 7 0610010F05Rik   201   186   171   330   408   309
- 8 0610010K14Rik     2     1    11     3     7     6
- 9 0610011F06Rik   307   317   318   377   357   434
-10 0610012D04Rik     4     0     2     3     4     0
-# … with 43,270 more rows
-~~~
-{: .output}
-
-This looks pretty good, but we are missing the `genotype` variable. Let's
-add this information to the column names as well.
-
-
-~~~
-cnts_wide <- cnts %>%
-  pivot_wider(
-    id_cols = gene,
-    names_from = c(sample, genotype),
-    values_from = cnt
-)
-
-str(cnts_wide)
-~~~
-{: .language-r}
-
-
-
-~~~
-tibble[,7] [43,280 × 7] (S3: tbl_df/tbl/data.frame)
- $ gene : chr [1:43280] "0610005C13Rik" "0610007P14Rik" "0610009B22Rik" "0610009E02Rik" ...
- $ A_Wt : num [1:43280] 5 582 132 13 36 761 201 2 307 4 ...
- $ B_Wt : num [1:43280] 0 587 95 6 25 855 186 1 317 0 ...
- $ C_Wt : num [1:43280] 0 549 119 9 32 792 171 11 318 2 ...
- $ D_Hom: num [1:43280] 0 862 197 7 39 ...
- $ E_Hom: num [1:43280] 0 755 233 18 41 ...
- $ F_Hom: num [1:43280] 1 836 200 17 58 ...
-~~~
-{: .output}
-
-We store the data frame under the name `cnts_wide` so that we can use it
-later in this episode.
-
-
-#### pivot_longer
-
-The opposing situation could occur if we had been provided with data in the
-form of `cnts_wide`, where the sample labels are column names, but we 
-wish to treat them as values of a sample variable instead.
-
-In this situation we are gathering the column names and turning them into a
-pair of new variables. One variable represents the column names as values, and
-the other variable contains the values previously associated with the column
-names.
-
-`pivot_longer()` takes four principal arguments:
-
-1. the data
-2. the *cols* with the set of columns we want transform into a variable.
-3. the *names_to* column variable we wish to create and fill with values 
-associated with the key.
-4. the *values_to* column variable we want to fill with the values.
-
-
-~~~
-cnts_wide %>% pivot_longer(
-    cols = A_Wt:F_Hom,
-    names_to = c("sample", "genotype"),
-    names_sep = "_",
-    values_to = "cnt"
-)
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 259,680 x 4
-   gene          sample genotype   cnt
-   <chr>         <chr>  <chr>    <dbl>
- 1 0610005C13Rik A      Wt           5
- 2 0610005C13Rik B      Wt           0
- 3 0610005C13Rik C      Wt           0
- 4 0610005C13Rik D      Hom          0
- 5 0610005C13Rik E      Hom          0
- 6 0610005C13Rik F      Hom          1
- 7 0610007P14Rik A      Wt         582
- 8 0610007P14Rik B      Wt         587
- 9 0610007P14Rik C      Wt         549
-10 0610007P14Rik D      Hom        862
-# … with 259,670 more rows
-~~~
-{: .output}
-
-Since we are transforming column names into two new variables, we must specify a
-string separator using the `names_sep` argument.
-
-
-> ## Challenge 4.2
->
-> Reshape the `cnts` data frame with samples as rows and the three genes
-> "Hopx", "Rpl21" and "Calr" as columns.
->
->> ## Solution
->>
->> 
->> ~~~
->> cnts %>%
->>   filter(gene %in% c("Hopx", "Rpl21", "Calr")) %>%
->>   pivot_wider(
->>     id_cols = sample,
->>     names_from = gene,
->>     values_from = cnt
->>   )
->> ~~~
->> {: .language-r}
->> 
->> 
->> 
->> ~~~
->> # A tibble: 6 x 4
->>   sample  Calr  Hopx Rpl21
->>   <chr>  <dbl> <dbl> <dbl>
->> 1 A       6137 18765 12499
->> 2 B       6279 15569 11248
->> 3 C       6733 14070  9851
->> 4 D      12369 16010 14494
->> 5 E      10524 18048 14177
->> 6 F      10801 19600 15642
->> ~~~
->> {: .output}
-> {: .solution}
-{: .challenge}
-
-
-### Mutate
-
-Frequently you'll want to create new columns based on the values in existing
-columns, for example to do unit conversions, or to find the ratio of values in
-two columns. For this we'll use `mutate()`.
-
-Let's start by calculating the difference between `D_Hom` and `E_Hom` variables
-in the `cnts_wide` data frame:
-
-
-~~~
-cnts_wide %>%
-  mutate(diff_DE = D_Hom - E_Hom)
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 43,280 x 8
-   gene           A_Wt  B_Wt  C_Wt D_Hom E_Hom F_Hom diff_DE
-   <chr>         <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl>
- 1 0610005C13Rik     5     0     0     0     0     1       0
- 2 0610007P14Rik   582   587   549   862   755   836     107
- 3 0610009B22Rik   132    95   119   197   233   200     -36
- 4 0610009E02Rik    13     6     9     7    18    17     -11
- 5 0610009L18Rik    36    25    32    39    41    58      -2
- 6 0610009O20Rik   761   855   792  1295  1352  1233     -57
- 7 0610010F05Rik   201   186   171   330   408   309     -78
- 8 0610010K14Rik     2     1    11     3     7     6      -4
- 9 0610011F06Rik   307   317   318   377   357   434      20
-10 0610012D04Rik     4     0     2     3     4     0      -1
-# … with 43,270 more rows
-~~~
-{: .output}
-
-You can also create a second new column based on the first new column within the
-same call of `mutate()`:
-
-
-~~~
-cnts_wide %>%
-  mutate(diff_DE = D_Hom - E_Hom,
-         diff_DE_pct = diff_DE / D_Hom * 100)
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 43,280 x 9
-   gene           A_Wt  B_Wt  C_Wt D_Hom E_Hom F_Hom diff_DE diff_DE_pct
-   <chr>         <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl>       <dbl>
- 1 0610005C13Rik     5     0     0     0     0     1       0      NaN   
- 2 0610007P14Rik   582   587   549   862   755   836     107       12.4 
- 3 0610009B22Rik   132    95   119   197   233   200     -36      -18.3 
- 4 0610009E02Rik    13     6     9     7    18    17     -11     -157.  
- 5 0610009L18Rik    36    25    32    39    41    58      -2       -5.13
- 6 0610009O20Rik   761   855   792  1295  1352  1233     -57       -4.40
- 7 0610010F05Rik   201   186   171   330   408   309     -78      -23.6 
- 8 0610010K14Rik     2     1    11     3     7     6      -4     -133.  
- 9 0610011F06Rik   307   317   318   377   357   434      20        5.31
-10 0610012D04Rik     4     0     2     3     4     0      -1      -33.3 
-# … with 43,270 more rows
-~~~
-{: .output}
-
-If this runs off your screen and you just want to see the first few rows, you
-can use a pipe to view the `head()` of the data. (Pipes work with 
-non-**`dplyr`** functions, too, as long as the **`dplyr`** or `magrittr` package
-is loaded).
-
-
-~~~
-cnts_wide %>%
-  mutate(diff_DE = D_Hom - E_Hom,
-         diff_DE_pct = diff_DE / D_Hom * 100) %>%
-  head()
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 6 x 9
-  gene           A_Wt  B_Wt  C_Wt D_Hom E_Hom F_Hom diff_DE diff_DE_pct
-  <chr>         <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl>       <dbl>
-1 0610005C13Rik     5     0     0     0     0     1       0      NaN   
-2 0610007P14Rik   582   587   549   862   755   836     107       12.4 
-3 0610009B22Rik   132    95   119   197   233   200     -36      -18.3 
-4 0610009E02Rik    13     6     9     7    18    17     -11     -157.  
-5 0610009L18Rik    36    25    32    39    41    58      -2       -5.13
-6 0610009O20Rik   761   855   792  1295  1352  1233     -57       -4.40
-~~~
-{: .output}
-
-`NaN`s ("Not a Number") will be inserted in the last column whenever we try to
-divide a value by zero. If we want to remove those, we can insert a `filter()`
-in the chain:
-
-
-~~~
-cnts_wide %>%
-  mutate(diff_DE = D_Hom - E_Hom,
-         diff_DE_pct = diff_DE / D_Hom * 100) %>%
-  filter(!is.na(diff_DE_pct)) %>%
-  head()
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 6 x 9
-  gene           A_Wt  B_Wt  C_Wt D_Hom E_Hom F_Hom diff_DE diff_DE_pct
-  <chr>         <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl>       <dbl>
-1 0610007P14Rik   582   587   549   862   755   836     107       12.4 
-2 0610009B22Rik   132    95   119   197   233   200     -36      -18.3 
-3 0610009E02Rik    13     6     9     7    18    17     -11     -157.  
-4 0610009L18Rik    36    25    32    39    41    58      -2       -5.13
-5 0610009O20Rik   761   855   792  1295  1352  1233     -57       -4.40
-6 0610010F05Rik   201   186   171   330   408   309     -78      -23.6 
-~~~
-{: .output}
-
-`is.na()` is a function that determines whether something is an `NA` (or `NaN`).
-The `!` symbol negates the result, so we're asking for every row where weight
-*is not* an `NA` (or `NaN`).
-
-> ## Challenge 4.3
->
-> Create a new data frame from the `cnts_wide` data that meets the
-> following criteria: contains only the `gene` column and a new column called
-> `log_A_Wt` with the common logarithm of the `cnt` values in the `A_Wt` column.
->
-> **Hint**: You can use the `log10()` function to calculate the common
-> logarithm values.
-> 
->> ## Solution
->>
->> 
->> ~~~
->> cnts_wide %>%
->>   mutate(log_A_Wt = log10(A_Wt)) %>%
->>   select(gene, log_A_Wt)
->> ~~~
->> {: .language-r}
->> 
->> 
->> 
->> ~~~
->> # A tibble: 43,280 x 2
->>    gene          log_A_Wt
->>    <chr>            <dbl>
->>  1 0610005C13Rik    0.699
->>  2 0610007P14Rik    2.76 
->>  3 0610009B22Rik    2.12 
->>  4 0610009E02Rik    1.11 
->>  5 0610009L18Rik    1.56 
->>  6 0610009O20Rik    2.88 
->>  7 0610010F05Rik    2.30 
->>  8 0610010K14Rik    0.301
->>  9 0610011F06Rik    2.49 
->> 10 0610012D04Rik    0.602
->> # … with 43,270 more rows
+>> # A tibble: 4 × 2
+>>   patient_id disease_outcome
+>>   <chr>      <fct>          
+>> 1 OAS-29_16  recovered      
+>> 2 OAS-29_20  <NA>           
+>> 3 OAS-29_27  dead           
+>> 4 OAS-29_29  recovered      
 >> ~~~
 >> {: .output}
 > {: .solution}
@@ -761,24 +422,25 @@ the `group_by()` function.
 `group_by()` is often used together with `summarize()`, which collapses each
 group into a single-row summary of that group. `group_by()` takes as arguments
 the column names that contain the **categorical** variables for which you want
-to calculate the summary statistics. So to compute the mean `weight` by sex:
+to calculate the summary statistics. So to compute the mean `ct` value by sex:
 
 
 ~~~
-cnts %>%
-  group_by(genotype) %>%
-  summarize(mean = mean(cnt))
+samples %>%
+  group_by(disease_outcome) %>%
+  summarize(mean = mean(ct))
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 2 x 2
-  genotype  mean
-  <chr>    <dbl>
-1 Hom       507.
-2 Wt        344.
+# A tibble: 3 × 2
+  disease_outcome  mean
+  <fct>           <dbl>
+1 dead             28.9
+2 recovered        28.6
+3 <NA>             31.7
 ~~~
 {: .output}
 
@@ -786,69 +448,66 @@ You can also group by multiple columns:
 
 
 ~~~
-cnts %>%
-  group_by(gene, genotype) %>%
-  summarize(mean = mean(cnt)) %>% 
-  head()
+samples %>%
+  group_by(disease_outcome, sex) %>%
+  summarize(mean = mean(ct))
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 3
-# Groups:   gene [3]
-  gene          genotype    mean
-  <chr>         <chr>      <dbl>
-1 0610005C13Rik Hom        0.333
-2 0610005C13Rik Wt         1.67 
-3 0610007P14Rik Hom      818.   
-4 0610007P14Rik Wt       573.   
-5 0610009B22Rik Hom      210    
-6 0610009B22Rik Wt       115.   
+# A tibble: 6 × 3
+# Groups:   disease_outcome [3]
+  disease_outcome sex     mean
+  <fct>           <fct>  <dbl>
+1 dead            female  31.5
+2 dead            male    25.1
+3 recovered       female  29.4
+4 recovered       male    27.7
+5 <NA>            female  36.7
+6 <NA>            male    29.2
 ~~~
 {: .output}
 
 Once the data are grouped, you can also summarize multiple variables at the same
 time (and not necessarily on the same variable). For instance, we could add a
-column indicating the minimum count for each genotype for each gene:
+column indicating the minimum Ct value for each disease outcome for each sex:
 
 
 ~~~
-cnts %>%
-  group_by(gene, genotype) %>%
-  summarize(mean = mean(cnt),
-            min = min(cnt)) %>%
-  head()
+samples %>%
+  group_by(disease_outcome, sex) %>%
+  summarize(mean = mean(ct),
+            min = min(ct))
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 4
-# Groups:   gene [3]
-  gene          genotype    mean   min
-  <chr>         <chr>      <dbl> <dbl>
-1 0610005C13Rik Hom        0.333     0
-2 0610005C13Rik Wt         1.67      0
-3 0610007P14Rik Hom      818.      755
-4 0610007P14Rik Wt       573.      549
-5 0610009B22Rik Hom      210       197
-6 0610009B22Rik Wt       115.       95
+# A tibble: 6 × 4
+# Groups:   disease_outcome [3]
+  disease_outcome sex     mean   min
+  <fct>           <fct>  <dbl> <dbl>
+1 dead            female  31.5  18.3
+2 dead            male    25.1  16  
+3 recovered       female  29.4  19.3
+4 recovered       male    27.7  16.3
+5 <NA>            female  36.7  36.7
+6 <NA>            male    29.2  15.3
 ~~~
 {: .output}
 
 It is sometimes useful to rearrange the result of a query to inspect the values.
-For instance, we can sort on `min_cnt` to put the lowest numbers first:
-
+For instance, we can sort on `min` to put the lowest numbers first:
 
 
 ~~~
-cnts %>%
-  group_by(gene, genotype) %>%
-  summarize(mean = mean(cnt),
-            min = min(cnt)) %>%
+samples %>%
+  group_by(disease_outcome, sex) %>%
+  summarize(mean = mean(ct),
+            min = min(ct)) %>%
   arrange(min)
 ~~~
 {: .language-r}
@@ -856,33 +515,28 @@ cnts %>%
 
 
 ~~~
-# A tibble: 86,560 x 4
-# Groups:   gene [43,280]
-   gene          genotype  mean   min
-   <chr>         <chr>    <dbl> <dbl>
- 1 0610005C13Rik Hom      0.333     0
- 2 0610005C13Rik Wt       1.67      0
- 3 0610012D04Rik Hom      2.33      0
- 4 0610012D04Rik Wt       2         0
- 5 0610025J13Rik Wt       1.33      0
- 6 0610031O16Rik Hom      0.333     0
- 7 0610031O16Rik Wt       0.333     0
- 8 0610040F04Rik Hom      1.33      0
- 9 1110002J07Rik Wt       1.67      0
-10 1110008E08Rik Hom      0         0
-# … with 86,550 more rows
+# A tibble: 6 × 4
+# Groups:   disease_outcome [3]
+  disease_outcome sex     mean   min
+  <fct>           <fct>  <dbl> <dbl>
+1 <NA>            male    29.2  15.3
+2 dead            male    25.1  16  
+3 recovered       male    27.7  16.3
+4 dead            female  31.5  18.3
+5 recovered       female  29.4  19.3
+6 <NA>            female  36.7  36.7
 ~~~
 {: .output}
 
 To sort in descending order, we need to add the `desc()` function. If we want
-to sort the results by decreasing order of mean count:
+to sort the results by decreasing order of mean Ct:
 
 
 ~~~
-cnts %>%
-  group_by(gene, genotype) %>%
-  summarize(mean = mean(cnt),
-            min = min(cnt)) %>%
+samples %>%
+  group_by(disease_outcome, sex) %>%
+  summarize(mean = mean(ct),
+            min = min(ct)) %>%
   arrange(desc(min))
 ~~~
 {: .language-r}
@@ -890,21 +544,16 @@ cnts %>%
 
 
 ~~~
-# A tibble: 86,560 x 4
-# Groups:   gene [43,280]
-   gene    genotype    mean    min
-   <chr>   <chr>      <dbl>  <dbl>
- 1 Yam1    Hom      562743. 546656
- 2 Scgb1a1 Hom      343686. 312982
- 3 Scgb1a1 Wt       405803. 312507
- 4 Yam1    Wt       391803. 299211
- 5 Sftpc   Hom      289526. 261788
- 6 Sftpc   Wt       232192. 213059
- 7 mt-Rnr2 Wt       173459. 159714
- 8 Lyz2    Hom      152748  142628
- 9 mt-Rnr2 Hom      153111. 141593
-10 Sparc   Hom      108928  103711
-# … with 86,550 more rows
+# A tibble: 6 × 4
+# Groups:   disease_outcome [3]
+  disease_outcome sex     mean   min
+  <fct>           <fct>  <dbl> <dbl>
+1 <NA>            female  36.7  36.7
+2 recovered       female  29.4  19.3
+3 dead            female  31.5  18.3
+4 recovered       male    27.7  16.3
+5 dead            male    25.1  16  
+6 <NA>            male    29.2  15.3
 ~~~
 {: .output}
 
@@ -917,195 +566,163 @@ each sample, we would do:
 
 
 ~~~
-cnts %>%
-    count(sample) 
+samples %>%
+  count(disease_outcome) 
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 2
-  sample     n
-  <chr>  <int>
-1 A      43280
-2 B      43280
-3 C      43280
-4 D      43280
-5 E      43280
-6 F      43280
+# A tibble: 3 × 2
+  disease_outcome     n
+  <fct>           <int>
+1 dead               15
+2 recovered          11
+3 <NA>                3
 ~~~
 {: .output}
 
 The `count()` function is shorthand for something we've already seen: grouping
 by a variable, and summarizing it by counting the number of observations in that
-group. In other words, `cnts %>% count(sample)` is equivalent to:  
+group. In other words, `samples %>% count(disease_outcome)` is equivalent to:  
 
 
 ~~~
-cnts %>%
-    group_by(sample) %>%
-    summarize(n = n())
+samples %>%
+  group_by(disease_outcome) %>%
+  summarize(n = n())
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 2
-  sample     n
-  <chr>  <int>
-1 A      43280
-2 B      43280
-3 C      43280
-4 D      43280
-5 E      43280
-6 F      43280
+# A tibble: 3 × 2
+  disease_outcome     n
+  <fct>           <int>
+1 dead               15
+2 recovered          11
+3 <NA>                3
 ~~~
 {: .output}
 
 We can also combine `count()` with other functions such as `filter()`. Here
-we will count for each sample the number of genes with more than 10,000 reads.
+we will count the disease outcomes for only the samples with high Ct values,
+i.e. with a Ct value greater than or equal to 35.
 
 
 ~~~
-cnts %>%
-    filter(cnt > 10000) %>%
-    count(gene) 
+samples %>%
+  filter(ct >= 35) %>%
+  count(disease_outcome) 
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 260 x 2
-   gene              n
-   <chr>         <int>
- 1 9430020K01Rik     1
- 2 Abca3             4
- 3 Abhd2             1
- 4 Ace               6
- 5 Actb              6
- 6 Acvrl1            4
- 7 Aes               1
- 8 Ager              6
- 9 Ahnak             6
-10 Akap5             2
-# … with 250 more rows
+# A tibble: 3 × 2
+  disease_outcome     n
+  <fct>           <int>
+1 dead                5
+2 recovered           3
+3 <NA>                2
 ~~~
 {: .output}
 
 The example above shows the use of `count()` to count the number of
-rows/observations for *one* factor (i.e., `gene`). If we wanted to count
-*combination of factors*, such as `gene` and `genotype`, we would specify the
-first and the second factor as the arguments of `count()`:
+rows/observations for *one* factor (i.e., `disease_outcome`). If we wanted to
+count *combination of factors*, such as `disease_outcome` and `sex`, we would
+specify the first and the second factor as the arguments of `count()`:
 
 
 ~~~
-cnts %>%
-  filter(cnt > 10000) %>%
-  count(gene, genotype) 
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 419 x 3
-   gene          genotype     n
-   <chr>         <chr>    <int>
- 1 9430020K01Rik Hom          1
- 2 Abca3         Hom          3
- 3 Abca3         Wt           1
- 4 Abhd2         Hom          1
- 5 Ace           Hom          3
- 6 Ace           Wt           3
- 7 Actb          Hom          3
- 8 Actb          Wt           3
- 9 Acvrl1        Hom          3
-10 Acvrl1        Wt           1
-# … with 409 more rows
-~~~
-{: .output}
-
-With the above code, we can proceed with `arrange()` to sort the table 
-according to a number of criteria so that we have a better comparison. 
-For instance, we might want to arrange the table above in (i) an alphabetical
-order of the levels of the genotypes and (ii) in descending order of the count:
-
-
-~~~
-cnts %>%
-  filter(cnt > 10000) %>%
-  count(gene, genotype) %>%
-  arrange(genotype, desc(n))
+samples %>%
+  filter(ct >= 35) %>%
+  count(disease_outcome, sex) 
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 419 x 3
-   gene    genotype     n
-   <chr>   <chr>    <int>
- 1 Abca3   Hom          3
- 2 Ace     Hom          3
- 3 Actb    Hom          3
- 4 Acvrl1  Hom          3
- 5 Ager    Hom          3
- 6 Ahnak   Hom          3
- 7 Akr1a1  Hom          3
- 8 Aldh1a1 Hom          3
- 9 Aldh2   Hom          3
-10 Anxa2   Hom          3
-# … with 409 more rows
+# A tibble: 6 × 3
+  disease_outcome sex        n
+  <fct>           <fct>  <int>
+1 dead            female     4
+2 dead            male       1
+3 recovered       female     1
+4 recovered       male       2
+5 <NA>            female     1
+6 <NA>            male       1
 ~~~
 {: .output}
 
-From the table above, we may learn that, for instance, there are 75 observations of 
-the *albigula* species that are not specified for its sex (i.e. `NA`).
+With the above code, we can proceed with `arrange()` to sort the table according
+to a number of criteria so that we have a better comparison. For instance, we
+might want to arrange the table above in (i) an alphabetical order of the levels
+of the sex and (ii) in descending order of the count:
+
+
+~~~
+samples %>%
+  filter(ct >= 35) %>%
+  count(disease_outcome, sex)  %>%
+  arrange(sex, desc(n))
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 6 × 3
+  disease_outcome sex        n
+  <fct>           <fct>  <int>
+1 dead            female     4
+2 recovered       female     1
+3 <NA>            female     1
+4 recovered       male       2
+5 dead            male       1
+6 <NA>            male       1
+~~~
+{: .output}
+
+From the table above, we may learn that, for instance, there are one female and
+one male where the disease outcome is not specified (i.e. `NA`).
 
 
 > ## Challenge 4.4
 >
-> * For each sample in the `cnts` data frame, how many of the genes have
->   zero reads?
+> * For each collecting date in the `samples` data frame, how many samples have
+>   a Ct value greater than or equal to 35?
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> cnts %>%
->>   filter(cnt == 0) %>%
->>   count(gene) 
+>> samples %>%
+>>  filter(ct >= 35) %>%
+>>  count(collection_date)
 >> ~~~
 >> {: .language-r}
 >> 
 >> 
 >> 
 >> ~~~
->> # A tibble: 23,451 x 2
->>    gene              n
->>    <chr>         <int>
->>  1 0610005C13Rik     4
->>  2 0610012D04Rik     2
->>  3 0610025J13Rik     1
->>  4 0610031O16Rik     4
->>  5 0610040F04Rik     2
->>  6 1110002J07Rik     1
->>  7 1110008E08Rik     6
->>  8 1110015O18Rik     6
->>  9 1110025L11Rik     6
->> 10 1110028F18Rik     5
->> # … with 23,441 more rows
+>> # A tibble: 4 × 2
+>>   collection_date     n
+>>   <date>          <int>
+>> 1 2020-03-31          5
+>> 2 2020-04-01          1
+>> 3 2020-04-07          2
+>> 4 2020-04-08          2
 >> ~~~
 >> {: .output}
 > {: .solution}
 >
 > * Use `group_by()` and `summarize()` to find the mean and standard deviation
->   of the number of reads for each genotype and gene. Then reshape the data
->   so that the mean and standard deviation for for the two genotypes are
->   displayed in separate columns.
+>   of the Ct value for each disease outcome and sex.
 >
 >   **Hint:** calculate the standard deviation with the `sd()` function.
 >
@@ -1113,38 +730,26 @@ the *albigula* species that are not specified for its sex (i.e. `NA`).
 >>
 >> 
 >> ~~~
->> cnts %>%
->>     group_by(gene, genotype) %>%
->>     summarize(
->>         mean = mean(cnt),
->>         stdev = sd(cnt)
->>     ) %>% 
->>     pivot_wider(
->>         id_cols = gene,
->>         names_from = genotype,
->>         values_from = (c(mean, stdev))
->>     )
+>> samples %>%
+>>     group_by(disease_outcome, sex) %>%
+>>     summarize(mean = mean(ct),
+>>               stdev = sd(ct))
 >> ~~~
 >> {: .language-r}
 >> 
 >> 
 >> 
 >> ~~~
->> # A tibble: 43,280 x 5
->> # Groups:   gene [43,280]
->>    gene          mean_Hom mean_Wt stdev_Hom stdev_Wt
->>    <chr>            <dbl>   <dbl>     <dbl>    <dbl>
->>  1 0610005C13Rik    0.333    1.67     0.577     2.89
->>  2 0610007P14Rik  818.     573.      55.8      20.6 
->>  3 0610009B22Rik  210      115.      20.0      18.8 
->>  4 0610009E02Rik   14        9.33     6.08      3.51
->>  5 0610009L18Rik   46       31       10.4       5.57
->>  6 0610009O20Rik 1293.     803.      59.5      47.9 
->>  7 0610010F05Rik  349      186       52.2      15   
->>  8 0610010K14Rik    5.33     4.67     2.08      5.51
->>  9 0610011F06Rik  389.     314       40.0       6.08
->> 10 0610012D04Rik    2.33     2        2.08      2   
->> # … with 43,270 more rows
+>> # A tibble: 6 × 4
+>> # Groups:   disease_outcome [3]
+>>   disease_outcome sex     mean stdev
+>>   <fct>           <fct>  <dbl> <dbl>
+>> 1 dead            female  31.5  7.44
+>> 2 dead            male    25.1  6.87
+>> 3 recovered       female  29.4  6.22
+>> 4 recovered       male    27.7 11.6 
+>> 5 <NA>            female  36.7 NA   
+>> 6 <NA>            male    29.2 19.6 
 >> ~~~
 >> {: .output}
 > {: .solution}
@@ -1160,41 +765,24 @@ them with your collaborators or for archival.
 Similar to the `read_csv()` function used for reading CSV files into R, there is
 a `write_csv()` function that generates CSV files from data frames.
 
-Before using `write_csv()`, we are going to create a new folder, `data`,
-in our working directory that will store this generated dataset. We don't want
-to write generated datasets in the same directory as our raw data. It's good
-practice to keep them separate. The `data_raw` folder should only contain the
-raw, unaltered data, and should be left alone to make sure we don't delete or
-modify it. In contrast, our script will generate the contents of the `data`
-directory, so even if the files it contains are deleted, we can always
-re-generate them.
+Before using `write_csv()`, we are going to create a new folder, `data`, in our
+working directory that will store this generated dataset. We don't want to write
+generated datasets in the same directory as our raw data. It's good practice to
+keep them separate. The `data_raw` folder should only contain the raw, unaltered
+data, and should be left alone to make sure we don't delete or modify it. In
+contrast, our script will generate the contents of the `data` directory, so even
+if the files it contains are deleted, we can always re-generate them.
 
-We will conclude this episode by generating two CSV files with a small dataset that
-we will use in the next episode on plotting:
+We will conclude this episode by generating a CSV file with a small dataset
+that contain only samples with a Ct value greater than or equal to 35:
 
 
 ~~~
-# Create a vector with a subset of genes
-genes_subset <- c(
-  "Rbpj", "Nop10", "Nsun2", "Cxcl5", "Cfdp1", "Furin", "Adcy8", "Grin1",
-  "Itpka", "Ippk", "Aff2", "Rab43", "Ofd1", "Edem2", "Xlr4c", "Mpc2",
-  "Ect2l", "Pcgf1", "Nov", "Sys1", "Ackr2", "Acat1", "Phkg2", "Hecw2",
-  "Ctps", "Arl5b", "Wnt3a", "Evc", "Wibg", "Axl", "Usp19", "Agbl2",
-  "Eif3f", "Mark4", "Sbk2", "Eri3", "Tab1", "Cd276", "Sox9", "Ces2e",
-  "Htra3", "Foxj2", "Arl4d", "Wdr1", "Taco1", "Aebp2", "Nemf", "Fpgt",
-  "Helq", "Nudt6")
-
-# Filter out subset of genes
-cnts_sml_wide <- cnts_wide %>%
-  filter(gene %in% genes_subset)
-
-cnts_sml_long <- cnts %>%
-  filter(gene %in% genes_subset)
+# Filter out samples with high Ct values
+samples_high_ct <- samples %>%
+  filter(ct >= 35)
 
 # Write data frame to CSV
-write_csv(cnts_sml_wide, file = "gene_counts_sml_wide.csv")
-
-# Write data frame to CSV
-write_csv(cnts_sml_long, file = "gene_counts_sml_long.csv")
+write_csv(samples_high_ct, file = "data/samples_high_ct.csv")
 ~~~
 {: .language-r}
