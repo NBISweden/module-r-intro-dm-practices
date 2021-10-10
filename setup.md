@@ -15,7 +15,7 @@ title: Setup
 
 > ## Data
 >
-> Download the following files and put them somewhere you'll remember:
+> The following files are used in this lesson:
 > * [covid_samples.csv](data/covid_samples.csv)
 > * [sequencing.csv](data/covid_sequencing.csv)
 >

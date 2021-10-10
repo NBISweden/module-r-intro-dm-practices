@@ -15,7 +15,6 @@ objectives:
 - "Convert between strings and factors."
 - "Reorder and rename factors."
 - "Change how character strings are handled in a data frame."
-- "Format dates."
 keypoints:
 - "It is easy to import data into R from tabular formats including Excel.
   However, you still need to check that R has imported and interpreted your
@@ -33,46 +32,60 @@ source("../bin/chunk-options.R")
 knitr_fig_path("03-")
 ```
 
+## COVID-19 example data
+
+In this lesson we will use data on 29 positive SARS-CoV-2 samples taken from as
+many individuals. The data come from a [scientific study](https://doi.org/10.1038/s41467-021-24078-9)
+where researchers evaluated the performance of a new and more cost-effective
+method, "COVseq", for obtaining viral genome sequences. The researchers were
+particularly interested in the method's ability to detect new viral variants.
+
+We will use two datasets that are stored in comma-separated values (CSV) files:
+`covid_samples.csv` and `covid_sequencing.csv`. The first dataset contains 29
+rows describing the SARS-CoV-2 samples. The second dataset contains results from
+applying three different sequencing procedures to each sample. This dataset has
+87 rows, i.e. three rows for each sample. The COVseq method is part of two of
+the three investigated procedures, and is thus represented by two thirds of the
+rows in the sequencing dataset.
+
+![SARS-CoV-2 data used .](../fig/COVseq-samples.png)
+
 ## Loading the samples data
 
-We are investigating gene expression in mice and want to keep track of animals
-included in different experiments. The dataset is stored as a comma separated
-value (CSV) file. Each row holds information for a single animal, and the
-columns represent:
+We will start with the dataset with 29 rows, where each row represents one
+positive SARS-CoV-2 sample (and consequently one individual). This dataset has
+the following columns:
 
-| Column                | Description                                                                                         |
-|-----------------------|-----------------------------------------------------------------------------------------------------|
-| animal\_id            | 6-digit code for the animal                                                                         |
-| month                 | month of experiment                                                                                 |
-| day                   | day of experiment                                                                                   |
-| year                  | year of experiment                                                                                  |                                                                |
-| mouse\_line           | short code for the mouse line                                                                       |
-| strain                | background strain of the mouse line                                                                 |
-| developmental\_stage  | stage of development (e.g. "embryo", "pup" or "adult")                                              |
-| sex                   | "F" (female), "M" (male) or NA (unknown)                                                            |
-| organism\_part        | part of the animal used for the experiment                                                          |
-| genotype              | "wild type" (2 wild type alleles), "mutant" (1 mutated allele) or "knockout" (both alleles mutated) |
-| experiment\_type      | kind of experiment; "IHC" for immunnohistochemistry                                                 |
-| researcher            | researcher responsible for the experiment                                                           |
+| Column          | Description                                                                                                                     |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------|
+| patient_id      | code for the sampled individual                                                                                                 |
+| collection_date | date when the sample was taken                                                                                                  |
+| country         | country                                                                                                                         |
+| region          | geographic region                                                                                                               |
+| age             | age of the person when the sample was taken                                                                                     |
+| disease_outcome | outcome of the disease (dead/recovered/NA)                                                                                      |
+| sex             | sex of the person (female/male)                                                                                                 |                                                                                       |
+| ct              | cycle threshold (Ct) value from real time PCR assays, i.e. the number of amplification cycles needed to detect the virus        |
+
 
 ### Downloading the data
 
 We are going to use the R function `download.file()` to download the CSV file
-that contains data from Figshare, and we will use `read_csv()` to load the
+that contains the data, and we will then use `read_csv()` to load the
 content of the CSV file into R.
 
 Inside the `download.file` command, the first entry is a character string with the
-source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv"). 
+source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/covid_samples.csv"). 
 This source URL downloads a CSV file from GitHub. The text after the comma
-("data_raw/samples.csv") is the destination of the file on your local machine.
-You'll need to have a folder on your machine called "data_raw" where 
-you'll download the file. So this command downloads a file from the web, names 
-it "samples.csv" and adds it to a preexisting folder named "data_raw".
+("data_raw/covid_samples.csv") is the destination of the file on your computer.
+You'll need to have a folder called "data_raw" where  you'll download the file.
+So this command downloads a file from the web, names it "covid_samples.csv" and
+adds it to a preexisting folder named "data_raw".
 
 ```{r, eval=FALSE, purl=TRUE}
 download.file(
-  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv",
-  destfile = "data_raw/samples_r_lesson.csv")
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/covid_samples.csv",
+  destfile = "data_raw/covid_samples.csv")
 ```
 
 
@@ -83,17 +96,17 @@ yet loaded the data from the file into memory. To do this, we can use the
 `read_csv()` function from the **`tidyverse`** package. 
 
 Packages in R are basically sets of additional functions that let you do more
-stuff. The functions we've been using so far, like `round()`, `sqrt()`, or
+stuff. The functions we've been using so far, like `round()`, `sqrt()`, and
 `c()`, come built into R; packages give you access to additional functions. 
 Before you use a package for the first time you need to install it on your 
-machine, and then you load it into every subsequent R session when you 
-need it. 
+machine, and then you load it into every subsequent R session when you need it. 
 
-To install the **`tidyverse`** package, we can type
-`install.packages("tidyverse")` straight into the console. In fact, it's better 
-to write this in the console than in our script for any package, as there's no 
-need to re-install packages every time we run the script. 
-Then, to load the package type:
+If you have followed the [setup instructions](../setup.html), you should now
+have the **`tidyverse`** package installed. If not, you can install the package
+by typing `install.packages("tidyverse")` straight into the console. In fact,
+it's better to write this in the console than in our script for any package, as
+there's no need to re-install packages every time we run the script. Then, to
+load the package type:
 
 ```{r, message = FALSE, purl = FALSE}
 ## load the tidyverse packages, incl. dplyr
@@ -105,24 +118,25 @@ Now we can use the functions from the **`tidyverse`** package. Let's use
 frames later):
 
 ```{r, eval = FALSE,  purl = FALSE}
-samples <- read_csv("data_raw/samples_r_lesson.csv")
+samples <- read_csv("data_raw/covid_samples.csv")
 ```
 ```{r, echo = FALSE, eval = TRUE, purl = FALSE}
 # silently read in CSV file with samples
-samples <- read_csv("../data/samples_r_lesson.csv")
+samples <- read_csv("../data/covid_samples.csv")
 ```
 
-You will see the text `Column specification`, followed by each column name and
-its data type. When you execute `read_csv` on a data file, it looks through the
-first 1000 rows of each column and guesses its data type. For example, in this
-dataset, `read_csv()` reads `animal_id` as `col_double` (a numeric data type),
-and `mouse_line` as `col_character`. You have the option to specify the data
-type for a column manually by using the `col_types` argument in `read_csv`.
+You will see the text `Column specification`, followed by the delimiter and the
+columns' data types. When you execute `read_csv` on a data file, it looks
+through the first 1000 rows of each column and guesses its data type. For
+example, in this dataset, `read_csv()` reads `patient_id` as `chr` (short for
+"character") and `age` as `dbl` (short for "double", a numeric data type),
+and . You have the option to specify the data type for a column manually by
+using the `col_types` argument in `read_csv`.
 
 We can see the contents of the first few lines of the data by typing its name:
 `samples`. By default, this will show show you as many rows and columns of the
-data as fit on your screen. If you want to see the first 50 rows, you could type
-`print(samples, n = 50)`. We can also extract the first few lines of this
+data as fit on your screen. If you want to see the first 20 rows, you could type
+`print(samples, n = 20)`. We can also extract the first few lines of this
 data using the function `head()`:
 
 ```{r, results='show', purl=FALSE}
@@ -160,6 +174,7 @@ view(samples)
 > presence of unexpected [newlines](https://en.wikipedia.org/wiki/Newline) are
 > important characteristics of your data files. Those parameters will ease up
 > the import step of your data in R.
+{: .callout}
 
 ## What are data frames?
 
@@ -178,6 +193,7 @@ factors). For example, here is a figure depicting a data frame comprising a
 numeric, a character, and a logical vector.
 
 ![](../fig/data-frame.svg)
+
 We can see this also when inspecting the <b>str</b>ucture of a data frame
 with the function `str()`:
 
@@ -227,11 +243,11 @@ objects besides `data.frame`.
 >> ## Solution
 >>
 >> ```{r, purl=FALSE}
-str(samples)
-```
+>> str(samples)
+>> ```
 >> * The object `samples` is of class `data.frame`, or more specifically a
 >>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
->> * Rows and columns: 100 rows and 12 columns
+>> * Rows and columns: 29 rows and 10 columns
 > {: .solution}
 {: .challenge}
 
@@ -265,16 +281,16 @@ or decreasing order, test `1:10` and `10:1` for instance.
 You can also exclude certain indices of a data frame using the "`-`" sign:
 
 ```{r, purl=FALSE}
-samples[, -1]       # the whole data frame, except the first column
-samples[-(7:100), ] # equivalent to head(samples)
+samples[, -1]  # the whole data frame, except the first column
+samples[-(7:29), ]  # equivalent to head(samples)
 ```
 
 Data frames can be subset by calling indices (as shown previously), but also by
 calling their column names directly:
 
 ```{r, purl=FALSE}
-samples["animal_id"]
-samples[, "animal_id"]
+samples["patient_id"]
+samples[, "patient_id"]
 ```
 
 When we extract a subset from a data frame of class `tibble`, we normally
@@ -282,16 +298,16 @@ get back an object of the same class. To get one-column subsets returned as
 vectors, we can use double square brackets:
 
 ```{r, purl=FALSE}
-samples[[1]]              # first column as vector
-samples[["animal_id"]]    # named column as vector
-samples[[1, 1]]           # first element in the first column as vector        
-samples[[1, "animal_id"]] # first element in the named column as vector
+samples[[1]]  # first column as vector
+samples[["patient_id"]]  # named column as vector
+samples[[1, 1]]  # first element in the first column as vector        
+samples[[1, "patient_id"]]  # first element in the named column as vector
 ```
 
 We can also access an individual column as a vector by using a dollar sign, `$`:
 
 ```{r, purl=FALSE}
-samples$animal_id         # named column as vector
+samples$patient_id  # named column as vector
 ```
 
 In RStudio, you can use the autocompletion feature to get the full and correct
@@ -310,27 +326,22 @@ names of the columns.
 >      * Pull out that last row using `nrow()` instead of the row number.
 >      * Create a new data frame (`samples_last`) from that last row.
 >
-> 3. Use `nrow()` to extract the row that is in the middle of the data
->    frame. Store the content of this row in an object named `samples_middle`.
->
-> 4. Combine `nrow()` with the `-` notation above to reproduce the behavior of
+> 3. Combine `nrow()` with the `-` notation above to reproduce the behavior of
 >    `head(samples)`, keeping just the first 6 rows of the samples
 >    dataset.
 >
 >> ## Solution
 >>
->>```{r, purl=FALSE}
-## 1.
-samples_20 <- samples[20, ]
-## 2.
-# Saving `n_rows` to improve readability and reduce duplication
-n_rows <- nrow(samples)
-samples_last <- samples[n_rows, ]
-## 3.
-samples_middle <- samples[n_rows / 2, ]
-## 4.
-samples_head<- samples[-(7:n_rows), ]
-```
+>> ```{r, purl=FALSE}
+>> ## 1.
+>> samples_20 <- samples[20, ]
+>> ## 2.
+>> # Saving `n_rows` to improve readability and reduce duplication
+>> n_rows <- nrow(samples)
+>> samples_last <- samples[n_rows, ]
+>> ## 3.
+>> samples_head<- samples[-(7:n_rows), ]
+>> ```
 > {: .solution}
 {: .challenge}
 
@@ -341,11 +352,12 @@ samples_head<- samples[-(7:n_rows), ]
 ### Factors
 ```
 
-When we did `str(samples)` we saw that the column `animal_id`, `month`, `day`
-and `year` consist of numeric values. The remaining columns (e.g. `mouse_line`,
-`strain` and `sex`), however, are of the class `character`. Arguably, these
-columns contain categorical data, which means that they can only take on a
-limited number of values. 
+When we did `str(samples)` we saw that the columns `age`, `tax_id` and
+`ct` consist of numeric values and that the column `collection_date` contains
+dates. The remaining columns (e.g. `patient_id`, `sex` and `disease_outcome`),
+however, are of the class `character`. Arguably, some of these columns
+(e.g. `sex` and `disease_outcome`) contain categorical data, which means that
+they can only take on a limited number of values. 
 
 R has a special class for working with categorical data, called `factor`. 
 Factors are very useful and actually contribute to making R particularly well 
@@ -353,7 +365,7 @@ suited to working with data. So we are going to spend a little time introducing
 them.
 
 Once created, factors can only contain a pre-defined set of values, known as
-*levels*. Factors are stored as integers associated with labels and they can be
+_levels_. Factors are stored as integers associated with labels and they can be
 ordered or unordered. While factors look (and often behave) like character
 vectors, they are actually treated as integer vectors by R. So you need to be
 very careful when treating them as strings.
@@ -363,74 +375,75 @@ not automatically coerced (=converted) into the `factor` data type, but once we
 have loaded the data we can do the conversion using the `factor()` function: 
 
 ```{r, purl=FALSE}
-samples$sex <- factor(samples$sex)
+samples$disease_outcome <- factor(samples$disease_outcome)
 ```
 
 We can see that the conversion has worked by using the `summary()` 
 function again. This produces a table with the counts for each factor level:
 
 ```{r, purl=FALSE}
-summary(samples$sex)
+summary(samples$disease_outcome)
 ```
 
 By default, R always sorts levels in alphabetical order. For
 instance, if you have a factor with 2 levels:
 
 ```{r, purl=TRUE}
-sex <- factor(c("male", "female", "female", "male"))
+disease_outcome <- factor(c("recovered", "dead", "dead", "recovered"))
 ```
 
-R will assign `1` to the level `"female"` and `2` to the level `"male"`
-(because `f` comes before `m`, even though the first element in this vector is
-`"male"`). You can see this by using the function `levels()` and you can find
-the number of levels using `nlevels()`:
+R will assign `1` to the level `"dead"` and `2` to the level `"recovered"`
+(because `d` comes before `r`, even though the first element in this vector is
+`"recovered"`). You can see this by using the function `levels()` and you can
+find the number of levels using `nlevels()`:
 
 ```{r, purl=FALSE}
-levels(sex)
-nlevels(sex)
+levels(disease_outcome)
+nlevels(disease_outcome)
 ```
 
 Sometimes, the order of the factors does not matter, other times you might want
 to specify the order because it is meaningful (e.g., "low", "medium", "high"),
 it improves your visualization, or it is required by a particular type of
-analysis. Here, one way to reorder our levels in the `sex` vector would be:
+analysis. Here, one way to reorder our levels in the `desease_outcome` vector
+would be:
 
 ```{r, results=TRUE, purl=FALSE}
-sex # current order
-sex <- factor(sex, levels = c("male", "female"))
-sex # after re-ordering
+disease_outcome # current order
+disease_outcome <- factor(disease_outcome, levels = c("recovered", "dead"))
+disease_outcome # after re-ordering
 ```
 
 In R's memory, these factors are represented by integers (1, 2, 3), but are more
-informative than integers because factors are self describing: `"female"`,
-`"male"` is more descriptive than `1`, `2`. Which one is "male"?  You wouldn't
-be able to tell just from the integer data. Factors, on the other hand, have
-this information built in. It is particularly helpful when there are many levels
-(like the species names in our example dataset).
-
+informative than integers because factors are self describing: `"dead"`,
+`"recovered"` is more descriptive than `1`, `2`. Which one is "dead"? You 
+wouldn't be able to tell just from the integer data. Factors, on the other hand,
+have this information built in. It is particularly helpful when there are many
+levels (like the species names in our example dataset).
 
 > ## Challenge 3.3
 >
-> 1. Change the columns `strain` and `organism_part` in the `samples`
->    data frame into a factor.
+> 1. Change the columns `disease_outcome` and `sex` in the `samples` data frame
+>    into factors.
 >
 > 2. Using the functions you have learnt so far, can you find out...
 >
->      * How many samples were taken from brain tissue?
->      * How many different mouse strains are in the `strain` column?
+>      * How many levels are there in the `sex` column?
+>      * How many individuals was recorded to have died from COVID-19?
 >
 >> ## Solution
 >>
 >> ```{r, purl=FALSE}
-samples$strain <- factor(samples$strain)
-samples$organism_part <- factor(samples$organism_part)
-summary(samples$organism_part)
-nlevels(samples$strain)
-```
+>> samples$disease_outcome <- factor(samples$disease_outcome)
+>> samples$sex <- factor(samples$sex)
+>> nlevels(samples$sex)
+>> summary(samples$disease_outcome)
+>> ```
 >>
->> * How many brain samples? There are 16 "brain" values in the `organism_part`
-     column.
->> * How many mouse strains? There are 2 strains in the `strain` column.
+>> * How many levels in the `sex` column? There are 2 levels.
+>> * How many individuals died? There are 15 reported as "dead" in the
+>>   `disease_outcome` column.
+>>   column.
 > {: .solution}
 {: .challenge}
 
@@ -441,7 +454,7 @@ If you need to convert a factor to a character vector, you use
 `as.character(x)`.
 
 ```{r, purl=FALSE}
-as.character(sex)
+as.character(disease_outcome)
 ```
 
 In some cases, you may have to convert factors where the levels appear as
@@ -459,9 +472,9 @@ Another method is to use the `levels()` function. Compare:
 
 ```{r, purl=TRUE}
 year_fct <- factor(c(1990, 1983, 1977, 1998, 1990))
-as.numeric(year_fct)               # Wrong! And there is no warning...
-as.numeric(as.character(year_fct)) # Works...
-as.numeric(levels(year_fct))[year_fct]    # The recommended way.
+as.numeric(year_fct)  # Wrong! And there is no warning...
+as.numeric(as.character(year_fct))  # Works...
+as.numeric(levels(year_fct))[year_fct]  # The recommended way.
 ```
 
 Notice that in the `levels()` approach, three important steps occur:
@@ -479,54 +492,72 @@ level. Let's look at the number of males and females captured over the course of
 the experiment:
 
 ```{r barplot-1, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
-plot(samples$sex)
+plot(samples$disease_outcome)
 ```
 
-However, as we saw when we used `summary(samples$sex)`, there are 23 individuals
-for which the sex information hasn't been recorded. To show them in the plot, we
-can turn the missing values into a factor level with the  `addNA()` function. We
-will also have to give the new factor level a label. We are going to work with a
-copy of the `sex` column, so we're not modifying the working copy of the data
-frame:
+However, as we saw when we used `summary(samples$disease_outcomce)`, there are
+3 individuals for which the information hasn't been recorded. To show them in
+the plot, we can turn the missing values into a factor level with the `addNA()`
+function. We will also have to give the new factor level a label. We are going
+to work with a copy of the `disease_outcome` column, so we're not modifying the
+working copy of the data frame:
 
 ```{r, purl=FALSE}
-sex <- samples$sex
-levels(sex)
-sex <- addNA(sex)
-levels(sex)
-head(sex)
-levels(sex)[3] <- "unknown"
-levels(sex)
-head(sex)
+disease_outcome <- samples$disease_outcome
+levels(disease_outcome)
 ```
 
-Now we can plot the data again, using `plot(sex)`.
+We see that the missing values are not among the levels, so let's add them into
+a new level:
+
+```{r, purl=FALSE}
+disease_outcome <- addNA(disease_outcome)
+levels(disease_outcome)
+```
+
+Let us then label the new level with something more sensible:
+
+```{r, purl=FALSE}
+levels(disease_outcome)[3] <- "unknown"
+levels(disease_outcome)
+```
+
+We see that there are now three labeled levels. We can also see the labels
+if we look at the vector directly:
+
+```{r, purl=FALSE}
+disease_outcome
+```
+
+Now we can plot the data again, using `plot(disease_outcome)`.
 
 ```{r barplot-2, echo = FALSE, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
-plot(sex)
+plot(disease_outcome)
 ```
 
-> ## Challenge
+> ## Challenge 3.4
 >
-> * Rename "F" and "M" to "female" and "male" respectively.
-> * Now that we have renamed the factor level to "unknown", can you recreate
->   the barplot such that "unknown" is first (before "female")?
+> * Store a copy of the factor column `sex` to an object named `sex`.
+> * In the new object, rename "female" and "male" to "F" and "M" respectively.
+> * Reorder the factor levels so that "M" comes before "F".
+> * Create a bar plot of the factor.
 >
 >> ## Solution
 >>
 >> ```{r barplot-3, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
-levels(sex)[1:2] <- c("female", "male")
-sex <- factor(sex, levels = c("unknown", "female", "male"))
-plot(sex)
-```
+>> sex = samples$sex
+>> levels(sex)[1:2] <- c("F", "M")
+>> sex <- factor(sex, levels = c("M", "F"))
+>> plot(sex)
+>> ```
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge 3.4
+> ## Challenge 3.5 (optional)
 >
 > 1. We have seen how data frames are created when using `read_csv()`, but they
->    can also be created by hand with the `data.frame()` function.  There are a
+>    can also be created by hand with the `data.frame()` function. There are a
 >    few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
 >    Don't hesitate to experiment!
 >
@@ -575,99 +606,3 @@ to your advantage to detect mistakes that might have been introduced during data
 entry (for instance, a letter in a column that should only contain numbers).
 
 Learn more in this [RStudio tutorial](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio)
-
-## Formatting dates
-
-One of the most common issues that new (and experienced!) R users have is
-converting date and time information into a variable that is appropriate and
-usable during analyses. As a reminder from earlier in this lesson, the best
-practice for dealing with date data is to ensure that each component of your
-date is stored as a separate variable. Using `str()`, We can confirm that our
-data frame has a separate column for day, month, and year, and that each
-contains integer values.
-
-```{r, eval=FALSE, purl=FALSE}
-str(samples)
-```
-We are going to use the `ymd()` function from the package **`lubridate`**
-(which belongs to the **`tidyverse`**; learn more [here](https://www.tidyverse.org/)).
-**`lubridate`** gets installed as part of the **`tidyverse`** installation.
-When you load the **`tidyverse`** (`library(tidyverse)`), the core packages
-(the packages used in most data analyses) get loaded. **`lubridate`** however
-does not belong to the core tidyverse, so you have to load it explicitly with
-`library(lubridate)`.
-
-Start by loading the required package:
-
-```{r load-package, message=FALSE, purl=FALSE}
-library(lubridate)
-```
-
-`ymd()` takes a vector representing year, month, and day, and converts it to a
-`Date` vector. `Date` is a class of data recognized by R as being a date and can
-be manipulated as such. The argument that the function requires is flexible,
-but, as a best practice, is a character vector formatted as "YYYY-MM-DD".
-
-
-Let's create a date object and inspect the structure:
-
-```{r, purl=FALSE}
-my_date <- ymd("2015-01-01")
-str(my_date)
-```
-
-Now let's paste the year, month, and day separately - we get the same result:
-
-```{r, purl=FALSE}
-# sep indicates the character to use to separate each component
-my_date <- ymd(paste("2015", "1", "1", sep = "-")) 
-str(my_date)
-```
-
-Now we apply this function to the samples dataset. Create a character vector
-from the `year`, `month`, and `day` columns of `samples` using `paste()`:
-
-```{r, purl=FALSE}
-paste(samples$year, samples$month, samples$day, sep = "-")
-```
-
-This character vector can be used as the argument for `ymd()`:
-
-```{r, purl=FALSE}
-ymd(paste(samples$year, samples$month, samples$day, sep = "-"))
-```
-
-There is a warning telling us that some dates could not be parsed (understood)
-by the `ymd()` function. For these dates, the function has returned `NA`, which
-means they are treated as missing values.
-We will deal with this problem later, but first we add the resulting `Date`
-vector to the `samples` data frame as a new column called `date`:
-
-```{r, purl=FALSE}
-samples$date <- ymd(paste(samples$year, samples$month, samples$day, sep = "-"))
-str(samples) # notice the new column, with 'date' as the class
-```
-
-Let's make sure everything worked correctly. One way to inspect the new column
-is to use `summary()`:
-
-```{r, results=TRUE, purl=FALSE}
-summary(samples$date)
-```
-
-Let's investigate why some dates could not be parsed.
-
-We can use the functions we saw previously to deal with missing data to identify
-the rows in our data frame that are failing. If we combine them with what we
-learned about subsetting data frames earlier, we can extract the columns "year,
-"month", "day" from the records that have `NA` in our new column `date`. We will
-also use `head()` so we don't clutter the output:
-
-```{r, results=TRUE, purl=FALSE}
-missing_dates <- samples[is.na(samples$date), c("year", "month", "day")]
-
-head(missing_dates)
-```
-
-Why did these dates fail to parse? If you had to use these data for your
-analyses, how would you deal with this situation?

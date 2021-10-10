@@ -1,4 +1,4 @@
-alias,host_subject_id,isolate,instrument_platform,instrument_model,library_name,total_reads,mapped_reads,mapped_reads_pct,coverage_median,coverage_pct_1x,coverage_pct_10x,snps,missense_variants,n_per_100kb_consensus,pangolin_lineage,nextclade_clade
+alias,patient_id,isolate,instrument_platform,instrument_model,library_name,total_reads,mapped_reads,mapped_reads_pct,coverage_median,coverage_pct_1x,coverage_pct_10x,snps,missense_variants,n_per_100kb_consensus,pangolin_lineage,nextclade_clade
 PE300_COVseq_OAS-1,OAS-29_1,not provided,ILLUMINA,Illumina MiSeq,COVseq,46280,46260,99.97,22.0,96.0,77.0,14,9,23300.91,B.1.1.1,20D
 PE150_COVseq_OAS-1,OAS-29_1,not provided,ILLUMINA,NextSeq 500,COVseq,27266,27210,99.96,10.0,92.0,53.0,4,2,47504.52,None,20A
 NEBNext_OAS-1,OAS-29_1,not provided,ILLUMINA,NextSeq 500,NEBNext,46094,44534,99.63,3.0,79.0,37.0,19,15,62972.87,None,20D
