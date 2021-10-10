@@ -17,62 +17,75 @@ objectives:
 - "Convert between strings and factors."
 - "Reorder and rename factors."
 - "Change how character strings are handled in a data frame."
-- "Format dates."
 keypoints:
 - "It is easy to import data into R from tabular formats including Excel.
   However, you still need to check that R has imported and interpreted your
-  data correctly"
+  data correctly."
 - "There are best practices for organizing your data (keeping it tidy) and R
-  is great for this"
+  is great for this."
 - "Base R has many useful functions for manipulating your data, but all of R's
   capabilities are greatly enhanced by software packages developed by the
-  community"
+  community."
 source: Rmd
 ---
 
 
 
+## COVID-19 example data
+
+In this lesson we will use data on 29 positive SARS-CoV-2 samples taken from as
+many individuals. The data come from a [scientific study](https://doi.org/10.1038/s41467-021-24078-9)
+where researchers evaluated the performance of a new and more cost-effective
+method, "COVseq", for obtaining viral genome sequences. The researchers were
+particularly interested in the method's ability to detect new viral variants.
+
+We will use two datasets that are stored in comma-separated values (CSV) files:
+`covid_samples.csv` and `covid_sequencing.csv`. The first dataset contains 29
+rows describing the SARS-CoV-2 samples. The second dataset contains results from
+applying three different sequencing procedures to each sample. This dataset has
+87 rows, i.e. three rows for each sample. The COVseq method is part of two of
+the three investigated procedures, and is thus represented by two thirds of the
+rows in the sequencing dataset.
+
+![SARS-CoV-2 data used .](../fig/COVseq-samples.png)
+
 ## Loading the samples data
 
-We are investigating gene expression in mice and want to keep track of animals
-included in different experiments. The dataset is stored as a comma separated
-value (CSV) file. Each row holds information for a single animal, and the
-columns represent:
+We will start with the dataset with 29 rows, where each row represents one
+positive SARS-CoV-2 sample (and consequently one individual). This dataset has
+the following columns:
 
-| Column                | Description                                                                                         |
-|-----------------------|-----------------------------------------------------------------------------------------------------|
-| animal\_id            | 6-digit code for the animal                                                                         |
-| month                 | month of experiment                                                                                 |
-| day                   | day of experiment                                                                                   |
-| year                  | year of experiment                                                                                  |                                                                |
-| mouse\_line           | short code for the mouse line                                                                       |
-| strain                | background strain of the mouse line                                                                 |
-| developmental\_stage  | stage of development (e.g. "embryo", "pup" or "adult")                                              |
-| sex                   | "F" (female), "M" (male) or NA (unknown)                                                            |
-| organism\_part        | part of the animal used for the experiment                                                          |
-| genotype              | "wild type" (2 wild type alleles), "mutant" (1 mutated allele) or "knockout" (both alleles mutated) |
-| experiment\_type      | kind of experiment; "IHC" for immunnohistochemistry                                                 |
-| researcher            | researcher responsible for the experiment                                                           |
+| Column          | Description                                                                                                                     |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------|
+| patient_id      | code for the sampled individual                                                                                                 |
+| collection_date | date when the sample was taken                                                                                                  |
+| country         | country                                                                                                                         |
+| region          | geographic region                                                                                                               |
+| age             | age of the person when the sample was taken                                                                                     |
+| disease_outcome | outcome of the disease (dead/recovered/NA)                                                                                      |
+| sex             | sex of the person (female/male)                                                                                                 |                                                                                       |
+| ct              | cycle threshold (Ct) value from real time PCR assays, i.e. the number of amplification cycles needed to detect the virus        |
+
 
 ### Downloading the data
 
 We are going to use the R function `download.file()` to download the CSV file
-that contains data from Figshare, and we will use `read_csv()` to load the
+that contains the data, and we will then use `read_csv()` to load the
 content of the CSV file into R.
 
 Inside the `download.file` command, the first entry is a character string with the
-source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv"). 
-This source URL downloads a CSV file from FitHub. The text after the comma
-("data_raw/samples.csv") is the destination of the file on your local machine.
-You'll need to have a folder on your machine called "data_raw" where 
-you'll download the file. So this command downloads a file from the web, names 
-it "samples.csv" and adds it to a preexisting folder named "data_raw".
+source URL ("https://nbisweden.github.io/module-r-intro-dm-practices/data/covid_samples.csv"). 
+This source URL downloads a CSV file from GitHub. The text after the comma
+("data_raw/covid_samples.csv") is the destination of the file on your computer.
+You'll need to have a folder called "data_raw" where  you'll download the file.
+So this command downloads a file from the web, names it "covid_samples.csv" and
+adds it to a preexisting folder named "data_raw".
 
 
 ~~~
 download.file(
-  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/samples_r_lesson.csv",
-  destfile = "data_raw/samples_r_lesson.csv")
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/covid_samples.csv",
+  destfile = "data_raw/covid_samples.csv")
 ~~~
 {: .language-r}
 
@@ -84,17 +97,17 @@ yet loaded the data from the file into memory. To do this, we can use the
 `read_csv()` function from the **`tidyverse`** package. 
 
 Packages in R are basically sets of additional functions that let you do more
-stuff. The functions we've been using so far, like `round()`, `sqrt()`, or
+stuff. The functions we've been using so far, like `round()`, `sqrt()`, and
 `c()`, come built into R; packages give you access to additional functions. 
 Before you use a package for the first time you need to install it on your 
-machine, and then you should import it in every subsequent R session when you 
-need it. 
+machine, and then you load it into every subsequent R session when you need it. 
 
-To install the **`tidyverse`** package, we can type
-`install.packages("tidyverse")` straight into the console. In fact, it's better 
-to write this in the console than in our script for any package, as there's no 
-need to re-install packages every time we run the script. 
-Then, to load the package type:
+If you have followed the [setup instructions](../setup.html), you should now
+have the **`tidyverse`** package installed. If not, you can install the package
+by typing `install.packages("tidyverse")` straight into the console. In fact,
+it's better to write this in the console than in our script for any package, as
+there's no need to re-install packages every time we run the script. Then, to
+load the package type:
 
 
 ~~~
@@ -109,41 +122,47 @@ frames later):
 
 
 ~~~
-samples <- read_csv("data_raw/samples_r_lesson.csv")
+samples <- read_csv("data_raw/covid_samples.csv")
 ~~~
 {: .language-r}
 
 ~~~
-
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-cols(
-  animal_id = col_double(),
-  month = col_double(),
-  day = col_double(),
-  year = col_double(),
-  mouse_line = col_character(),
-  strain = col_character(),
-  developmental_stage = col_character(),
-  sex = col_character(),
-  organism_part = col_character(),
-  genotype = col_character(),
-  experiment_type = col_character(),
-  researcher = col_character()
-)
+Rows: 29 Columns: 8
 ~~~
 {: .output}
 
-You will see the text `Column specification`, followed by each column name and
-its data type. When you execute `read_csv` on a data file, it looks through the
-first 1000 rows of each column and guesses its data type. For example, in this
-dataset, `read_csv()` reads `animal_id` as `col_double` (a numeric data type),
-and `mouse_line` as `col_character`. You have the option to specify the data
-type for a column manually by using the `col_types` argument in `read_csv`.
+
+
+~~~
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (5): patient_id, country, region, disease_outcome, sex
+dbl  (2): age, ct
+date (1): collection_date
+~~~
+{: .output}
+
+
+
+~~~
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+~~~
+{: .output}
+
+You will see the text `Column specification`, followed by the delimiter and the
+columns' data types. When you execute `read_csv` on a data file, it looks
+through the first 1000 rows of each column and guesses its data type. For
+example, in this dataset, `read_csv()` reads `patient_id` as `chr` (short for
+"character") and `age` as `dbl` (short for "double", a numeric data type),
+and . You have the option to specify the data type for a column manually by
+using the `col_types` argument in `read_csv`.
 
 We can see the contents of the first few lines of the data by typing its name:
 `samples`. By default, this will show show you as many rows and columns of the
-data as fit on your screen. If you wanted to the first 50 rows, you could type
-`print(samples, n = 50)`. We can also extract the first few lines of this
+data as fit on your screen. If you want to see the first 20 rows, you could type
+`print(samples, n = 20)`. We can also extract the first few lines of this
 data using the function `head()`:
 
 
@@ -155,17 +174,15 @@ head(samples)
 
 
 ~~~
-# A tibble: 6 x 12
-  animal_id month   day  year mouse_line strain  developmental_stage sex  
-      <dbl> <dbl> <dbl> <dbl> <chr>      <chr>   <chr>               <chr>
-1    800793     1     6  2018 Alk3       BALB/cJ adult               F    
-2    804396     1     7  2019 Vegfr      C57BL/6 adult               M    
-3    805431     1    12  2018 Vegfr      C57BL/6 pup                 F    
-4    805992     1    13  2019 Vegfr      C57BL/6 pup                 M    
-5    808935     1    14  2020 Alk3       BALB/cJ adult               M    
-6    810875     1    16  2019 Alk6       C57BL/6 embryo              <NA> 
-# … with 4 more variables: organism_part <chr>, genotype <chr>,
-#   experiment_type <chr>, researcher <chr>
+# A tibble: 6 × 8
+  patient_id collection_date country region   age disease_outcome sex       ct
+  <chr>      <date>          <chr>   <chr>  <dbl> <chr>           <chr>  <dbl>
+1 OAS-29_1   2020-03-31      Italy   Turin     48 dead            female  41.5
+2 OAS-29_10  2020-03-31      Italy   Turin     35 <NA>            male    15.3
+3 OAS-29_11  2020-03-31      Italy   Turin     59 recovered       male    25.3
+4 OAS-29_12  2020-03-31      Italy   Turin     60 recovered       female  27  
+5 OAS-29_13  2020-03-31      Italy   Turin     83 dead            female  25.3
+6 OAS-29_14  2020-04-01      Italy   Turin     21 dead            male    31  
 ~~~
 {: .output}
 
@@ -196,12 +213,13 @@ view(samples)
 > Check out the help for `read_csv()` by typing `?read_csv` to learn more. 
 >
 > In addition to the above versions of the csv format, you should develop the
-> habits of looking at and record some parameters of your csv files. For
+> habits of looking at some parameters of your csv files. For
 > instance, the character encoding, control characters used for line ending,
 > date format (if the date is not splitted into three variables), and the
 > presence of unexpected [newlines](https://en.wikipedia.org/wiki/Newline) are
 > important characteristics of your data files. Those parameters will ease up
 > the import step of your data in R.
+{: .callout}
 
 ## What are data frames?
 
@@ -220,6 +238,7 @@ factors). For example, here is a figure depicting a data frame comprising a
 numeric, a character, and a logical vector.
 
 ![](../fig/data-frame.svg)
+
 We can see this also when inspecting the <b>str</b>ucture of a data frame
 with the function `str()`:
 
@@ -232,34 +251,27 @@ str(samples)
 
 
 ~~~
-spec_tbl_df[,12] [100 × 12] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ animal_id          : num [1:100] 800793 804396 805431 805992 808935 ...
- $ month              : num [1:100] 1 1 1 1 1 1 1 1 1 1 ...
- $ day                : num [1:100] 6 7 12 13 14 16 19 19 20 24 ...
- $ year               : num [1:100] 2018 2019 2018 2019 2020 ...
- $ mouse_line         : chr [1:100] "Alk3" "Vegfr" "Vegfr" "Vegfr" ...
- $ strain             : chr [1:100] "BALB/cJ" "C57BL/6" "C57BL/6" "C57BL/6" ...
- $ developmental_stage: chr [1:100] "adult" "adult" "pup" "pup" ...
- $ sex                : chr [1:100] "F" "M" "F" "M" ...
- $ organism_part      : chr [1:100] NA "lung" "lung" "lung" ...
- $ genotype           : chr [1:100] "wild type" "wild type" "wild type" "wild type" ...
- $ experiment_type    : chr [1:100] "behaviour" "sequencing assay" "IHC" "IHC" ...
- $ researcher         : chr [1:100] "Kim" "Sam" "Sam" "Sam" ...
+spec_tbl_df [29 × 8] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ patient_id     : chr [1:29] "OAS-29_1" "OAS-29_10" "OAS-29_11" "OAS-29_12" ...
+ $ collection_date: Date[1:29], format: "2020-03-31" "2020-03-31" ...
+ $ country        : chr [1:29] "Italy" "Italy" "Italy" "Italy" ...
+ $ region         : chr [1:29] "Turin" "Turin" "Turin" "Turin" ...
+ $ age            : num [1:29] 48 35 59 60 83 21 44 55 81 63 ...
+ $ disease_outcome: chr [1:29] "dead" NA "recovered" "recovered" ...
+ $ sex            : chr [1:29] "female" "male" "male" "female" ...
+ $ ct             : num [1:29] 41.5 15.3 25.3 27 25.3 ...
  - attr(*, "spec")=
   .. cols(
-  ..   animal_id = col_double(),
-  ..   month = col_double(),
-  ..   day = col_double(),
-  ..   year = col_double(),
-  ..   mouse_line = col_character(),
-  ..   strain = col_character(),
-  ..   developmental_stage = col_character(),
+  ..   patient_id = col_character(),
+  ..   collection_date = col_date(format = ""),
+  ..   country = col_character(),
+  ..   region = col_character(),
+  ..   age = col_double(),
+  ..   disease_outcome = col_character(),
   ..   sex = col_character(),
-  ..   organism_part = col_character(),
-  ..   genotype = col_character(),
-  ..   experiment_type = col_character(),
-  ..   researcher = col_character()
+  ..   ct = col_double()
   .. )
+ - attr(*, "problems")=<externalptr> 
 ~~~
 {: .output}
 
@@ -313,39 +325,32 @@ objects besides `data.frame`.
 >> 
 >> 
 >> ~~~
->> spec_tbl_df[,12] [100 × 12] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
->>  $ animal_id          : num [1:100] 800793 804396 805431 805992 808935 ...
->>  $ month              : num [1:100] 1 1 1 1 1 1 1 1 1 1 ...
->>  $ day                : num [1:100] 6 7 12 13 14 16 19 19 20 24 ...
->>  $ year               : num [1:100] 2018 2019 2018 2019 2020 ...
->>  $ mouse_line         : chr [1:100] "Alk3" "Vegfr" "Vegfr" "Vegfr" ...
->>  $ strain             : chr [1:100] "BALB/cJ" "C57BL/6" "C57BL/6" "C57BL/6" ...
->>  $ developmental_stage: chr [1:100] "adult" "adult" "pup" "pup" ...
->>  $ sex                : chr [1:100] "F" "M" "F" "M" ...
->>  $ organism_part      : chr [1:100] NA "lung" "lung" "lung" ...
->>  $ genotype           : chr [1:100] "wild type" "wild type" "wild type" "wild type" ...
->>  $ experiment_type    : chr [1:100] "behaviour" "sequencing assay" "IHC" "IHC" ...
->>  $ researcher         : chr [1:100] "Kim" "Sam" "Sam" "Sam" ...
+>> spec_tbl_df [29 × 8] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+>>  $ patient_id     : chr [1:29] "OAS-29_1" "OAS-29_10" "OAS-29_11" "OAS-29_12" ...
+>>  $ collection_date: Date[1:29], format: "2020-03-31" "2020-03-31" ...
+>>  $ country        : chr [1:29] "Italy" "Italy" "Italy" "Italy" ...
+>>  $ region         : chr [1:29] "Turin" "Turin" "Turin" "Turin" ...
+>>  $ age            : num [1:29] 48 35 59 60 83 21 44 55 81 63 ...
+>>  $ disease_outcome: chr [1:29] "dead" NA "recovered" "recovered" ...
+>>  $ sex            : chr [1:29] "female" "male" "male" "female" ...
+>>  $ ct             : num [1:29] 41.5 15.3 25.3 27 25.3 ...
 >>  - attr(*, "spec")=
 >>   .. cols(
->>   ..   animal_id = col_double(),
->>   ..   month = col_double(),
->>   ..   day = col_double(),
->>   ..   year = col_double(),
->>   ..   mouse_line = col_character(),
->>   ..   strain = col_character(),
->>   ..   developmental_stage = col_character(),
+>>   ..   patient_id = col_character(),
+>>   ..   collection_date = col_date(format = ""),
+>>   ..   country = col_character(),
+>>   ..   region = col_character(),
+>>   ..   age = col_double(),
+>>   ..   disease_outcome = col_character(),
 >>   ..   sex = col_character(),
->>   ..   organism_part = col_character(),
->>   ..   genotype = col_character(),
->>   ..   experiment_type = col_character(),
->>   ..   researcher = col_character()
+>>   ..   ct = col_double()
 >>   .. )
+>>  - attr(*, "problems")=<externalptr> 
 >> ~~~
 >> {: .output}
 >> * The object `samples` is of class `data.frame`, or more specifically a
 >>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
->> * Rows and columns: 100 rows and 12 columns
+>> * Rows and columns: 29 rows and 10 columns
 > {: .solution}
 {: .challenge}
 
@@ -366,10 +371,10 @@ samples[1, 1]
 
 
 ~~~
-# A tibble: 1 x 1
-  animal_id
-      <dbl>
-1    800793
+# A tibble: 1 × 1
+  patient_id
+  <chr>     
+1 OAS-29_1  
 ~~~
 {: .output}
 
@@ -384,10 +389,10 @@ samples[1, 6]
 
 
 ~~~
-# A tibble: 1 x 1
-  strain 
-  <chr>  
-1 BALB/cJ
+# A tibble: 1 × 1
+  disease_outcome
+  <chr>          
+1 dead           
 ~~~
 {: .output}
 
@@ -402,20 +407,20 @@ samples[, 1]
 
 
 ~~~
-# A tibble: 100 x 1
-   animal_id
-       <dbl>
- 1    800793
- 2    804396
- 3    805431
- 4    805992
- 5    808935
- 6    810875
- 7    812308
- 8    814334
- 9    816649
-10    819947
-# … with 90 more rows
+# A tibble: 29 × 1
+   patient_id
+   <chr>     
+ 1 OAS-29_1  
+ 2 OAS-29_10 
+ 3 OAS-29_11 
+ 4 OAS-29_12 
+ 5 OAS-29_13 
+ 6 OAS-29_14 
+ 7 OAS-29_15 
+ 8 OAS-29_16 
+ 9 OAS-29_17 
+10 OAS-29_18 
+# … with 19 more rows
 ~~~
 {: .output}
 
@@ -430,20 +435,20 @@ samples[1]
 
 
 ~~~
-# A tibble: 100 x 1
-   animal_id
-       <dbl>
- 1    800793
- 2    804396
- 3    805431
- 4    805992
- 5    808935
- 6    810875
- 7    812308
- 8    814334
- 9    816649
-10    819947
-# … with 90 more rows
+# A tibble: 29 × 1
+   patient_id
+   <chr>     
+ 1 OAS-29_1  
+ 2 OAS-29_10 
+ 3 OAS-29_11 
+ 4 OAS-29_12 
+ 5 OAS-29_13 
+ 6 OAS-29_14 
+ 7 OAS-29_15 
+ 8 OAS-29_16 
+ 9 OAS-29_17 
+10 OAS-29_18 
+# … with 19 more rows
 ~~~
 {: .output}
 
@@ -458,12 +463,12 @@ samples[1:3, 6]
 
 
 ~~~
-# A tibble: 3 x 1
-  strain 
-  <chr>  
-1 BALB/cJ
-2 C57BL/6
-3 C57BL/6
+# A tibble: 3 × 1
+  disease_outcome
+  <chr>          
+1 dead           
+2 <NA>           
+3 recovered      
 ~~~
 {: .output}
 
@@ -478,12 +483,10 @@ samples[3, ]
 
 
 ~~~
-# A tibble: 1 x 12
-  animal_id month   day  year mouse_line strain  developmental_stage sex  
-      <dbl> <dbl> <dbl> <dbl> <chr>      <chr>   <chr>               <chr>
-1    805431     1    12  2018 Vegfr      C57BL/6 pup                 F    
-# … with 4 more variables: organism_part <chr>, genotype <chr>,
-#   experiment_type <chr>, researcher <chr>
+# A tibble: 1 × 8
+  patient_id collection_date country region   age disease_outcome sex      ct
+  <chr>      <date>          <chr>   <chr>  <dbl> <chr>           <chr> <dbl>
+1 OAS-29_11  2020-03-31      Italy   Turin     59 recovered       male   25.3
 ~~~
 {: .output}
 
@@ -502,52 +505,49 @@ You can also exclude certain indices of a data frame using the "`-`" sign:
 
 
 ~~~
-samples[, -1]       # the whole data frame, except the first column
+samples[, -1]  # the whole data frame, except the first column
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 100 x 11
-   month   day  year mouse_line strain  developmental_stage sex   organism_part
-   <dbl> <dbl> <dbl> <chr>      <chr>   <chr>               <chr> <chr>        
- 1     1     6  2018 Alk3       BALB/cJ adult               F     <NA>         
- 2     1     7  2019 Vegfr      C57BL/6 adult               M     lung         
- 3     1    12  2018 Vegfr      C57BL/6 pup                 F     lung         
- 4     1    13  2019 Vegfr      C57BL/6 pup                 M     lung         
- 5     1    14  2020 Alk3       BALB/cJ adult               M     <NA>         
- 6     1    16  2019 Alk6       C57BL/6 embryo              <NA>  brain        
- 7     1    19  2018 Alk3       BALB/cJ adult               F     <NA>         
- 8     1    19  2019 Vegfr      C57BL/6 pup                 M     lung         
- 9     1    20  2018 Vegfr      C57BL/6 pup                 F     lung         
-10     1    24  2019 Vegfr      C57BL/6 adult               M     lung         
-# … with 90 more rows, and 3 more variables: genotype <chr>,
-#   experiment_type <chr>, researcher <chr>
+# A tibble: 29 × 7
+   collection_date country region   age disease_outcome sex       ct
+   <date>          <chr>   <chr>  <dbl> <chr>           <chr>  <dbl>
+ 1 2020-03-31      Italy   Turin     48 dead            female  41.5
+ 2 2020-03-31      Italy   Turin     35 <NA>            male    15.3
+ 3 2020-03-31      Italy   Turin     59 recovered       male    25.3
+ 4 2020-03-31      Italy   Turin     60 recovered       female  27  
+ 5 2020-03-31      Italy   Turin     83 dead            female  25.3
+ 6 2020-04-01      Italy   Turin     21 dead            male    31  
+ 7 2020-04-01      Italy   Turin     44 recovered       female  33.7
+ 8 2020-04-01      Italy   Turin     55 recovered       male    39  
+ 9 2020-03-31      Italy   Turin     81 dead            female  35.7
+10 2020-04-01      Italy   Turin     63 recovered       female  19.3
+# … with 19 more rows
 ~~~
 {: .output}
 
 
 
 ~~~
-samples[-(7:100), ] # equivalent to head(samples)
+samples[-(7:29), ]  # equivalent to head(samples)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 12
-  animal_id month   day  year mouse_line strain  developmental_stage sex  
-      <dbl> <dbl> <dbl> <dbl> <chr>      <chr>   <chr>               <chr>
-1    800793     1     6  2018 Alk3       BALB/cJ adult               F    
-2    804396     1     7  2019 Vegfr      C57BL/6 adult               M    
-3    805431     1    12  2018 Vegfr      C57BL/6 pup                 F    
-4    805992     1    13  2019 Vegfr      C57BL/6 pup                 M    
-5    808935     1    14  2020 Alk3       BALB/cJ adult               M    
-6    810875     1    16  2019 Alk6       C57BL/6 embryo              <NA> 
-# … with 4 more variables: organism_part <chr>, genotype <chr>,
-#   experiment_type <chr>, researcher <chr>
+# A tibble: 6 × 8
+  patient_id collection_date country region   age disease_outcome sex       ct
+  <chr>      <date>          <chr>   <chr>  <dbl> <chr>           <chr>  <dbl>
+1 OAS-29_1   2020-03-31      Italy   Turin     48 dead            female  41.5
+2 OAS-29_10  2020-03-31      Italy   Turin     35 <NA>            male    15.3
+3 OAS-29_11  2020-03-31      Italy   Turin     59 recovered       male    25.3
+4 OAS-29_12  2020-03-31      Italy   Turin     60 recovered       female  27  
+5 OAS-29_13  2020-03-31      Italy   Turin     83 dead            female  25.3
+6 OAS-29_14  2020-04-01      Italy   Turin     21 dead            male    31  
 ~~~
 {: .output}
 
@@ -556,54 +556,54 @@ calling their column names directly:
 
 
 ~~~
-samples["animal_id"]
+samples["patient_id"]
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 100 x 1
-   animal_id
-       <dbl>
- 1    800793
- 2    804396
- 3    805431
- 4    805992
- 5    808935
- 6    810875
- 7    812308
- 8    814334
- 9    816649
-10    819947
-# … with 90 more rows
+# A tibble: 29 × 1
+   patient_id
+   <chr>     
+ 1 OAS-29_1  
+ 2 OAS-29_10 
+ 3 OAS-29_11 
+ 4 OAS-29_12 
+ 5 OAS-29_13 
+ 6 OAS-29_14 
+ 7 OAS-29_15 
+ 8 OAS-29_16 
+ 9 OAS-29_17 
+10 OAS-29_18 
+# … with 19 more rows
 ~~~
 {: .output}
 
 
 
 ~~~
-samples[, "animal_id"]
+samples[, "patient_id"]
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 100 x 1
-   animal_id
-       <dbl>
- 1    800793
- 2    804396
- 3    805431
- 4    805992
- 5    808935
- 6    810875
- 7    812308
- 8    814334
- 9    816649
-10    819947
-# … with 90 more rows
+# A tibble: 29 × 1
+   patient_id
+   <chr>     
+ 1 OAS-29_1  
+ 2 OAS-29_10 
+ 3 OAS-29_11 
+ 4 OAS-29_12 
+ 5 OAS-29_13 
+ 6 OAS-29_14 
+ 7 OAS-29_15 
+ 8 OAS-29_16 
+ 9 OAS-29_17 
+10 OAS-29_18 
+# … with 19 more rows
 ~~~
 {: .output}
 
@@ -613,74 +613,64 @@ vectors, we can use double square brackets:
 
 
 ~~~
-samples[[1]]              # first column as vector
+samples[[1]]  # first column as vector
 ~~~
 {: .language-r}
 
 
 
 ~~~
-  [1] 800793 804396 805431 805992 808935 810875 812308 814334 816649 819947
- [11] 820421 821756 877817 821844 826176 832626 834217 835936 836507 837913
- [21] 842068 843132 844834 845290 855000 856721 862100 863932 864387 865043
- [31] 865149 866205 867481 867794 875004 876139 890389 886043 821080 889891
- [41] 890412 891135 891731 892354 893041 893257 893290 896197 898035 899372
- [51] 903535 904417 905633 909250 909687 910503 910988 916800 917874 918189
- [61] 918674 919295 920470 920574 924436 925791 928254 928944 932353 934662
- [71] 935401 935845 939519 941458 941646 942097 942925 943018 944091 945336
- [81] 946315 951520 951658 957895 958065 958342 959920 969452 971991 977235
- [91] 979356 980584 983907 985280 985570 986267 996829 996946 999154 999979
+ [1] "OAS-29_1"  "OAS-29_10" "OAS-29_11" "OAS-29_12" "OAS-29_13" "OAS-29_14"
+ [7] "OAS-29_15" "OAS-29_16" "OAS-29_17" "OAS-29_18" "OAS-29_19" "OAS-29_2" 
+[13] "OAS-29_20" "OAS-29_21" "OAS-29_22" "OAS-29_23" "OAS-29_24" "OAS-29_25"
+[19] "OAS-29_26" "OAS-29_27" "OAS-29_28" "OAS-29_29" "OAS-29_3"  "OAS-29_4" 
+[25] "OAS-29_5"  "OAS-29_6"  "OAS-29_7"  "OAS-29_8"  "OAS-29_9" 
 ~~~
 {: .output}
 
 
 
 ~~~
-samples[["animal_id"]]    # named column as vector
+samples[["patient_id"]]  # named column as vector
 ~~~
 {: .language-r}
 
 
 
 ~~~
-  [1] 800793 804396 805431 805992 808935 810875 812308 814334 816649 819947
- [11] 820421 821756 877817 821844 826176 832626 834217 835936 836507 837913
- [21] 842068 843132 844834 845290 855000 856721 862100 863932 864387 865043
- [31] 865149 866205 867481 867794 875004 876139 890389 886043 821080 889891
- [41] 890412 891135 891731 892354 893041 893257 893290 896197 898035 899372
- [51] 903535 904417 905633 909250 909687 910503 910988 916800 917874 918189
- [61] 918674 919295 920470 920574 924436 925791 928254 928944 932353 934662
- [71] 935401 935845 939519 941458 941646 942097 942925 943018 944091 945336
- [81] 946315 951520 951658 957895 958065 958342 959920 969452 971991 977235
- [91] 979356 980584 983907 985280 985570 986267 996829 996946 999154 999979
+ [1] "OAS-29_1"  "OAS-29_10" "OAS-29_11" "OAS-29_12" "OAS-29_13" "OAS-29_14"
+ [7] "OAS-29_15" "OAS-29_16" "OAS-29_17" "OAS-29_18" "OAS-29_19" "OAS-29_2" 
+[13] "OAS-29_20" "OAS-29_21" "OAS-29_22" "OAS-29_23" "OAS-29_24" "OAS-29_25"
+[19] "OAS-29_26" "OAS-29_27" "OAS-29_28" "OAS-29_29" "OAS-29_3"  "OAS-29_4" 
+[25] "OAS-29_5"  "OAS-29_6"  "OAS-29_7"  "OAS-29_8"  "OAS-29_9" 
 ~~~
 {: .output}
 
 
 
 ~~~
-samples[[1, 1]]           # first element in the first column as vector        
+samples[[1, 1]]  # first element in the first column as vector        
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 800793
+[1] "OAS-29_1"
 ~~~
 {: .output}
 
 
 
 ~~~
-samples[[1, "animal_id"]] # first element in the named column as vector
+samples[[1, "patient_id"]]  # first element in the named column as vector
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 800793
+[1] "OAS-29_1"
 ~~~
 {: .output}
 
@@ -688,23 +678,18 @@ We can also access an individual column as a vector by using a dollar sign, `$`:
 
 
 ~~~
-samples$animal_id         # named column as vector
+samples$patient_id  # named column as vector
 ~~~
 {: .language-r}
 
 
 
 ~~~
-  [1] 800793 804396 805431 805992 808935 810875 812308 814334 816649 819947
- [11] 820421 821756 877817 821844 826176 832626 834217 835936 836507 837913
- [21] 842068 843132 844834 845290 855000 856721 862100 863932 864387 865043
- [31] 865149 866205 867481 867794 875004 876139 890389 886043 821080 889891
- [41] 890412 891135 891731 892354 893041 893257 893290 896197 898035 899372
- [51] 903535 904417 905633 909250 909687 910503 910988 916800 917874 918189
- [61] 918674 919295 920470 920574 924436 925791 928254 928944 932353 934662
- [71] 935401 935845 939519 941458 941646 942097 942925 943018 944091 945336
- [81] 946315 951520 951658 957895 958065 958342 959920 969452 971991 977235
- [91] 979356 980584 983907 985280 985570 986267 996829 996946 999154 999979
+ [1] "OAS-29_1"  "OAS-29_10" "OAS-29_11" "OAS-29_12" "OAS-29_13" "OAS-29_14"
+ [7] "OAS-29_15" "OAS-29_16" "OAS-29_17" "OAS-29_18" "OAS-29_19" "OAS-29_2" 
+[13] "OAS-29_20" "OAS-29_21" "OAS-29_22" "OAS-29_23" "OAS-29_24" "OAS-29_25"
+[19] "OAS-29_26" "OAS-29_27" "OAS-29_28" "OAS-29_29" "OAS-29_3"  "OAS-29_4" 
+[25] "OAS-29_5"  "OAS-29_6"  "OAS-29_7"  "OAS-29_8"  "OAS-29_9" 
 ~~~
 {: .output}
 
@@ -724,29 +709,24 @@ names of the columns.
 >      * Pull out that last row using `nrow()` instead of the row number.
 >      * Create a new data frame (`samples_last`) from that last row.
 >
-> 3. Use `nrow()` to extract the row that is in the middle of the data
->    frame. Store the content of this row in an object named `samples_middle`.
->
-> 4. Combine `nrow()` with the `-` notation above to reproduce the behavior of
->    `head(samples)`, keeping just the first through 6th rows of the samples
+> 3. Combine `nrow()` with the `-` notation above to reproduce the behavior of
+>    `head(samples)`, keeping just the first 6 rows of the samples
 >    dataset.
 >
 >> ## Solution
 >>
->>
->>~~~
->>## 1.
->>samples_20 <- samples[20, ]
->>## 2.
->># Saving `n_rows` to improve readability and reduce duplication
->>n_rows <- nrow(samples)
->>samples_last <- samples[n_rows, ]
->>## 3.
->>samples_middle <- samples[n_rows / 2, ]
->>## 4.
->>samples_head<- samples[-(7:n_rows), ]
->>~~~
->>{: .language-r}
+>> 
+>> ~~~
+>> ## 1.
+>> samples_20 <- samples[20, ]
+>> ## 2.
+>> # Saving `n_rows` to improve readability and reduce duplication
+>> n_rows <- nrow(samples)
+>> samples_last <- samples[n_rows, ]
+>> ## 3.
+>> samples_head<- samples[-(7:n_rows), ]
+>> ~~~
+>> {: .language-r}
 > {: .solution}
 {: .challenge}
 
@@ -755,11 +735,12 @@ names of the columns.
 
 
 
-When we did `str(samples)` we saw that the column `animal_id`, `month`, `day`
-and `year` consist of numeric values. The remaining columns (e.g. `mouse_line`,
-`strain` and `sex`), however, are of the class `character`. Arguably, these
-columns contain categorical data, which means that they can only take on a
-limited number of values. 
+When we did `str(samples)` we saw that the columns `age`, `tax_id` and
+`ct` consist of numeric values and that the column `collection_date` contains
+dates. The remaining columns (e.g. `patient_id`, `sex` and `disease_outcome`),
+however, are of the class `character`. Arguably, some of these columns
+(e.g. `sex` and `disease_outcome`) contain categorical data, which means that
+they can only take on a limited number of values. 
 
 R has a special class for working with categorical data, called `factor`. 
 Factors are very useful and actually contribute to making R particularly well 
@@ -767,7 +748,7 @@ suited to working with data. So we are going to spend a little time introducing
 them.
 
 Once created, factors can only contain a pre-defined set of values, known as
-*levels*. Factors are stored as integers associated with labels and they can be
+_levels_. Factors are stored as integers associated with labels and they can be
 ordered or unordered. While factors look (and often behave) like character
 vectors, they are actually treated as integer vectors by R. So you need to be
 very careful when treating them as strings.
@@ -778,7 +759,7 @@ have loaded the data we can do the conversion using the `factor()` function:
 
 
 ~~~
-samples$sex <- factor(samples$sex)
+samples$disease_outcome <- factor(samples$disease_outcome)
 ~~~
 {: .language-r}
 
@@ -787,15 +768,15 @@ function again. This produces a table with the counts for each factor level:
 
 
 ~~~
-summary(samples$sex)
+summary(samples$disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-   F    M NA's 
-  36   41   23 
+     dead recovered      NA's 
+       15        11         3 
 ~~~
 {: .output}
 
@@ -804,32 +785,32 @@ instance, if you have a factor with 2 levels:
 
 
 ~~~
-sex <- factor(c("male", "female", "female", "male"))
+disease_outcome <- factor(c("recovered", "dead", "dead", "recovered"))
 ~~~
 {: .language-r}
 
-R will assign `1` to the level `"female"` and `2` to the level `"male"`
-(because `f` comes before `m`, even though the first element in this vector is
-`"male"`). You can see this by using the function `levels()` and you can find
-the number of levels using `nlevels()`:
+R will assign `1` to the level `"dead"` and `2` to the level `"recovered"`
+(because `d` comes before `r`, even though the first element in this vector is
+`"recovered"`). You can see this by using the function `levels()` and you can
+find the number of levels using `nlevels()`:
 
 
 ~~~
-levels(sex)
+levels(disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "female" "male"  
+[1] "dead"      "recovered"
 ~~~
 {: .output}
 
 
 
 ~~~
-nlevels(sex)
+nlevels(disease_outcome)
 ~~~
 {: .language-r}
 
@@ -843,78 +824,63 @@ nlevels(sex)
 Sometimes, the order of the factors does not matter, other times you might want
 to specify the order because it is meaningful (e.g., "low", "medium", "high"),
 it improves your visualization, or it is required by a particular type of
-analysis. Here, one way to reorder our levels in the `sex` vector would be:
+analysis. Here, one way to reorder our levels in the `desease_outcome` vector
+would be:
 
 
 ~~~
-sex # current order
+disease_outcome # current order
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] male   female female male  
-Levels: female male
+[1] recovered dead      dead      recovered
+Levels: dead recovered
 ~~~
 {: .output}
 
 
 
 ~~~
-sex <- factor(sex, levels = c("male", "female"))
-sex # after re-ordering
+disease_outcome <- factor(disease_outcome, levels = c("recovered", "dead"))
+disease_outcome # after re-ordering
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] male   female female male  
-Levels: male female
+[1] recovered dead      dead      recovered
+Levels: recovered dead
 ~~~
 {: .output}
 
 In R's memory, these factors are represented by integers (1, 2, 3), but are more
-informative than integers because factors are self describing: `"female"`,
-`"male"` is more descriptive than `1`, `2`. Which one is "male"?  You wouldn't
-be able to tell just from the integer data. Factors, on the other hand, have
-this information built in. It is particularly helpful when there are many levels
-(like the species names in our example dataset).
-
+informative than integers because factors are self describing: `"dead"`,
+`"recovered"` is more descriptive than `1`, `2`. Which one is "dead"? You 
+wouldn't be able to tell just from the integer data. Factors, on the other hand,
+have this information built in. It is particularly helpful when there are many
+levels (like the species names in our example dataset).
 
 > ## Challenge 3.3
 >
-> 1. Change the columns `strain` and `organism_part` in the `samples`
->    data frame into a factor.
+> 1. Change the columns `disease_outcome` and `sex` in the `samples` data frame
+>    into factors.
 >
 > 2. Using the functions you have learnt so far, can you find out...
 >
->      * How many samples were taken from brain tissue?
->      * How many different mouse strains are in the `strain` column?
+>      * How many levels are there in the `sex` column?
+>      * How many individuals was recorded to have died from COVID-19?
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> samples$strain <- factor(samples$strain)
->> samples$organism_part <- factor(samples$organism_part)
->> summary(samples$organism_part)
->> ~~~
->> {: .language-r}
->> 
->> 
->> 
->> ~~~
->> brain  lung  NA's 
->>    16    58    26 
->> ~~~
->> {: .output}
->> 
->> 
->> 
->> ~~~
->> nlevels(samples$strain)
+>> samples$disease_outcome <- factor(samples$disease_outcome)
+>> samples$sex <- factor(samples$sex)
+>> nlevels(samples$sex)
 >> ~~~
 >> {: .language-r}
 >> 
@@ -924,10 +890,26 @@ this information built in. It is particularly helpful when there are many levels
 >> [1] 2
 >> ~~~
 >> {: .output}
+>> 
+>> 
+>> 
+>> ~~~
+>> summary(samples$disease_outcome)
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>>      dead recovered      NA's 
+>>        15        11         3 
+>> ~~~
+>> {: .output}
 >>
->> * How many brain samples? There are 16 "brain" values in the `organism_part`
-     column.
->> * how many mouse strains? There are 2 strains in the `strain` column.
+>> * How many levels in the `sex` column? There are 2 levels.
+>> * How many individuals died? There are 15 reported as "dead" in the
+>>   `disease_outcome` column.
+>>   column.
 > {: .solution}
 {: .challenge}
 
@@ -939,14 +921,14 @@ If you need to convert a factor to a character vector, you use
 
 
 ~~~
-as.character(sex)
+as.character(disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "male"   "female" "female" "male"  
+[1] "recovered" "dead"      "dead"      "recovered"
 ~~~
 {: .output}
 
@@ -966,7 +948,7 @@ Another method is to use the `levels()` function. Compare:
 
 ~~~
 year_fct <- factor(c(1990, 1983, 1977, 1998, 1990))
-as.numeric(year_fct)               # Wrong! And there is no warning...
+as.numeric(year_fct)  # Wrong! And there is no warning...
 ~~~
 {: .language-r}
 
@@ -980,7 +962,7 @@ as.numeric(year_fct)               # Wrong! And there is no warning...
 
 
 ~~~
-as.numeric(as.character(year_fct)) # Works...
+as.numeric(as.character(year_fct))  # Works...
 ~~~
 {: .language-r}
 
@@ -994,7 +976,7 @@ as.numeric(as.character(year_fct)) # Works...
 
 
 ~~~
-as.numeric(levels(year_fct))[year_fct]    # The recommended way.
+as.numeric(levels(year_fct))[year_fct]  # The recommended way.
 ~~~
 {: .language-r}
 
@@ -1021,109 +1003,105 @@ the experiment:
 
 
 ~~~
-plot(samples$sex)
+plot(samples$disease_outcome)
 ~~~
 {: .language-r}
 
 <img src="../fig/rmd-03-barplot-1-1.png" title="plot of chunk barplot-1" alt="plot of chunk barplot-1" width="432" style="display: block; margin: auto;" />
 
-However, as we saw when we used `summary(samples$sex)`, there are 23 individuals
-for which the sex information hasn't been recorded. To show them in the plot, we
-can turn the missing values into a factor level with the  `addNA()` function. We
-will also have to give the new factor level a label. We are going to work with a
-copy of the `sex` column, so we're not modifying the working copy of the data
-frame:
+However, as we saw when we used `summary(samples$disease_outcomce)`, there are
+3 individuals for which the information hasn't been recorded. To show them in
+the plot, we can turn the missing values into a factor level with the `addNA()`
+function. We will also have to give the new factor level a label. We are going
+to work with a copy of the `disease_outcome` column, so we're not modifying the
+working copy of the data frame:
 
 
 ~~~
-sex <- samples$sex
-levels(sex)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "F" "M"
-~~~
-{: .output}
-
-
-
-~~~
-sex <- addNA(sex)
-levels(sex)
+disease_outcome <- samples$disease_outcome
+levels(disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "F" "M" NA 
+[1] "dead"      "recovered"
 ~~~
 {: .output}
 
+We see that the missing values are not among the levels, so let's add them into
+a new level:
 
 
 ~~~
-head(sex)
+disease_outcome <- addNA(disease_outcome)
+levels(disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] F    M    F    M    M    <NA>
-Levels: F M <NA>
+[1] "dead"      "recovered" NA         
 ~~~
 {: .output}
 
+Let us then label the new level with something more sensible:
 
 
 ~~~
-levels(sex)[3] <- "unknown"
-levels(sex)
+levels(disease_outcome)[3] <- "unknown"
+levels(disease_outcome)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "F"       "M"       "unknown"
+[1] "dead"      "recovered" "unknown"  
 ~~~
 {: .output}
 
+We see that there are now three labeled levels. We can also see the labels
+if we look at the vector directly:
 
 
 ~~~
-head(sex)
+disease_outcome
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] F       M       F       M       M       unknown
-Levels: F M unknown
+ [1] dead      unknown   recovered recovered dead      dead      recovered
+ [8] recovered dead      recovered dead      dead      unknown   recovered
+[15] recovered recovered dead      recovered unknown   dead      recovered
+[22] recovered dead      dead      dead      dead      dead      dead     
+[29] dead     
+Levels: dead recovered unknown
 ~~~
 {: .output}
 
-Now we can plot the data again, using `plot(sex)`.
+Now we can plot the data again, using `plot(disease_outcome)`.
 
 <img src="../fig/rmd-03-barplot-2-1.png" title="plot of chunk barplot-2" alt="plot of chunk barplot-2" width="432" style="display: block; margin: auto;" />
 
-> ## Challenge
+> ## Challenge 3.4
 >
-> * Rename "F" and "M" to "female" and "male" respectively.
-> * Now that we have renamed the factor level to "unknown", can you recreate
->   the barplot such that "unknown" is first (before "female")?
+> * Store a copy of the factor column `sex` to an object named `sex`.
+> * In the new object, rename "female" and "male" to "F" and "M" respectively.
+> * Reorder the factor levels so that "M" comes before "F".
+> * Create a bar plot of the factor.
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> levels(sex)[1:2] <- c("female", "male")
->> sex <- factor(sex, levels = c("unknown", "female", "male"))
+>> sex = samples$sex
+>> levels(sex)[1:2] <- c("F", "M")
+>> sex <- factor(sex, levels = c("M", "F"))
 >> plot(sex)
 >> ~~~
 >> {: .language-r}
@@ -1133,10 +1111,10 @@ Now we can plot the data again, using `plot(sex)`.
 {: .challenge}
 
 
-> ## Challenge 3.4
+> ## Challenge 3.5 (optional)
 >
 > 1. We have seen how data frames are created when using `read_csv()`, but they
->    can also be created by hand with the `data.frame()` function.  There are a
+>    can also be created by hand with the `data.frame()` function. There are a
 >    few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
 >    Don't hesitate to experiment!
 >
@@ -1189,259 +1167,3 @@ to your advantage to detect mistakes that might have been introduced during data
 entry (for instance, a letter in a column that should only contain numbers).
 
 Learn more in this [RStudio tutorial](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio)
-
-## Formatting dates
-
-One of the most common issues that new (and experienced!) R users have is
-converting date and time information into a variable that is appropriate and
-usable during analyses. As a reminder from earlier in this lesson, the best
-practice for dealing with date data is to ensure that each component of your
-date is stored as a separate variable. Using `str()`, We can confirm that our
-data frame has a separate column for day, month, and year, and that each
-contains integer values.
-
-
-~~~
-str(samples)
-~~~
-{: .language-r}
-We are going to use the `ymd()` function from the package **`lubridate`**
-(which belongs to the **`tidyverse`**; learn more [here](https://www.tidyverse.org/)).
-**`lubridate`** gets installed as part of the **`tidyverse`** installation.
-When you load the **`tidyverse`** (`library(tidyverse)`), the core packages
-(the packages used in most data analyses) get loaded. **`lubridate`** however
-does not belong to the core tidyverse, so you have to load it explicitly with
-`library(lubridate)`
-
-Start by loading the required package:
-
-
-~~~
-library(lubridate)
-~~~
-{: .language-r}
-
-`ymd()` takes a vector representing year, month, and day, and converts it to a
-`Date` vector. `Date` is a class of data recognized by R as being a date and can
-be manipulated as such. The argument that the function requires is flexible,
-but, as a best practice, is a character vector formatted as "YYYY-MM-DD".
-
-
-Let's create a date object and inspect the structure:
-
-
-~~~
-my_date <- ymd("2015-01-01")
-str(my_date)
-~~~
-{: .language-r}
-
-
-
-~~~
- Date[1:1], format: "2015-01-01"
-~~~
-{: .output}
-
-Now let's paste the year, month, and day separately - we get the same result:
-
-
-~~~
-# sep indicates the character to use to separate each component
-my_date <- ymd(paste("2015", "1", "1", sep = "-")) 
-str(my_date)
-~~~
-{: .language-r}
-
-
-
-~~~
- Date[1:1], format: "2015-01-01"
-~~~
-{: .output}
-
-Now we apply this function to the samples dataset. Create a character vector
-from the `year`, `month`, and `day` columns of `samples` using `paste()`:
-
-
-~~~
-paste(samples$year, samples$month, samples$day, sep = "-")
-~~~
-{: .language-r}
-
-
-
-~~~
-  [1] "2018-1-6"   "2019-1-7"   "2018-1-12"  "2019-1-13"  "2020-1-14" 
-  [6] "2019-1-16"  "2018-1-19"  "2019-1-19"  "2018-1-20"  "2019-1-24" 
- [11] "2019-1-31"  "2018-2-30"  "2019-4-13"  "2018-2-7"   "2019-2-14" 
- [16] "2020-2-16"  "2020-2-18"  "2020-2-18"  "2020-2-23"  "2020-2-27" 
- [21] "2020-2-27"  "2018-3-0"   "2018-3-7"   "2019-3-7"   "2019-3-9"  
- [26] "2020-3-9"   "2018-3-17"  "2018-3-21"  "2018-3-23"  "2019-3-29" 
- [31] "2019-3-30"  "2018-4-1"   "2018-4-10"  "2020-4-10"  "2019-4-11" 
- [36] "2018-4-13"  "2020-4-22"  "2019-4-17"  "2019-2-3"   "2018-4-21" 
- [41] "2020-4-22"  "2020-4-25"  "2020-4-30"  "2019-5-1"   "2019-5-3"  
- [46] "2020-5-3"   "2018-5-8"   "2018-5-9"   "2020-5-15"  "2018-5-18" 
- [51] "2019-5-25"  "2019-5-28"  "2018-6-4"   "2020-6-4"   "2020-6-6"  
- [56] "2019-6-7"   "2019-6-7"   "2020-6-7"   "2020-6-15"  "2020-6-22" 
- [61] "2020-6-28"  "2019-7-3"   "2019-7-4"   "2020-7-7"   "2018-7-12" 
- [66] "2018-7-15"  "2020-7-23"  "2019-7-25"  "2019-7-26"  "2018-7-27" 
- [71] "2019-8-3"   "2018-8-10"  "2020-8-10"  "2020-8-11"  "2020-8-23" 
- [76] "2020-8-24"  "2020-8-31"  "2019-9-2"   "2019-9-10"  "2018-9-15" 
- [81] "2018-9-16"  "2019-9-27"  "2019-10-3"  "2020-10-8"  "2019-10-11"
- [86] "2018-10-13" "2018-10-25" "2019-10-29" "2019-11-1"  "2019-11-2" 
- [91] "2019-11-3"  "2018-11-9"  "2019-11-14" "2019-11-21" "2018-12-18"
- [96] "2019-12-20" "2019-12-20" "2019-12-23" "2018-12-25" "2018-12-29"
-~~~
-{: .output}
-
-This character vector can be used as the argument for `ymd()`:
-
-
-~~~
-ymd(paste(samples$year, samples$month, samples$day, sep = "-"))
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning: 2 failed to parse.
-~~~
-{: .warning}
-
-
-
-~~~
-  [1] "2018-01-06" "2019-01-07" "2018-01-12" "2019-01-13" "2020-01-14"
-  [6] "2019-01-16" "2018-01-19" "2019-01-19" "2018-01-20" "2019-01-24"
- [11] "2019-01-31" NA           "2019-04-13" "2018-02-07" "2019-02-14"
- [16] "2020-02-16" "2020-02-18" "2020-02-18" "2020-02-23" "2020-02-27"
- [21] "2020-02-27" NA           "2018-03-07" "2019-03-07" "2019-03-09"
- [26] "2020-03-09" "2018-03-17" "2018-03-21" "2018-03-23" "2019-03-29"
- [31] "2019-03-30" "2018-04-01" "2018-04-10" "2020-04-10" "2019-04-11"
- [36] "2018-04-13" "2020-04-22" "2019-04-17" "2019-02-03" "2018-04-21"
- [41] "2020-04-22" "2020-04-25" "2020-04-30" "2019-05-01" "2019-05-03"
- [46] "2020-05-03" "2018-05-08" "2018-05-09" "2020-05-15" "2018-05-18"
- [51] "2019-05-25" "2019-05-28" "2018-06-04" "2020-06-04" "2020-06-06"
- [56] "2019-06-07" "2019-06-07" "2020-06-07" "2020-06-15" "2020-06-22"
- [61] "2020-06-28" "2019-07-03" "2019-07-04" "2020-07-07" "2018-07-12"
- [66] "2018-07-15" "2020-07-23" "2019-07-25" "2019-07-26" "2018-07-27"
- [71] "2019-08-03" "2018-08-10" "2020-08-10" "2020-08-11" "2020-08-23"
- [76] "2020-08-24" "2020-08-31" "2019-09-02" "2019-09-10" "2018-09-15"
- [81] "2018-09-16" "2019-09-27" "2019-10-03" "2020-10-08" "2019-10-11"
- [86] "2018-10-13" "2018-10-25" "2019-10-29" "2019-11-01" "2019-11-02"
- [91] "2019-11-03" "2018-11-09" "2019-11-14" "2019-11-21" "2018-12-18"
- [96] "2019-12-20" "2019-12-20" "2019-12-23" "2018-12-25" "2018-12-29"
-~~~
-{: .output}
-
-There is a warning telling us that some dates could not be parsed (understood)
-by the `ymd()` function. For these dates, the function has returned `NA`, which
-means they are treated as missing values.
-We will deal with this problem later, but first we add the resulting `Date`
-vector to the `samples` data frame as a new column called `date`:
-
-
-~~~
-samples$date <- ymd(paste(samples$year, samples$month, samples$day, sep = "-"))
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning: 2 failed to parse.
-~~~
-{: .warning}
-
-
-
-~~~
-str(samples) # notice the new column, with 'date' as the class
-~~~
-{: .language-r}
-
-
-
-~~~
-spec_tbl_df[,13] [100 × 13] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ animal_id          : num [1:100] 800793 804396 805431 805992 808935 ...
- $ month              : num [1:100] 1 1 1 1 1 1 1 1 1 1 ...
- $ day                : num [1:100] 6 7 12 13 14 16 19 19 20 24 ...
- $ year               : num [1:100] 2018 2019 2018 2019 2020 ...
- $ mouse_line         : chr [1:100] "Alk3" "Vegfr" "Vegfr" "Vegfr" ...
- $ strain             : Factor w/ 2 levels "BALB/cJ","C57BL/6": 1 2 2 2 1 2 1 2 2 2 ...
- $ developmental_stage: chr [1:100] "adult" "adult" "pup" "pup" ...
- $ sex                : Factor w/ 2 levels "F","M": 1 2 1 2 2 NA 1 2 1 2 ...
- $ organism_part      : Factor w/ 2 levels "brain","lung": NA 2 2 2 NA 1 NA 2 2 2 ...
- $ genotype           : chr [1:100] "wild type" "wild type" "wild type" "wild type" ...
- $ experiment_type    : chr [1:100] "behaviour" "sequencing assay" "IHC" "IHC" ...
- $ researcher         : chr [1:100] "Kim" "Sam" "Sam" "Sam" ...
- $ date               : Date[1:100], format: "2018-01-06" "2019-01-07" ...
- - attr(*, "spec")=
-  .. cols(
-  ..   animal_id = col_double(),
-  ..   month = col_double(),
-  ..   day = col_double(),
-  ..   year = col_double(),
-  ..   mouse_line = col_character(),
-  ..   strain = col_character(),
-  ..   developmental_stage = col_character(),
-  ..   sex = col_character(),
-  ..   organism_part = col_character(),
-  ..   genotype = col_character(),
-  ..   experiment_type = col_character(),
-  ..   researcher = col_character()
-  .. )
-~~~
-{: .output}
-
-Let's make sure everything worked correctly. One way to inspect the new column
-is to use `summary()`:
-
-
-~~~
-summary(samples$date)
-~~~
-{: .language-r}
-
-
-
-~~~
-        Min.      1st Qu.       Median         Mean      3rd Qu.         Max. 
-"2018-01-06" "2018-10-28" "2019-06-07" "2019-06-08" "2020-02-21" "2020-10-08" 
-        NA's 
-         "2" 
-~~~
-{: .output}
-
-Let's investigate why some dates could not be parsed.
-
-We can use the functions we saw previously to deal with missing data to identify
-the rows in our data frame that are failing. If we combine them with what we
-learned about subsetting data frames earlier, we can extract the columns "year,
-"month", "day" from the records that have `NA` in our new column `date`. We will
-also use `head()` so we don't clutter the output:
-
-
-~~~
-missing_dates <- samples[is.na(samples$date), c("year", "month", "day")]
-
-head(missing_dates)
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 2 x 3
-   year month   day
-  <dbl> <dbl> <dbl>
-1  2018     2    30
-2  2018     3     0
-~~~
-{: .output}
-
-Why did these dates fail to parse? If you had to use these data for your
-analyses, how would you deal with this situation?
