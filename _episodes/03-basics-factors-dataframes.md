@@ -350,7 +350,7 @@ objects besides `data.frame`.
 >> {: .output}
 >> * The object `samples` is of class `data.frame`, or more specifically a
 >>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
->> * Rows and columns: 29 rows and 10 columns
+>> * Rows and columns: 29 rows and 8 columns
 > {: .solution}
 {: .challenge}
 
@@ -872,7 +872,8 @@ levels (like the species names in our example dataset).
 > 2. Using the functions you have learnt so far, can you find out...
 >
 >      * How many levels are there in the `sex` column?
->      * How many individuals was recorded to have died from COVID-19?
+>      * How many individuals are listed as "dead" in the `disease_outcome`
+>        column?
 >
 >> ## Solution
 >>
@@ -907,8 +908,8 @@ levels (like the species names in our example dataset).
 >> {: .output}
 >>
 >> * How many levels in the `sex` column? There are 2 levels.
->> * How many individuals died? There are 15 reported as "dead" in the
->>   `disease_outcome` column.
+>> * How many are listed as dead? There are 15 individuals listed as "dead"
+>>   in the `disease_outcome` column.
 >>   column.
 > {: .solution}
 {: .challenge}
@@ -1149,14 +1150,15 @@ Now we can plot the data again, using `plot(disease_outcome)`.
 >> ## Solution
 >>
 >> * missing quotations around the names of the animals
->> * missing one entry in the `feel` column (probably for one of the furry animals)
+>> * missing one entry in the `feel` column (probably for one of the furry
+>>   animals)
 >> * missing one comma in the `weight` column
 >> * `country`, `climate`, `temperature`, and `northern_hemisphere` are
 >>    characters; `has_kangaroo` is numeric
 >> * using `factor()` one could replace character columns with factors columns
->> * removing the quotes in `temperature` and `northern_hemisphere` and replacing 1
->>   by TRUE in the `has_kangaroo` column would give what was probably 
->>   intended
+>> * removing the quotes in `temperature` and `northern_hemisphere` and
+>>   replacing 1 by TRUE in the `has_kangaroo` column would give what was
+>>   probably intended
 > {: .solution}
 {: .challenge}
 
