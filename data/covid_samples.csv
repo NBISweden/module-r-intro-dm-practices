@@ -1,30 +1,30 @@
-host_subject_id,collection_date,geo_country,geo_region,host_age,host_disease_outcome,host_sex,tax_id,scientific_name,ct
-OAS-29_1,2020-03-31,Italy,Turin,48,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,41.5
-OAS-29_10,2020-03-31,Italy,Turin,35,,male,2697049,Severe acute respiratory syndrome coronavirus 2,15.333333333333334
-OAS-29_11,2020-03-31,Italy,Turin,59,recovered,male,2697049,Severe acute respiratory syndrome coronavirus 2,25.33333333333333
-OAS-29_12,2020-03-31,Italy,Turin,60,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,27.0
-OAS-29_13,2020-03-31,Italy,Turin,83,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,25.33333333333333
-OAS-29_14,2020-04-01,Italy,Turin,21,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,31.0
-OAS-29_15,2020-04-01,Italy,Turin,44,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,33.666666666666664
-OAS-29_16,2020-04-01,Italy,Turin,55,recovered,male,2697049,Severe acute respiratory syndrome coronavirus 2,39.0
-OAS-29_17,2020-03-31,Italy,Turin,81,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,35.666666666666664
-OAS-29_18,2020-04-01,Italy,Turin,63,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,19.33333333333333
-OAS-29_19,2020-04-01,Italy,Turin,78,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,26.666666666666668
-OAS-29_2,2020-03-31,Italy,Turin,24,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,37.0
-OAS-29_20,2020-03-31,Italy,Turin,74,,male,2697049,Severe acute respiratory syndrome coronavirus 2,43.0
-OAS-29_21,2020-04-08,Italy,Turin,76,recovered,male,2697049,Severe acute respiratory syndrome coronavirus 2,16.333333333333332
-OAS-29_22,2020-04-08,Italy,Turin,56,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,28.33333333333333
-OAS-29_23,2020-04-08,Italy,Turin,44,recovered,male,2697049,Severe acute respiratory syndrome coronavirus 2,17.333333333333332
-OAS-29_24,2020-04-08,Italy,Turin,96,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,16.0
-OAS-29_25,2020-04-08,Italy,Turin,80,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,30.666666666666668
-OAS-29_26,2020-04-08,Italy,Turin,19,,female,2697049,Severe acute respiratory syndrome coronavirus 2,36.66666666666666
-OAS-29_27,2020-04-08,Italy,Turin,68,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,35.0
-OAS-29_28,2020-04-07,Italy,Turin,30,recovered,female,2697049,Severe acute respiratory syndrome coronavirus 2,37.5
-OAS-29_29,2020-04-07,Italy,Turin,56,recovered,male,2697049,Severe acute respiratory syndrome coronavirus 2,40.5
-OAS-29_3,2020-03-31,Italy,Turin,41,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,39.0
-OAS-29_4,2020-04-01,Italy,Turin,0.4,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,23.666666666666668
-OAS-29_5,2020-03-31,Italy,Turin,23,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,21.0
-OAS-29_6,2020-03-31,Italy,Turin,59,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,30.0
-OAS-29_7,2020-03-31,Italy,Turin,45,dead,male,2697049,Severe acute respiratory syndrome coronavirus 2,24.0
-OAS-29_8,2020-03-31,Italy,Turin,76,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,30.0
-OAS-29_9,2020-03-31,Italy,Turin,49,dead,female,2697049,Severe acute respiratory syndrome coronavirus 2,18.33333333333333
+patient_id,collection_date,country,region,age,disease_outcome,sex,ct
+OAS-29_1,2020-03-31,Italy,Turin,48,dead,female,41.5
+OAS-29_10,2020-03-31,Italy,Turin,35,,male,15.333333333333334
+OAS-29_11,2020-03-31,Italy,Turin,59,recovered,male,25.33333333333333
+OAS-29_12,2020-03-31,Italy,Turin,60,recovered,female,27.0
+OAS-29_13,2020-03-31,Italy,Turin,83,dead,female,25.33333333333333
+OAS-29_14,2020-04-01,Italy,Turin,21,dead,male,31.0
+OAS-29_15,2020-04-01,Italy,Turin,44,recovered,female,33.666666666666664
+OAS-29_16,2020-04-01,Italy,Turin,55,recovered,male,39.0
+OAS-29_17,2020-03-31,Italy,Turin,81,dead,female,35.666666666666664
+OAS-29_18,2020-04-01,Italy,Turin,63,recovered,female,19.33333333333333
+OAS-29_19,2020-04-01,Italy,Turin,78,dead,female,26.666666666666668
+OAS-29_2,2020-03-31,Italy,Turin,24,dead,female,37.0
+OAS-29_20,2020-03-31,Italy,Turin,74,,male,43.0
+OAS-29_21,2020-04-08,Italy,Turin,76,recovered,male,16.333333333333332
+OAS-29_22,2020-04-08,Italy,Turin,56,recovered,female,28.33333333333333
+OAS-29_23,2020-04-08,Italy,Turin,44,recovered,male,17.333333333333332
+OAS-29_24,2020-04-08,Italy,Turin,96,dead,male,16.0
+OAS-29_25,2020-04-08,Italy,Turin,80,recovered,female,30.666666666666668
+OAS-29_26,2020-04-08,Italy,Turin,19,,female,36.66666666666666
+OAS-29_27,2020-04-08,Italy,Turin,68,dead,male,35.0
+OAS-29_28,2020-04-07,Italy,Turin,30,recovered,female,37.5
+OAS-29_29,2020-04-07,Italy,Turin,56,recovered,male,40.5
+OAS-29_3,2020-03-31,Italy,Turin,41,dead,female,39.0
+OAS-29_4,2020-04-01,Italy,Turin,0.4,dead,male,23.666666666666668
+OAS-29_5,2020-03-31,Italy,Turin,23,dead,male,21.0
+OAS-29_6,2020-03-31,Italy,Turin,59,dead,female,30.0
+OAS-29_7,2020-03-31,Italy,Turin,45,dead,male,24.0
+OAS-29_8,2020-03-31,Italy,Turin,76,dead,female,30.0
+OAS-29_9,2020-03-31,Italy,Turin,49,dead,female,18.33333333333333
