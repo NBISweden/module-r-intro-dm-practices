@@ -41,20 +41,19 @@ method, "COVseq", for obtaining viral genome sequences. The researchers were
 particularly interested in the method's ability to detect new viral variants.
 
 We will use two datasets that are stored in comma-separated values (CSV) files:
-`covid_samples.csv` and `covid_sequencing.csv`. The first dataset contains 29
-rows describing the SARS-CoV-2 samples. The second dataset contains results from
-applying three different sequencing procedures to each sample. This dataset has
-87 rows, i.e. three rows for each sample. The COVseq method is part of two of
-the three investigated procedures, and is thus represented by two thirds of the
-rows in the sequencing dataset.
+`covid_samples.csv` and `covseq_miseq.csv`. The first dataset is mainly
+describing the SARS-CoV-2 samples. The second dataset contains some results from
+sequencing the samples using the COVseq method on an Illumina MiSeq
+instrument. This particular set-up was one of three sequencing strategies
+examined by the researchers.
 
-![SARS-CoV-2 data used .](../fig/COVseq-samples.png)
+![SARS-CoV-2 data used in this lesson.](../fig/COVseq-samples.png)
 
 ## Loading the samples data
 
-We will start with the dataset with 29 rows, where each row represents one
-positive SARS-CoV-2 sample (and consequently one individual). This dataset has
-the following columns:
+We will start with the samples dataset. This dataset has 29 rows that each
+represents one positive SARS-CoV-2 sample (and consequently one individual). The
+dataset has the following columns:
 
 | Column          | Description                                                                                                                     |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------|
