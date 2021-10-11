@@ -57,7 +57,7 @@ To make plotting a bit more interesting, we will in this episode also make use
 of the COVseq-MiSeq dataset mentioned in episode 3. This dataset contains
 results from the sequencing of the SARS-CoV-2 samples using the COVseq method on
 a MiSeq instrument from Illumina. We will first load the sequencing data into a
-dataframe, and then combine that data frame with the `sample` data frame.
+dataframe, and then combine that data frame with the `samples` data frame.
 
 <a title="Konrad Förstner, CC0, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Illumina_MiSeq_sequencer.jpg"><img width="300" alt="Illumina MiSeq sequencer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Illumina_MiSeq_sequencer.jpg/512px-Illumina_MiSeq_sequencer.jpg"></a>
 
