@@ -14,15 +14,14 @@ objectives:
 - "Describe what faceting is and apply faceting in ggplot."
 - "Modify the aesthetics of an existing ggplot plot (including axis labels and color)."
 - "Build complex and customized plots from data in a data frame."
-
 keypoints:
 - "ggplot2 is powerful data visualization package in R."
 - "ggplot2 lets the user add, remove or change components of a plot."
-- "Plots created with ggplot2 can be customized in many ways, which make
-  the package very useful."
-
+- "Plots created with ggplot2 can be customized in many ways, which make the package very useful."
 source: Rmd
 ---
+
+## Getting ready for plotting
 
 
 We start by loading the required packages. **`ggplot2`** is included in
@@ -34,46 +33,157 @@ library(tidyverse)
 ~~~
 {: .language-r}
 
-If not still in the workspace, load the two small datasets that we created in
-the previous episode.
+If not still in the workspace, load the samples dataset used in the previous
+episode.
 
 
 ~~~
-cnts_sml_long <- read_csv("gene_counts_sml_long.csv")
-cnts_sml_wide <- read_csv("gene_counts_sml_wide.csv")
-~~~
-{: .language-r}
-
-
-
-To make the `cnts_sml_wide` dataset a bit more interesting for the plotting in
-this episode, we will add a fictional column as a factor that we call
-`gene_category`:
-
-
-~~~
-cnts_sml_wide$gene_category = factor(c(
-    2, 2, 1, 1, 1, 3, 3, 1, 1, 1, 3, 3, 1, 3, 3, 2, 2, 3, 3, 2, 2, 2, 2, 3, 2,
-    1, 2, 3, 2, 3, 1, 3, 1, 2, 3, 2, 1, 2, 3, 1, 1, 1, 3, 2, 1, 2, 2, 3, 3, 1))
-
-head(cnts_sml_wide)
+samples <- read_csv("data_raw/covid_samples.csv")
 ~~~
 {: .language-r}
 
 
 
+Like previously, we turn the `disease_outcome` and `sex` columns into factors:
+
+
 ~~~
-# A tibble: 6 x 8
-  gene   A_Wt  B_Wt  C_Wt D_Hom E_Hom F_Hom gene_category
-  <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <fct>        
-1 Acat1  1154  1197  1039  1766  1812  1760 2            
-2 Ackr2   348   454   513   657   708   643 2            
-3 Adcy8   435   504   523   668   867   792 1            
-4 Aebp2   864   832   846  1463  1520  1527 1            
-5 Aff2     20    32    19    44    75    47 1            
-6 Agbl2   146   153   113   141   170   191 3            
+samples$disease_outcome <- factor(samples$disease_outcome)
+samples$sex <- factor(samples$sex)
+~~~
+{: .language-r}
+
+## Loading the sequencing data
+
+To make plotting a bit more interesting, we will in this episode also make use
+of the COVseq-MiSeq dataset mentioned in episode 3. This dataset contains
+results from the sequencing of the SARS-CoV-2 samples using the COVseq method on
+a MiSeq instrument from Illumina. We will first load the sequencing data into a
+dataframe, and then combine that data frame with the `sample` data frame.
+
+<a title="Konrad Förstner, CC0, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Illumina_MiSeq_sequencer.jpg"><img width="300" alt="Illumina MiSeq sequencer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Illumina_MiSeq_sequencer.jpg/512px-Illumina_MiSeq_sequencer.jpg"></a>
+
+A MiSeq instrument from Illumina.
+
+The sequencing dataset has the following columns:
+
+| Column              | Description
+|---------------------|-------------------------------------------------------------|
+| alias               | code for the sequencing run                                 | 
+| patient_id          | code for the sampled individual                             |
+| instrument_model    | instrument model                                            |
+| library_name        | library preparation method                                  |
+| total_reads         | total number of sequence reads                              |
+| mapped_reads        | number of reads mapped against the SARS-CoV-2 virus         |
+| mapped_reads_pct    | per cent reads mapped against the SARS-CoV-2 virus          |
+| coverage_median     | median sequencing coverage (depth) of the mapped reads      |
+| coverage_pct_1x     | per cent with 1x or more sequencing coverage                |
+| coverage_pct_10x    | per cent with 10x or more sequencing coverage               |
+| snps                | number of identified SNPs (single-nucleotide polymorphisms) |
+| pangolin_lineage    | PANGO lineage, epidemiological lineage of SARS-CoV-2        |
+| nextclade_clade     | Phylogenetic placement according to Nextclade               |
+
+
+Let's read the data into a new data frame named `sequencing`:
+
+
+~~~
+sequencing <- read_csv("data_raw/covseq_miseq.csv")
+~~~
+{: .language-r}
+
+
+
+Now that we have created the data frame, we are going to transform two of the
+columns into factors:
+
+
+~~~
+sequencing$pangolin_lineage <- factor(sequencing$pangolin_lineage)
+sequencing$nextclade_clade <- factor(sequencing$nextclade_clade)
+~~~
+{: .language-r}
+
+## Joining the sequencing and samples data
+
+We now have two separate, but obviously related data frames. Both the `samples`
+and `sequencing` data frames have rows that correspond to the 29 SARS-CoV-2
+samples. They both also have and a column named `patient_id` that uniquely
+identifies each sample. By joining the two data frames based on the patient ID,
+we can ensure that each row in the `sequencing` data frame is paired with the
+correct row in the `samples` data frame. 
+
+Joining two related datasets based on shared variables is fairly common in data
+analysis workflows. We will use the `dplyr` function `inner_join()` to
+accommodate this in R:
+
+
+~~~
+covseq <- sequencing %>%
+  inner_join(samples, by = "patient_id")
+~~~
+{: .language-r}
+
+> ### Note
+> `dplyr` offers 4 "mutating joins" functions for different situations:
+> `inner_join()`, `left_join()`, `right_join()` and `full_join`. You can read
+> more about the functions in R:s built-in help and [here](https://rpubs.com/williamsurles/293454).
+{: .callout}
+
+We should now have a data frame named `covseq` with 29 rows and all the columns
+from the `sequencing` and `samples` data frames. We can check this with the
+`str()` function:
+
+
+~~~
+str(covseq)
+~~~
+{: .language-r}
+
+
+
+~~~
+spec_tbl_df [29 × 20] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ alias           : chr [1:29] "PE300_COVseq_OAS-1" "PE300_COVseq_OAS-10" "PE300_COVseq_OAS-11" "PE300_COVseq_OAS-12" ...
+ $ patient_id      : chr [1:29] "OAS-29_1" "OAS-29_10" "OAS-29_11" "OAS-29_12" ...
+ $ instrument_model: chr [1:29] "Illumina MiSeq" "Illumina MiSeq" "Illumina MiSeq" "Illumina MiSeq" ...
+ $ library_name    : chr [1:29] "COVseq" "COVseq" "COVseq" "COVseq" ...
+ $ total_reads     : num [1:29] 46280 605294 918492 853598 775350 ...
+ $ mapped_reads    : num [1:29] 46260 605266 918430 853536 775298 ...
+ $ mapped_reads_pct: num [1:29] 100 100 100 100 100 ...
+ $ coverage_median : num [1:29] 22 1211 1530 1514 1567 ...
+ $ coverage_pct_1x : num [1:29] 96 100 100 100 100 100 99 95 98 100 ...
+ $ coverage_pct_10x: num [1:29] 77 98 99 98 99 98 97 73 92 98 ...
+ $ snps            : num [1:29] 14 15 6 17 16 14 18 16 15 15 ...
+ $ pangolin_lineage: Factor w/ 3 levels "B.1","B.1.1.1",..: 2 2 3 2 2 2 2 1 3 2 ...
+ $ nextclade_clade : Factor w/ 2 levels "20A","20D": 2 2 1 2 2 2 2 1 1 2 ...
+ $ collection_date : Date[1:29], format: "2020-03-31" "2020-03-31" ...
+ $ country         : chr [1:29] "Italy" "Italy" "Italy" "Italy" ...
+ $ region          : chr [1:29] "Turin" "Turin" "Turin" "Turin" ...
+ $ age             : num [1:29] 48 35 59 60 83 21 44 55 81 63 ...
+ $ disease_outcome : Factor w/ 2 levels "dead","recovered": 1 NA 2 2 1 1 2 2 1 2 ...
+ $ sex             : Factor w/ 2 levels "female","male": 1 2 2 1 1 2 1 2 1 1 ...
+ $ ct              : num [1:29] 41.5 15.3 25.3 27 25.3 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   alias = col_character(),
+  ..   patient_id = col_character(),
+  ..   instrument_model = col_character(),
+  ..   library_name = col_character(),
+  ..   total_reads = col_double(),
+  ..   mapped_reads = col_double(),
+  ..   mapped_reads_pct = col_double(),
+  ..   coverage_median = col_double(),
+  ..   coverage_pct_1x = col_double(),
+  ..   coverage_pct_10x = col_double(),
+  ..   snps = col_double(),
+  ..   pangolin_lineage = col_character(),
+  ..   nextclade_clade = col_character()
+  .. )
+ - attr(*, "problems")=<externalptr> 
 ~~~
 {: .output}
+
 
 ## Plotting with **`ggplot2`**
 
@@ -85,9 +195,9 @@ change or if we decide to change from a bar plot to a scatterplot. This helps in
 creating publication quality plots with minimal amounts of adjustments and 
 tweaking.
 
-**`ggplot2`** plots work best with data in the 'long' format, i.e., a column for
+**`ggplot2`** plots work best with data in the 'long' format, i.e. a column for
 every dimension, and a row for every observation. Well-structured data will save
-you lots of time when making figures with **`ggplot2`**
+you lots of time when making figures with **`ggplot2`**.
 
 ggplot graphics are built layer by layer by adding new elements. Adding layers
 in this fashion allows for extensive flexibility and customization of plots.
@@ -100,22 +210,22 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>()
 ```
 
 - use the `ggplot()` function and bind the plot to a specific data frame using 
-  the `data` argument
+  the `data` argument:
 
 
 ~~~
-ggplot(data = cnts_sml_wide)
+ggplot(data = covseq)
 ~~~
 {: .language-r}
 
 - define an aesthetic mapping (using the aesthetic (`aes`) function), by 
   selecting the variables to be plotted and specifying how to present them in
-  the graph, e.g., as x/y positions or characteristics such as size, shape,
-  color, etc.      
+  the graph, e.g. as x/y positions, or characteristics such as size, shape,
+  color, etc:      
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom))
+ggplot(data = covseq, mapping = aes(x = ct, y = total_reads))
 ~~~
 {: .language-r}
 
@@ -131,7 +241,7 @@ To add a geom to the plot use `+` operator. Let's first try `geom_point()`:
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
+ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
   geom_point()
 ~~~
 {: .language-r}
@@ -146,11 +256,11 @@ plot can also be generated with code like this:
 
 ~~~
 # Assign plot to a variable
-cnts_plot <- ggplot(data = cnts_sml_wide, 
-                           mapping = aes(x = A_Wt, y = D_Hom))
+reads_10x_plot <- ggplot(data = covseq,
+                        mapping = aes(x = total_reads, y = coverage_pct_10x))
 
 # Draw the plot
-cnts_plot + 
+reads_10x_plot + 
   geom_point()
 ~~~
 {: .language-r}
@@ -160,7 +270,7 @@ cnts_plot +
 **Notes**
 
 - Anything you put in the `ggplot()` function can be seen by any geom layers
-  that you add (i.e., these are universal plot settings). This includes the x- 
+  that you add (i.e. these are universal plot settings). This includes the x- 
   and y-axis you set up in `aes()`.
 - You can also specify aesthetics for a given geom independently of the
   aesthetics defined globally in the `ggplot()` function.
@@ -172,48 +282,33 @@ cnts_plot +
 
 ~~~
 # This is the correct syntax for adding layers
-cnts_plot +
+reads_10x_plot + 
   geom_point()
 
 # This will not add the new layer and will return an error message
-cnts_plot
+reads_10x_plot
   + geom_point()
 ~~~
 {: .language-r}
 
-> ## Challenge 5.1 (optional)
+> ## Challenge 5.1
 >
-> Scatter plots can be useful exploratory tools for small datasets. For data
-> sets with large numbers of observations, overplotting of points can be a
-> limitation of scatter plots. One strategy for handling such settings is to use
-> hexagonal binning of observations. The plot space is tessellated into
-> hexagons. Each hexagon is assigned a color based on the number of observations
-> that fall within its boundaries. To use hexagonal binning with **`ggplot2`**, 
-> irst install the R package `hexbin` from CRAN:
+> Create a scatter plot with the Ct value plotted against the total number of
+> sequence reads.
 >
->
-> 
-> ~~~
->   install.packages("hexbin")
->   library(hexbin)
-> ~~~
-> {: .language-r}
->
-> Then use the `geom_hex()` function:
->
-> 
-> ~~~
->   cnts_plot +
->   geom_hex()
-> ~~~
-> {: .language-r}
->
-> - What are the relative strengths and weaknesses of a hexagonal bin plot
->   compared to a scatter plot? Examine the above scatter plot and compare it
->   with the hexagonal bin plot that you created.
-```
+>> ## Solution
+>>
+>> 
+>> ~~~
+>> ggplot(data = covseq, 
+>>        mapping = aes(x = ct, y = total_reads)) +
+>>   geom_point()
+>> ~~~
+>> {: .language-r}
+>> 
+>> <img src="../fig/rmd-05-scatter-challenge-1-answer-1.png" title="plot of chunk scatter-challenge-1-answer" alt="plot of chunk scatter-challenge-1-answer" width="612" style="display: block; margin: auto;" />
+> {: .solution}
 {: .challenge}
-
 
 ## Building your plots iteratively
 
@@ -222,8 +317,8 @@ defining the dataset we'll use, lay out the axes, and choose a geom:
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
-    geom_point()
+ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+  geom_point()
 ~~~
 {: .language-r}
 
@@ -234,8 +329,8 @@ instance, we can add transparency (`alpha`) to avoid overplotting:
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
-    geom_point(alpha = 0.5)
+ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+  geom_point(alpha = 0.5)
 ~~~
 {: .language-r}
 
@@ -245,7 +340,7 @@ We can also add colors for all the points:
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
+ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
     geom_point(alpha = 0.5, color = "blue")
 ~~~
 {: .language-r}
@@ -255,61 +350,46 @@ ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
 Or to color each point in the plot differently, you could use a vector as an
 input to the argument **color**. **`ggplot2`** will provide a different color
 corresponding to different values in the vector. Here is an example where we
-color with **`gene`**:
+color with **`disease_outcome`**:
 
 
 
 ~~~
-ggplot(data = cnts_sml_wide, mapping = aes(x = A_Wt, y = D_Hom)) +
-    geom_point(alpha = 0.5, aes(color = gene_category))
+ggplot(data = covseq, mapping = aes(x = total_reads, y =coverage_pct_10x)) +
+    geom_point(alpha = 0.5, aes(color = disease_outcome))
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-05-color-by-gene-category-1-1.png" title="plot of chunk color-by-gene-category-1" alt="plot of chunk color-by-gene-category-1" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-05-color-by-disease-outcome-1-1.png" title="plot of chunk color-by-disease-outcome-1" alt="plot of chunk color-by-disease-outcome-1" width="612" style="display: block; margin: auto;" />
 
 > ## Challenge 5.2
 >
-> Use what you just learned to create a scatter plot the gene category against
-> the counts for sample `A_Wt`. Is this a good way to show this type of data?
+> Use what you just learned to create a scatter plot of the sex against the
+> cycle threshold (Ct). Is this a good way to show this type of data?
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> ggplot(data = cnts_sml_wide, 
->>        mapping = aes(x = gene_category, y = A_Wt)) +
->>   geom_point(aes(color = gene_category))
+>> ggplot(data = covseq, 
+>>        mapping = aes(x = sex, y = ct)) +
+>>   geom_point(aes(color = sex))
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-scatter-challenge-answer-1.png" title="plot of chunk scatter-challenge-answer" alt="plot of chunk scatter-challenge-answer" width="612" style="display: block; margin: auto;" />
->> Since we have counts that varies over a wide range, one could for example
->> use a logarithmic y-scale instead:
->>
->> 
->> ~~~
->> ggplot(data = cnts_sml_wide, 
->>        mapping = aes(x = gene_category, y = A_Wt)) +
->>   geom_point(aes(color = gene_category)) +
->>   scale_y_log10()
->> ~~~
->> {: .language-r}
->> 
->> <img src="../fig/rmd-05-scatter-challenge-answer2-1.png" title="plot of chunk scatter-challenge-answer2" alt="plot of chunk scatter-challenge-answer2" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-scatter-challenge-2-answer-1.png" title="plot of chunk scatter-challenge-2-answer" alt="plot of chunk scatter-challenge-2-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
-
 
 ## Boxplot
 
 Another useful way to visualize and compare distributions across groups is the
-boxplot. Here we will use the `cnts_sml_long` data frame that have all the
-counts in a single column. We will first create a boxplot that visualizes the
-distribution of counts within each sample.
+boxplot. Here we will first create a boxplot that visualizes the distribution of
+Ct values within each sex:
 
 
 ~~~
-ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
+ggplot(data = covseq, mapping = aes(x = sex, y = ct)) +
     geom_boxplot()
 ~~~
 {: .language-r}
@@ -321,7 +401,7 @@ counts and of their distribution:
 
 
 ~~~
-ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
+ggplot(data = covseq, mapping = aes(x = sex, y = ct)) +
     geom_boxplot(alpha = 0) +
     geom_jitter(alpha = 0.5, color = "tomato")
 ~~~
@@ -335,30 +415,27 @@ hidden?
 
 > ## Challenges 5.3
 >
-> Use the code below, and try to incrementally make changes to the plot.
->
->
->~~~
->ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
->    geom_boxplot(alpha = 0) +
->    geom_jitter(alpha = 0.5, color = "tomato")
->~~~
->{: .language-r}
->
 > Boxplots are useful summaries, but hide the *shape* of the distribution. For
 > example, if there is a bimodal distribution, it would not be observed with a
 > boxplot. An alternative to the boxplot is the violin plot (sometimes known as 
-> a beanplot), where the shape (of the density of points) is drawn.
+> a beanplot), where the shape (of the density of points) is drawn. Replace the
+> box plot with a violin plot; see `geom_violin()`. Modify the code below to
+> show a violin plot instead.
 >
-> * Replace the box plot with a violin plot; see `geom_violin()`.
+> 
+> ~~~
+> ggplot(data = covseq, mapping = aes(x = sex, y = ct)) +
+>     geom_boxplot(alpha = 0) +
+>     geom_jitter(alpha = 0.5, color = "tomato")
+> ~~~
+> {: .language-r}
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> # Violin plot instead of boxplot
->> ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
->>     geom_boxplot(alpha = 0) +
+>> ggplot(data = covseq, mapping = aes(x = sex, y = ct)) +
+>>     geom_violin(alpha = 0) +
 >>     geom_jitter(alpha = 0.5, color = "tomato")
 >> ~~~
 >> {: .language-r}
@@ -367,83 +444,67 @@ hidden?
 > In many types of data, it is important to consider the *scale* of the
 > observations. For example, it may be worth changing the scale of the axis to
 > better distribute the observations in the space of the plot. Changing the
-> scale of the axes is done similarly to adding/modifying other components:
+> scale of the axes is done similarly to adding/modifying other components.
+> 
+> * Modify the code below so that the number of reads are shown on a
+>   log 10 scale; see `scale_x_log10()`.
 >
-> * Represent the read counts on the log~10~ scale; see `scale_y_log10()`.
->
->> ## Solution
->>
->>
->>~~~
->># Violin plot with log-scale
->>ggplot(data = cnts_sml_long, mapping = aes(x = sample, y = cnt)) +
->>  geom_violin(alpha = 0) +
->>  geom_jitter(alpha = 0.5, color = "tomato") +
->>  scale_y_log10()
->>~~~
->>{: .language-r}
->>
->><img src="../fig/rmd-05-violinplot-logscale-answer-1.png" title="plot of chunk violinplot-logscale-answer" alt="plot of chunk violinplot-logscale-answer" width="612" style="display: block; margin: auto;" />
-> {: .solution}
->
-> * We've now looked at the distribution of the counts within samples. Try
->   making a new plot to explore the distribution for each `genotype` instead.
->   Overlay the boxplot layer on a jitter layer to show actual counts.
+> 
+> ~~~
+> ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+>     geom_point(alpha = 0)
+> ~~~
+> {: .language-r}
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> # Violin plot by genotype
->> ggplot(data = cnts_sml_long, mapping = aes(x = genotype, y = cnt)) +
->>   geom_violin(alpha = 0) +
->>   geom_jitter(alpha = 0.5, color = "tomato") +
+>> ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+>>   geom_point() +
 >>   scale_y_log10()
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-violinplot-by-genotype-answer-1.png" title="plot of chunk violinplot-by-genotype-answer" alt="plot of chunk violinplot-by-genotype-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-logscale-answer-1.png" title="plot of chunk logscale-answer" alt="plot of chunk logscale-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
-> * Add color to the data points on your boxplot according to the sample's
->   genotype of the actual sample.
+> * Add color to the data points on your plot according to the disease outcome.
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> # Violin plot by genotype in color
->> ggplot(data = cnts_sml_long, mapping = aes(x = genotype, y = cnt)) +
->>   geom_violin(alpha = 0) +
->>   geom_jitter(alpha = 0.5, aes(color = genotype)) +
+>> ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+>>   geom_point(aes(color = disease_outcome)) +
 >>   scale_y_log10()
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-violinplot-by-genotype-color-answer-1.png" title="plot of chunk violinplot-by-genotype-color-answer" alt="plot of chunk violinplot-by-genotype-color-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-logscale-color-by-disease-outcome-answer-1.png" title="plot of chunk logscale-color-by-disease-outcome-answer" alt="plot of chunk logscale-color-by-disease-outcome-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
-> * Reorder the genotype categories so that "Wt" is shown to the left and "Hom"
->   to the right (**hint:** use the `factor()` function).
+> * Replace "NA" with "unknown" (**hint:** use the `addNA()` and `levels()`
+>   functions).
 >
 >> ## Solution
 >>
 >> 
 >> ~~~
->> # Violin plot by reordered genotypes
+>> # Add NAs to the factor
+>> covseq$disease_outcome <- addNA(covseq$disease_outcome)
 >> 
->> # Create a factor with reordered levels
->> cnts_sml_long$genotype <- factor(cnts_sml_long$genotype, levels = c("Wt", "Hom"))
+>> # Rename the level
+>> levels(covseq$disease_outcome)[3] <- "unknown"
 >> 
 >> # Now create the plot in the same way as before
->> ggplot(data = cnts_sml_long, mapping = aes(x = genotype, y = cnt)) +
->>   geom_violin(alpha = 0) +
->>   geom_jitter(alpha = 0.5, aes(color = genotype)) +
+>> ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
+>>   geom_point(aes(color = disease_outcome)) +
 >>   scale_y_log10()
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-violinplot-by-genotype-ordering-answer-1.png" title="plot of chunk violinplot-by-genotype-ordering-answer" alt="plot of chunk violinplot-by-genotype-ordering-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-replace-na-answer-1.png" title="plot of chunk replace-na-answer" alt="plot of chunk replace-na-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -455,25 +516,21 @@ suitable dataset:
 
 
 ~~~
-# Filter out the rows for the gene 'Mpc2'
-cnts_Mpc2 <- cnts_sml_long %>% filter(gene == "Mpc2")
+# Count the 
+sex_cnts <- covseq %>% count(sex)
 
-cnts_Mpc2
+sex_cnts
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 6 x 4
-  gene  sample genotype   cnt
-  <chr> <chr>  <fct>    <dbl>
-1 Mpc2  A      Wt         602
-2 Mpc2  B      Wt         507
-3 Mpc2  C      Wt         532
-4 Mpc2  D      Hom        817
-5 Mpc2  E      Hom        729
-6 Mpc2  F      Hom        832
+# A tibble: 2 × 2
+  sex        n
+  <fct>  <int>
+1 female    16
+2 male      13
 ~~~
 {: .output}
 
@@ -481,7 +538,7 @@ Let's then create a barplot from the tiny dataset that we just created:
 
 
 ~~~
-ggplot(cnts_Mpc2, aes(x = sample, y = cnt)) +
+ggplot(sex_cnts, aes(x = sex, y = n)) +
   geom_bar(stat = "identity")
 ~~~
 {: .language-r}
@@ -489,14 +546,14 @@ ggplot(cnts_Mpc2, aes(x = sample, y = cnt)) +
 <img src="../fig/rmd-05-barplot1-1.png" title="plot of chunk barplot1" alt="plot of chunk barplot1" width="612" style="display: block; margin: auto;" />
 
 In the code above, we used the argument `stat = "identity"` instead of the
-default value `bin`. This means that the height of the bar will represented by
-the count in each category.
+default value `bin`. This means that the height of the bar will be represented
+by the count in each category.
 
-We can improve the plot by using different fill colors for the genotypes:
+We can improve the plot by using different fill colors for the sexes:
 
 
 ~~~
-ggplot(cnts_Mpc2, aes(x = sample, y = cnt, fill = genotype)) +
+ggplot(sex_cnts, aes(x = sex, y = n, fill = sex)) +
   geom_bar(stat = "identity")
 ~~~
 {: .language-r}
@@ -507,8 +564,8 @@ We could also have added this configuration to the `geom_bar()` layer instead:
 
 
 ~~~
-ggplot(cnts_Mpc2, aes(x = sample, y = cnt)) +
-  geom_bar(stat = "identity", aes(fill = genotype))
+ggplot(sex_cnts, aes(x = sex, y = n)) +
+  geom_bar(stat = "identity", aes(fill = sex))
 ~~~
 {: .language-r}
 
@@ -522,7 +579,7 @@ you need to use `+` and not `%>%`.
 
 
 ~~~
-cnts_Mpc2 %>% ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+sex_cnts %>% ggplot(aes(x = sex, y = n, fill = sex)) +
   geom_bar(stat = "identity")
 ~~~
 {: .language-r}
@@ -534,12 +591,12 @@ data visualization.
 
 
 ~~~
-cnts_Mpc2_graph <- cnts_sml_long %>%
-  filter(gene == "Mpc2") %>% 
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+sex_cnts_plot <- covseq %>%
+  count(sex) %>%
+  ggplot(aes(x = sex, y = n, fill = sex)) +
   geom_bar(stat = "identity")
 
-cnts_Mpc2_graph
+sex_cnts_plot
 ~~~
 {: .language-r}
 
@@ -549,35 +606,35 @@ cnts_Mpc2_graph
 
 `ggplot` has a special technique called *faceting* that allows the user to split 
 one plot into multiple plots based on a factor included in the dataset. We will 
-use it to make one barplot for each of three genes:
+use it to make one barplot for each of disease outcome:
 
 
 ~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene))
+    facet_wrap(facets = vars(disease_outcome))
 ~~~
 {: .language-r}
 
 <img src="../fig/rmd-05-first-facet-1.png" title="plot of chunk first-facet" alt="plot of chunk first-facet" width="612" style="display: block; margin: auto;" />
 
 You can also create more advanced layouts using the `facet_grid()` function.
-We can for example arrange the plots vertically insted of horizontally:
+We can for example arrange the plots vertically instead of horizontally:
 
 
 
 ~~~
-cnts_sml_long %>%
-    # Filter out three genes
-    filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-    # Create a separate barplot for each gene
-    ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+    ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_grid(rows = vars(gene))
+    facet_grid(rows = vars(disease_outcome))
 ~~~
 {: .language-r}
 
@@ -601,13 +658,13 @@ using the `theme_bw()` function:
 
 
 ~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
+    facet_wrap(facets = vars(disease_outcome)) +
     theme_bw()
 ~~~
 {: .language-r}
@@ -626,93 +683,90 @@ provides a wide variety of options.
 
 > ## Challenge 5.4
 >
-> Use what you just learned to create a plot that show how the mean count for
-> each genotype differ between the three genes "Evc", "Mpc" and "Nemf".
+> Use what you just learned to create a plot that shows how counts of PANGO
+> lineages (`pangolin_lineage`) differ between disease outcomes.
 >
 >> ## Solution
 >> 
 >> 
 >> ~~~
->> cnts_sml_long %>%
->>   filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
->>   group_by(gene, genotype) %>%
->>   summarize(mean=mean(cnt)) %>%
->>   ggplot(aes(x = genotype, y = mean)) +
+>> covseq %>%
+>>   count(pangolin_lineage, disease_outcome) %>%
+>>   ggplot(aes(x = disease_outcome, y = n, fill = disease_outcome)) +
 >>     geom_bar(stat = "identity") +
->>     facet_wrap(vars(gene))
+>>     facet_wrap(vars(pangolin_lineage))
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-average-gene-counts-1.png" title="plot of chunk average-gene-counts" alt="plot of chunk average-gene-counts" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-pango-counts-1.png" title="plot of chunk pango-counts" alt="plot of chunk pango-counts" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
 
 ## Customization
 
-Take a look at the [**`ggplot2`** cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf), and
+Take a look at the [**`ggplot2`** cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf), and
 think of ways you could improve the plot.
 
 Now, let's start with changing the names of axes and add a title to the figure:
 
 
 ~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Genotype",
-         y = "Number of reads") +
+    facet_wrap(facets = vars(disease_outcome)) +
+    labs(title = "Females and males per disease outcome",
+         x = "Sex",
+         y = "Number of patients") +
     theme_bw()
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-05-gene-counts-with-right-labels-1.png" title="plot of chunk gene-counts-with-right-labels" alt="plot of chunk gene-counts-with-right-labels" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-05-outcome-counts-with-right-labels-1.png" title="plot of chunk outcome-counts-with-right-labels" alt="plot of chunk outcome-counts-with-right-labels" width="612" style="display: block; margin: auto;" />
 
 The axes have more informative names, but their readability can be improved by
 increasing the font size. This can be done with the generic `theme()` function:
 
 
 ~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Sample",
-         y = "Number of reads") +
-    theme_bw() +
+    facet_wrap(facets = vars(disease_outcome)) +
+    labs(title = "Females and males per disease outcome",
+         x = "Sex",
+         y = "Number of patients") +
     theme(text = element_text(size = 16))  # set the font size of text elements
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-05-gene-counts-with-right-labels-xfont-size-1.png" title="plot of chunk gene-counts-with-right-labels-xfont-size" alt="plot of chunk gene-counts-with-right-labels-xfont-size" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-05-outcome-counts-with-right-labels-xfont-size-1.png" title="plot of chunk outcome-counts-with-right-labels-xfont-size" alt="plot of chunk outcome-counts-with-right-labels-xfont-size" width="612" style="display: block; margin: auto;" />
 
 We can also add another layer with the `scale_fill_discrete()` function to
 adjust the figure legend:
 
 
 ~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Sample",
-         y = "Number of reads") +
+    facet_wrap(facets = vars(disease_outcome)) +
+    labs(title = "Females and males per disease outcome",
+         x = "Sex",
+         y = "Number of patients") +
     scale_fill_discrete(
-      name = "Genotype",                        # figure legend title
-      labels = c("Wild type", "Homozygous")) +  # new figure legend labels
+      name = "Sex",  # figure legend title
+      labels = c("Female", "Male")) +  # new figure legend labels
     theme_bw() +
     theme(text = element_text(size = 16))
 ~~~
@@ -721,72 +775,14 @@ cnts_sml_long %>%
 <img src="../fig/rmd-05-adjust-figure-legend-1.png" title="plot of chunk adjust-figure-legend" alt="plot of chunk adjust-figure-legend" width="612" style="display: block; margin: auto;" />
 
 Note that it is also possible to change the fonts of your plots. If you are on
-Windows, you may have to install
-the [**`extrafont`** package](https://github.com/wch/extrafont), and follow the
-instructions included in the README for this package.
-
-After our manipulations, you may notice that the values on the x-axis are still
-not properly readable. Let's change the orientation of the labels and adjust 
-them vertically and horizontally so they don't overlap. You can use a 90 degree
-angle, or experiment to find the appropriate angle for diagonally oriented
-labels. We can also modify the facet label text (`strip.text`) to italicize the genus
-names:
-
-
-~~~
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
-    geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Genotype",
-         y = "Number of reads") +
-    theme_bw() +
-    theme(axis.text.x = element_text(colour = "grey20", size = 12, angle = 90, hjust = 0.5, vjust = 0.5),
-                        axis.text.y = element_text(colour = "grey20", size = 12),
-                        strip.text = element_text(face = "italic"),
-                        text = element_text(size = 16))
-~~~
-{: .language-r}
-
-<img src="../fig/rmd-05-ngene-counts-with-theme-1.png" title="plot of chunk ngene-counts-with-theme" alt="plot of chunk ngene-counts-with-theme" width="612" style="display: block; margin: auto;" />
-
-If you like the changes you created better than the default theme, you can save
-them as an object to be able to easily apply them to other plots you may create:
-
-
-
-~~~
-grey_theme <- theme(axis.text.x = element_text(colour="grey20", size = 12, 
-                                               angle = 90, hjust = 0.5, 
-                                               vjust = 0.5),
-                    axis.text.y = element_text(colour = "grey20", size = 12),
-                    text=element_text(size = 16))
-
-cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
-    geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Genotype",
-         y = "Number of reads") +
-    grey_theme
-~~~
-{: .language-r}
-
-<img src="../fig/rmd-05-gene-counts-with-right-labels-xfont-orientation-1.png" title="plot of chunk gene-counts-with-right-labels-xfont-orientation" alt="plot of chunk gene-counts-with-right-labels-xfont-orientation" width="612" style="display: block; margin: auto;" />
+Windows, you may have to install the [**`extrafont`** package](https://github.com/wch/extrafont),
+and follow the instructions included in the README for this package.
 
 > ## Challenge 5.5
 >
 > With all of this information in hand, please take another five minutes to either
 > improve one of the plots generated in this exercise or create a beautiful graph
-> of your own. Use the RStudio [**`ggplot2`** cheat sheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf) 
+> of your own. Use the RStudio [**`ggplot2`** cheat sheet](hhttps://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) 
 > for inspiration.
 >
 > Here are some ideas:
@@ -794,8 +790,8 @@ cnts_sml_long %>%
 > * See if you can change the thickness of the lines.
 > * Can you find a way to change the name of the legend? What about its labels?
 > * Try using a different color palette (see
->   [http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/]).
-{: .challenge
+>   [http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/)).
+{: .challenge}
 
 ## Arranging plots
 
@@ -805,7 +801,6 @@ using different variables or even different data frames. We won't go into
 it here, but the * **`patchwork`** package can be used to combine separate 
 gplots into a single figure while keeping everything aligned properly. Like most
 R packages, `patchwork` can be installed from CRAN, the R package repository.
-
 
 ## Exporting plots
 
@@ -822,23 +817,23 @@ dimension and resolution of your plot by adjusting the appropriate arguments
 
 
 ~~~
-cnts_plot <- cnts_sml_long %>%
-  # Filter out three genes
-  filter(gene %in% c("Evc", "Mpc2", "Nemf")) %>%
-  # Create a separate barplot for each gene
-  ggplot(aes(x = sample, y = cnt, fill = genotype)) +
+sex_outcome_plot <- covseq %>%
+  # Count sex and disease outcome
+  count(sex, disease_outcome) %>%
+  # Create a separate barplot for each disease outcome
+  ggplot(aes(x = sex, y = n, fill = sex)) +
     geom_bar(stat = "identity") +
-    facet_wrap(facets = vars(gene)) +
-    labs(title = "Number of reads for selected genes",
-         x = "Sample",
-         y = "Number of reads") +
+    facet_wrap(facets = vars(disease_outcome)) +
+    labs(title = "Females and males per disease outcome",
+         x = "Sex",
+         y = "Number of patients") +
     scale_fill_discrete(
-      name = "Genotype",
-      labels = c("Wild type", "Homozygous")) + 
+      name = "Sex",  # figure legend title
+      labels = c("Female", "Male")) +  # new figure legend labels
     theme_bw() +
     theme(text = element_text(size = 16))
-
-# Save the file
-ggsave("gene_counts_plot.png", cnts_plot, width = 15, height = 10)
+  
+# Save the file in a subdirectory named "fig"
+ggsave("fig/sex_disease_outcome.png", sex_outcome_plot, width = 15, height = 10)
 ~~~
 {: .language-r}
