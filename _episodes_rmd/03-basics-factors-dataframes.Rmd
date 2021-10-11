@@ -41,20 +41,19 @@ method, "COVseq", for obtaining viral genome sequences. The researchers were
 particularly interested in the method's ability to detect new viral variants.
 
 We will use two datasets that are stored in comma-separated values (CSV) files:
-`covid_samples.csv` and `covid_sequencing.csv`. The first dataset contains 29
-rows describing the SARS-CoV-2 samples. The second dataset contains results from
-applying three different sequencing procedures to each sample. This dataset has
-87 rows, i.e. three rows for each sample. The COVseq method is part of two of
-the three investigated procedures, and is thus represented by two thirds of the
-rows in the sequencing dataset.
+`covid_samples.csv` and `covseq_miseq.csv`. The first dataset is mainly
+describing the SARS-CoV-2 samples. The second dataset contains some results from
+sequencing the samples using the COVseq method on an Illumina MiSeq
+instrument. This particular set-up was one of three sequencing strategies
+examined by the researchers.
 
-![SARS-CoV-2 data used .](../fig/COVseq-samples.png)
+![SARS-CoV-2 data used in this lesson.](../fig/COVseq-samples.png)
 
 ## Loading the samples data
 
-We will start with the dataset with 29 rows, where each row represents one
-positive SARS-CoV-2 sample (and consequently one individual). This dataset has
-the following columns:
+We will start with the samples dataset. This dataset has 29 rows that each
+represents one positive SARS-CoV-2 sample (and consequently one individual). The
+dataset has the following columns:
 
 | Column          | Description                                                                                                                     |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------|
@@ -247,7 +246,7 @@ objects besides `data.frame`.
 >> ```
 >> * The object `samples` is of class `data.frame`, or more specifically a
 >>   `tibble` (`spec_tbl_df/tbl_df/tbl/data.frame`)
->> * Rows and columns: 29 rows and 10 columns
+>> * Rows and columns: 29 rows and 8 columns
 > {: .solution}
 {: .challenge}
 
@@ -429,7 +428,8 @@ levels (like the species names in our example dataset).
 > 2. Using the functions you have learnt so far, can you find out...
 >
 >      * How many levels are there in the `sex` column?
->      * How many individuals was recorded to have died from COVID-19?
+>      * How many individuals are listed as "dead" in the `disease_outcome`
+>        column?
 >
 >> ## Solution
 >>
@@ -441,8 +441,8 @@ levels (like the species names in our example dataset).
 >> ```
 >>
 >> * How many levels in the `sex` column? There are 2 levels.
->> * How many individuals died? There are 15 reported as "dead" in the
->>   `disease_outcome` column.
+>> * How many are listed as dead? There are 15 individuals listed as "dead"
+>>   in the `disease_outcome` column.
 >>   column.
 > {: .solution}
 {: .challenge}
@@ -588,14 +588,15 @@ plot(disease_outcome)
 >> ## Solution
 >>
 >> * missing quotations around the names of the animals
->> * missing one entry in the `feel` column (probably for one of the furry animals)
+>> * missing one entry in the `feel` column (probably for one of the furry
+>>   animals)
 >> * missing one comma in the `weight` column
 >> * `country`, `climate`, `temperature`, and `northern_hemisphere` are
 >>    characters; `has_kangaroo` is numeric
 >> * using `factor()` one could replace character columns with factors columns
->> * removing the quotes in `temperature` and `northern_hemisphere` and replacing 1
->>   by TRUE in the `has_kangaroo` column would give what was probably 
->>   intended
+>> * removing the quotes in `temperature` and `northern_hemisphere` and
+>>   replacing 1 by TRUE in the `has_kangaroo` column would give what was
+>>   probably intended
 > {: .solution}
 {: .challenge}
 
