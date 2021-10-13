@@ -128,14 +128,14 @@ Objects can be given almost any name such as `x`, `chromosome_position`, or
 > have drastically different meanings. However, in this lesson, the two words
 > are used synonymously. For more information see:
 > [https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects)
-
+{: .callout}
 
 When assigning a value to an object, R does not print anything. You can force R
 to print the value by using parentheses or by typing the object name:
 
 
 ~~~
-gc_content <- 43.5    # doesn't print anything
+gc_content <- 43.5  # doesn't print anything
 (gc_content <- 43.5)  # but putting parenthesis around the call prints the value of `gc_content`
 ~~~
 {: .language-r}
@@ -150,7 +150,7 @@ gc_content <- 43.5    # doesn't print anything
 
 
 ~~~
-gc_content            # and so does typing the name of the object
+gc_content  # and so does typing the name of the object
 ~~~
 {: .language-r}
 
@@ -625,8 +625,8 @@ You can use the `c()` function to add other elements to your vector:
 
 
 ~~~
-weight_g <- c(weight_g, 90) # add to the end of the vector
-weight_g <- c(30, weight_g) # add to the beginning of the vector
+weight_g <- c(weight_g, 90)  # add to the end of the vector
+weight_g <- c(30, weight_g)  # add to the beginning of the vector
 weight_g
 ~~~
 {: .language-r}
@@ -675,7 +675,7 @@ factors (`factor`) and arrays (`array`).
 > 
 >> ## Answer
 >>
->> R implicitly converts them all to be the same type
+>> R implicitly converts them all to be the same type.
 > {: .solution}
 >
 > * What will happen in each of these examples? (hint: use `class()` to check
@@ -807,7 +807,7 @@ values above 50:
 
 
 ~~~
-weight_g > 50    # will return logicals with TRUE for the indices that meet the condition
+weight_g > 50   # will return logicals with TRUE for the indices that meet the condition
 ~~~
 {: .language-r}
 
