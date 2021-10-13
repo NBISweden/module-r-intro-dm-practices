@@ -542,7 +542,7 @@ covseq <- sequencing %>%
 >
 >> ## Solution
 >>
->> ```{r violinplot-with-points, eval=FALSE, echo=TRUE, purl=FALSE}
+>> ```{r violinplot-with-points, eval=TRUE, echo=TRUE, purl=FALSE}
 >> ggplot(data = covseq, mapping = aes(x = sex, y = ct)) +
 >>     geom_violin(alpha = 0) +
 >>     geom_jitter(alpha = 0.5, color = "tomato")

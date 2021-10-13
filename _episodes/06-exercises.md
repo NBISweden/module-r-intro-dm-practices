@@ -706,6 +706,8 @@ covseq <- sequencing %>%
 >>     geom_jitter(alpha = 0.5, color = "tomato")
 >> ~~~
 >> {: .language-r}
+>> 
+>> <img src="../fig/rmd-06-violinplot-with-points-1.png" title="plot of chunk violinplot-with-points" alt="plot of chunk violinplot-with-points" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
 > In many types of data, it is important to consider the *scale* of the
