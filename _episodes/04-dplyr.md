@@ -116,7 +116,7 @@ Rows: 29 Columns: 8
 
 
 ~~~
-── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (5): patient_id, country, region, disease_outcome, sex
 dbl  (2): age, ct
@@ -692,7 +692,7 @@ From the table above, we may learn that, for instance, there are one female and
 one male where the disease outcome is not specified (i.e. `NA`).
 
 
-> ## Challenge 4.4
+> ## Challenge 4.2
 >
 > * For each collecting date in the `samples` data frame, how many samples have
 >   a Ct value greater than or equal to 35?

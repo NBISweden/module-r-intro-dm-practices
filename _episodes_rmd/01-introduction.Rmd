@@ -1,6 +1,6 @@
 ---
 title: "Introducing R and RStudio IDE"
-teaching: 15
+teaching: 20
 exercises: 5
 questions:
 - "Why use R?"
@@ -226,9 +226,9 @@ are only going to use one file and it will make things easier.
 It is good practice to create a [README text file](https://www.makeareadme.com)
 at the top level of your working directory to provide the context of the files
 in the directory. Making this a habit can save you many hours of work, as it
-will allow you to quickly get into a project again after being away from it. You
-may also find a README file helpful when you collaborate with others around a
-bunch of files.
+will allow you to quickly get into a project again after being away from it for
+some time. You may also find a README file helpful when you collaborate with
+others around a bunch of files.
 
 1.  Under the `File` menu, first click on `New File`, and then select
     `Text File`.
