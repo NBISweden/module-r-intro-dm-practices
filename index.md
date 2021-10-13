@@ -4,8 +4,7 @@ root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
 
-This lesson gives an introduction to R and how to work with tidy data. It also
-includes some content on literate programming.
+This lesson gives an introduction to R and how to work with tidy data.
 
 The material builds to a large extent on the Data Carpentry's lessons
 "Data Analysis and Visualization in R for Ecologists" and "Intro to R and
