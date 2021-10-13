@@ -257,7 +257,7 @@ plot can also be generated with code like this:
 ~~~
 # Assign plot to a variable
 reads_10x_plot <- ggplot(data = covseq,
-                        mapping = aes(x = total_reads, y = coverage_pct_10x))
+                         mapping = aes(x = total_reads, y = coverage_pct_10x))
 
 # Draw the plot
 reads_10x_plot + 
@@ -462,7 +462,7 @@ hidden?
 >> ~~~
 >> ggplot(data = covseq, mapping = aes(x = total_reads, y = coverage_pct_10x)) +
 >>   geom_point() +
->>   scale_y_log10()
+>>   scale_x_log10()
 >> ~~~
 >> {: .language-r}
 >> 
@@ -782,7 +782,7 @@ and follow the instructions included in the README for this package.
 >
 > With all of this information in hand, please take another five minutes to either
 > improve one of the plots generated in this exercise or create a beautiful graph
-> of your own. Use the RStudio [**`ggplot2`** cheat sheet](hhttps://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) 
+> of your own. Use the RStudio [**`ggplot2`** cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) 
 > for inspiration.
 >
 > Here are some ideas:
