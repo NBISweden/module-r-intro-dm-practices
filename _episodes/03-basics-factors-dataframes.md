@@ -133,7 +133,7 @@ Rows: 29 Columns: 8
 
 
 ~~~
-── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (5): patient_id, country, region, disease_outcome, sex
 dbl  (2): age, ct
@@ -737,8 +737,8 @@ names of the columns.
 When we did `str(samples)` we saw that the columns `age`, `tax_id` and
 `ct` consist of numeric values and that the column `collection_date` contains
 dates. The remaining columns (e.g. `patient_id`, `sex` and `disease_outcome`),
-however, are of the class `character`. Arguably, some of these columns
-(e.g. `sex` and `disease_outcome`) contain categorical data, which means that
+however, are of the class `character`. Arguably, some of these columns (like
+`sex` and `disease_outcome`) contain categorical data, which means that
 they can only take on a limited number of values. 
 
 R has a special class for working with categorical data, called `factor`. 
@@ -1090,7 +1090,7 @@ Now we can plot the data again, using `plot(disease_outcome)`.
 
 > ## Challenge 3.4
 >
-> * Store a copy of the factor column `sex` to an object named `sex`.
+> * Store a copy of the factor column `sex` to a new object named `sex`.
 > * In the new object, rename "female" and "male" to "F" and "M" respectively.
 > * Reorder the factor levels so that "M" comes before "F".
 > * Create a bar plot of the factor.
