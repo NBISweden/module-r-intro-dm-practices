@@ -444,12 +444,11 @@ sessionInfo()
 
 ~~~
 R version 4.1.1 (2021-08-10)
-Platform: x86_64-apple-darwin17.0 (64-bit)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
 Running under: macOS Big Sur 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+BLAS/LAPACK: /Users/markus/anaconda3/envs/dm-course-env/lib/libopenblasp-r0.3.17.dylib
 
 locale:
 [1] sv_SE.UTF-8/sv_SE.UTF-8/sv_SE.UTF-8/C/sv_SE.UTF-8/sv_SE.UTF-8
@@ -458,7 +457,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] knitr_1.36
+[1] knitr_1.35
 
 loaded via a namespace (and not attached):
 [1] compiler_4.1.1 magrittr_2.0.1 tools_4.1.1    stringi_1.7.5  highr_0.9     
