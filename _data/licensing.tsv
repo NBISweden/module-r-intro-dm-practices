@@ -1,0 +1,47 @@
+contentUrl	license
+fig/COVseq-samples.png	Illustration CC-BY 4.0 by NBIS, https://creativecommons.org/licenses/by/4.0/
+fig/Illumina_MiSeq_sequencer.jpg	A MiSeq from Illumina CC-0 by Konrad Förstner, https://creativecommons.org/publicdomain/zero/1.0/
+fig/data-frame.svg	Data Analysis and Visualization in R for Ecologists, CC-BY 4.0 by Data Carpentry, https://creativecommons.org/licenses/by/4.0/
+fig/kitten-try-things.jpg	Data Analysis and Visualization in R for Ecologists, CC-BY 4.0 by Data Carpentry, https://creativecommons.org/licenses/by/4.0/
+fig/r-starting-how-it-should-look-like.png	Data Analysis and Visualization in R for Ecologists, CC-BY 4.0 by Data Carpentry, https://creativecommons.org/licenses/by/4.0/
+fig/rstudio-preferences.png	Data Analysis and Visualization in R for Ecologists, CC-BY 4.0 by Data Carpentry, https://creativecommons.org/licenses/by/4.0/
+fig/rstudio-screenshot.png	RStudio screenshot by NBIS, used to teach about RStudio, https://www.rstudio.com/about/trademark/
+fig/rstudiohelp.png	RStudio screenshot by Data carpentry, used to teach about RStudio, https://www.rstudio.com/about/trademark/
+fig/rstudioredx.png	Data Analysis and Visualization in R for Ecologists, CC-BY 4.0 by Data Carpentry, https://datacarpentry.org/R-ecology-lesson 
+data/covid_samples.csv	Artificial data derived from original data made available through the study "COVseq is a cost-effective workflow for mass-scale SARS-CoV-2 genomic surveillance" in Nature Communications 12: 3903 (2021), DOI: https://doi.org/10.1038/s41467-021-24078-9. Original data available under accession number PRJEB42601 at EMBL-EBI (https://identifiers.org/ena.embl:PRJEB42601).
+data/covseq_miseq.csv	Artificial data derived from original data made available through the study "COVseq is a cost-effective workflow for mass-scale SARS-CoV-2 genomic surveillance" in Nature Communications 12: 3903 (2021), DOI: https://doi.org/10.1038/s41467-021-24078-9. Original data available under accession number PRJEB42601 at EMBL-EBI (https://identifiers.org/ena.embl:PRJEB42601).
+fig/rmd-03-barplot-1-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-03-barplot-2-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-03-barplot-3-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-adding-colors-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-adding-transparency-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-adjust-figure-legend-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-barplot1-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-barplot2-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-boxplot-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-boxplot-with-points-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-color-by-disease-outcome-1-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-create-ggplot-object-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-facet-in-rows-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-first-facet-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-first-facet-white-bg-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-first-ggplot-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-integrating-the-pipe-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-logscale-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-logscale-color-by-disease-outcome-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-outcome-counts-with-right-labels-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-outcome-counts-with-right-labels-xfont-size-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-pango-counts-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-pipes-and-manipulation-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-replace-na-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-scatter-challenge-1-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-scatter-challenge-2-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-05-violinplot-with-points-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-barplot-3-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-logscale-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-logscale-color-by-disease-outcome-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-pango-counts-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-replace-na-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-scatter-challenge-1-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-scatter-challenge-2-answer-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0/
+fig/rmd-06-violinplot-with-points-1.png	Diagram generated using the ggplot2 R-package, CC-0 by NBIS, https://creativecommons.org/publicdomain/zero/1.0///identifiers.org/ena.embl:PRJEB42601).
