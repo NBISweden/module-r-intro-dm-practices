@@ -79,8 +79,8 @@ Moving back and forth between these formats is non-trivial, and **`tidyr`**
 gives you tools for this and more sophisticated data manipulation.
 
 To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want
-to check out this [handy data transformation with **`dplyr`** cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
-and this [one about **`tidyr`**](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).
+to check out this [handy data transformation with **`dplyr`** cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/data-transformation.pdf)
+and this [one about **`tidyr`**](https://github.com/rstudio/cheatsheets/raw/main/data-import.pdf).
 
 In this episode, we will use the SARS-CoV-2 samples dataset that was introduced
 in the previous episode. You can read the data using the `read_csv()` function
