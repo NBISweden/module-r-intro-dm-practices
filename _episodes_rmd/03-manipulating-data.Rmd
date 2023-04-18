@@ -1,0 +1,564 @@
+---
+title: "Manipulating, analyzing and exporting data with tidyverse"
+teaching: 40
+exercises: 15
+questions:
+- "How can I manipulate dataframes without repeating myself?"
+objectives:
+- "Describe the purpose of the **`dplyr`** and **`tidyr`** packages."
+- "Select certain columns in a data frame with the **`dplyr`** function
+  `select`."
+- "Extract certain rows in a data frame according to logical (boolean)
+  conditions with the **`dplyr`** function `filter`."
+- "Link the output of one **`dplyr`** function to the input of another function
+  with the 'pipe' operator `%>%`."
+- "Use the split-apply-combine concept for data analysis."
+- "Use `summarize`, `group_by`, and `count` to split a data frame into groups of
+  observations, apply summary statistics for each group, and then combine the
+  results."
+- "Export a data frame to a .csv file."
+keypoints:
+- "Use the `dplyr` package to manipulate dataframes."
+- "Use `select()` to choose variables from a dataframe."
+- "Use `filter()` to choose data based on values."
+- "Use `group_by()` and `summarize()` to work with subsets of data."
+source: Rmd
+---
+
+```{r, include = FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("03-")
+```
+
+# Data manipulation using **`dplyr`** and **`tidyr`**
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read,
+especially for complicated operations. **`dplyr`** is a package for making
+tabular data manipulation easier. It pairs nicely with **`tidyr`** which enables
+you to swiftly convert between different data formats for plotting and analysis.
+
+The **`tidyverse`** package is an "umbrella-package" that installs **`tidyr`**,
+**`dplyr`**, and several other packages useful for data analysis, such as 
+**`ggplot2`**, **`tibble`**, etc.
+
+The **`tidyverse`** package tries to address 3 common issues that arise when
+doing data analysis with some of the functions that come with R:
+
+1. The results from a base R function sometimes depend on the type of data.
+2. Using R expressions in a non standard way, which can be confusing for new
+   learners.
+3. Hidden arguments, having default operations that new learners are not aware
+   of.
+
+You should already have installed and loaded the **`tidyverse`** package. 
+If we haven't already done so, we can type `install.packages("tidyverse")`
+straight into the console. Then, to load the package type `library(tidyverse)`.
+
+## What are **`dplyr`** and **`tidyr`**?
+
+The package **`dplyr`** provides easy tools for the most common data
+manipulation tasks. It is built to work directly with data frames, with many
+common tasks optimized by being written in a compiled language (C++). An
+additional feature is the ability to work directly with data stored in an
+external database. The benefits of doing this are that the data can be managed
+natively in a relational database, queries can be conducted on that database,
+and only the results of the query are returned.
+
+This addresses a common problem with R in that all operations are conducted
+in-memory and thus the amount of data you can work with is limited by available
+memory. The database connections essentially remove this limitation in that you
+can connect to a database of many hundreds of GB, conduct queries on it
+directly, and pull back into R only what you need for analysis.
+
+The package **`tidyr`** addresses the common problem of wanting to reshape your
+data for plotting and use by different R functions. Sometimes we want data sets
+where we have one row per measurement. Sometimes we want a data frame where each
+measurement type has its own column, and rows are instead more aggregated groups
+(e.g., a time period, an experimental unit like a plot or a batch number).
+Moving back and forth between these formats is non-trivial, and **`tidyr`**
+gives you tools for this and more sophisticated data manipulation.
+
+To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want
+to check out this [handy data transformation with **`dplyr`** cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
+and this [one about **`tidyr`**](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf).
+
+As before, we'll read in our data using the `read_csv()` function from the 
+tidyverse package **`readr`**.
+
+```{r, eval=FALSE, purl=TRUE}
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks.csv",
+  destfile = "data_raw/Hawks.csv"
+)
+```
+
+```{r, message = FALSE, purl = FALSE}
+## load the tidyverse packages, incl. dplyr
+library(tidyverse)
+```
+
+We can then read the data into memory:
+
+```{r, eval = FALSE,  purl = FALSE}
+hawks <- read_csv("data_raw/Hawks.csv")
+```
+```{r, echo = FALSE, eval = TRUE, purl = FALSE}
+# silently read in CSV file with data
+hawks <- read_csv("../data/Hawks.csv")
+```
+
+
+```{r, purl = FALSE}
+## inspect the data
+str(hawks)
+```
+
+```{r, eval=FALSE, purl=FALSE}
+## preview the data
+view(hawks)
+```
+
+Next, we're going to learn some of the most common **`dplyr`** functions:
+
+- `select()`: subset columns
+- `filter()`: subset rows on conditions
+- `mutate()`: create new columns by using information from other columns
+- `group_by()` and `summarize()`: create summary statistics on grouped data
+- `arrange()`: sort results
+- `count()`: count discrete values
+
+## Selecting columns and filtering rows
+
+To select columns of a data frame, use `select()`. The first argument
+to this function is the data frame (`hawks`), and the subsequent
+arguments are the columns to keep.
+
+```{r, results = 'hide', purl = FALSE}
+select(hawks, Species, Sex, Weight)
+```
+
+To select all columns *except* certain ones, put a "-" in front of
+the variable to exclude it.
+
+```{r, results = 'hide', purl = FALSE}
+select(hawks, -BandNumber, -Culmen)
+```
+
+This will select all the variables in `hawks` except `BandNumber`
+and `Culmen`.
+
+To choose rows based on a specific criterion, use `filter()`:
+
+```{r, purl = FALSE}
+filter(hawks, Sex == "F")
+```
+
+We can also filter rows that do not contain missing data in some columns:
+
+```{r, purl = FALSE}
+filter(hawks, !is.na(Sex) & !is.na(Weight))
+```
+
+This will return all rows that have a value in both the `Sex` column and the
+`Weight` column. In **`Tidyverse`**, there is also a special functions `drop_na` 
+that can be used to filter out rows with missing data:
+
+```{r, purl = FALSE}
+drop_na(hawks, Sex, Weight)
+```
+
+
+## Pipes
+
+What if you want to select and filter at the same time? There are three ways to
+do this: use intermediate steps, nested functions, or pipes.
+
+With intermediate steps, you create a temporary data frame and use that as input
+to the next function, like this:
+
+```{r, purl = FALSE}
+hawks_female <- filter(hawks, Sex == "F")
+hawks_female_sml <- select(hawks_female, Species, Sex, Weight)
+```
+
+This is readable, but can clutter up your workspace with lots of objects that
+you have to name individually. With multiple steps, that can be hard to keep
+track of.
+
+You can also nest functions (i.e. one function inside of another), like this:
+
+```{r, purl = FALSE}
+hawks_female <- select(
+  filter(hawks, Sex == "F"), Species, Sex, Weight)
+```
+
+This is handy, but can be difficult to read if too many functions are nested, as
+R evaluates the expression from the inside out (in this case, filtering, then
+selecting).
+
+The last option, *pipes*, are a recent addition to R. Pipes let you take the
+output of one function and send it directly to the next, which is useful when
+you need to do many things to the same dataset. Pipes in R look like `%>%` and
+are made available via the **`magrittr`** package, installed automatically with
+**`dplyr`**. If you use RStudio, you can type the pipe with <kbd>Ctrl</kbd> +
+<kbd>Shift</kbd> + <kbd>M</kbd> if you have a PC or <kbd>Cmd</kbd> +
+<kbd>Shift</kbd> + <kbd>M</kbd> if you have a Mac.
+
+```{r, purl = FALSE}
+hawks %>%
+  filter(Sex == "F") %>%
+  select(Species, Sex, Weight)
+```
+
+In the above code, we use the pipe to send the `hawks` dataset first through
+`filter()` to keep rows where `Sex` equals `"F"`, then through `select()`
+to keep only the `Species`, `Sex`, and `Weight` columns. Since `%>%` takes the
+object on its left and passes it as the first argument to the function on its
+right, we don't need to explicitly include the data frame as an argument to the
+`filter()` and `select()` functions any more.
+
+Some may find it helpful to read the pipe like the word "then". For instance,
+in the above example, we took the data frame `hawks`, *then* we `filter`ed for
+rows with `Sex == "F"`, *then* we `select`ed columns `Species`, `Sex`,
+and `Weight`. The **`dplyr`** functions by themselves are somewhat simple, but by
+combining them into linear workflows with the pipe, we can accomplish more
+complex manipulations of data frames.
+
+If we want to create a new object with this smaller version of the data, we
+can assign it a new name:
+
+```{r, purl = FALSE}
+hawks_female <- hawks %>%
+  filter(Sex == "F") %>%
+  select(Species, Sex, Weight)
+
+hawks_female
+```
+
+Note that the final data frame is the leftmost part of this expression.
+
+> ## Challenge 3.1
+>
+> Using pipes, subset the `hawks` data to include only males with a weight
+> (column `Weight`) greater than 500 g, and retain only the columns
+> `Species` and `Weight`.
+>
+>> ## Solution
+>>
+>> ```{r, purl=FALSE}
+>> hawks %>%
+>>  filter(sex == "M" & Weight > 500) %>%
+>>  select(Species, Weight)
+>> ```
+> {: .solution}
+{: .challenge}
+
+
+### Mutate
+
+
+Frequently you'll want to create new columns based on the values in existing
+columns, for example to do unit conversions, or to find the ratio of values in two
+columns. For this we'll use `mutate()`.
+
+To create a new column of weight in kg:
+
+```{r, purl = FALSE}
+hawks %>%
+  mutate(Weight_kg = Weight / 1000)
+```
+
+You can also create a second new column based on the first new column within the same call of `mutate()`:
+
+```{r, purl = FALSE}
+hawks %>%
+  mutate(Weight_kg = Weight / 1000,
+         Weight_lb = Weight_kg * 2.2)
+```
+
+If this runs off your screen and you just want to see the first few rows, you
+can use a pipe to view the `head()` of the data. (Pipes work with non-**`dplyr`**
+functions, too, as long as the **`dplyr`** or `magrittr` package is loaded).
+
+```{r, purl = FALSE}
+hawks %>%
+  mutate(Weight_kg = Weight / 1000) %>%
+  head()
+```
+
+The first few rows of the output are full of `NA`s, so if we wanted to remove
+those we could insert a `filter()` in the chain:
+
+```{r, purl = FALSE}
+hawks %>%
+  filter(!is.na(Weight)) %>%
+  mutate(Weight_kg = Weight / 1000) %>%
+  head()
+```
+
+`is.na()` is a function that determines whether something is an `NA`. The `!`
+symbol negates the result, so we're asking for every row where weight *is not* an `NA`.
+
+> ## Challenge 3.2
+>
+>  Create a new data frame from the `hawks` data that meets the following
+>  criteria: contains only the `Species` column and a new column called
+>  `Tarsus_cm` containing the `Tarsus` values (currently in mm)
+>  converted to centimeters. Furthermore, the `Tarsus_cm` column should have no
+> `NA`s and all values must be less than 6 cm.
+>
+>  **Hint**: think about how the commands should be ordered to produce this data
+>  frame!
+>
+>> ## Solution
+>>
+>> ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+>> hawks_tarsus_cm <- hawks %>%
+>>     filter(!is.na(Tarsus)) %>%
+>>     mutate(Tarsus_cm = Tarsus / 10) %>%
+>>     filter(Tarsus_cm < 6) %>%
+>>     select(Species, Tarsus_cm)
+>> ```
+> {: .solution}
+{: .challenge}
+
+
+### Creating your own functions
+
+Although there are many functions provided by R and its third-party packages,
+situations often arise when it is useful to write custom functions. Functions
+allow you automate common tasks and reduces the risk that you introduce errors
+in your code. If you find yourself copying and pasting the same block of code
+multiple times, you should consider wrapping that code block inside a function.
+
+Let's create a function for converting weight in kilograms to pounds:
+
+```{r, purl = FALSE}
+kg_to_lb <- function(x) {
+  lb  <-  x * 2.20462262
+  return(lb)
+}
+```
+
+We define kg_to_lb by assigning it to the output of function. The list of 
+argument names are contained within parentheses. Next, the body of the 
+function – the statements that are executed when it runs – is contained within 
+curly braces ({}). The statements in the body are indented by two spaces, which 
+makes the code easier to read but does not affect how the code operates.
+
+When we call the function, the values we pass to it are assigned to those
+variables so that we can use them inside the function. Inside the function, we
+use a return statement to send a result back to whoever asked for it.
+
+> ## Automatic Returns
+>
+> In R, it is not necessary to include the return statement. R automatically
+> returns whichever variable is on the last line of the body of the function.
+> While in the learning phase, we will explicitly define the
+> return statement.
+{: .callout}
+
+Let's try running our function. Calling our own function is no different from
+calling any other function:
+
+```{r, results = 'show', purl = FALSE}
+# Convert a single value
+kg_to_lb(57.5)
+# Convert multiple values in a vector
+kg_to_lb(c(48, 57.5, 52))
+```
+
+> ## Challenge 3.3
+> 
+>  Use the function `kg_to_lb()` above to create a new column in the 
+>  `hawks` data frame with the body weight expressed in pounds.
+>
+>> ## Solution
+>>
+>> ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+>> hawks %>%
+>>     mutate(Weight_lb = kg_to_lb(Weight / 1000))
+>> ```
+> {: .solution}
+{: .challenge}
+
+
+### Split-apply-combine data analysis and the `summarize()` function
+
+Many data analysis tasks can be approached using the *split-apply-combine*
+paradigm: split the data into groups, apply some analysis to each group, and
+then combine the results. **`dplyr`** makes this very easy through the use of
+the `group_by()` function.
+
+
+#### The `summarize()` function
+
+`group_by()` is often used together with `summarize()`, which collapses each
+group into a single-row summary of that group. `group_by()` takes as arguments
+the column names that contain the **categorical** variables for which you want
+to calculate the summary statistics. So to compute the mean weight by sex:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE))
+```
+
+The argument `na.rm` is used to exclude `NA` values before computing the mean.
+
+You can also group by multiple columns:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE))
+```
+
+Once the data are grouped, you can also summarize multiple variables at the same
+time (and not necessarily on the same variable). For instance, we could add a
+column indicating the minimum weight for each species for each sex:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE))
+```
+
+It is sometimes useful to rearrange the result of a query to inspect the values.
+For instance, we can sort on `min` to put the lowest numbers first:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE)) %>% 
+  arrange(min)
+```
+
+To sort in descending order, we need to add the `desc()` function. If we want
+to sort the results by decreasing order of mean weight:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE)) %>% 
+  arrange(min) %>% 
+  arrange(desc(min))
+```
+
+#### Counting
+
+When working with data, we often want to know the number of observations found
+for each factor or combination of factors. For this task, **`dplyr`** provides
+`count()`. For example, if we wanted to count the number of rows of data for
+each Sex, we would do:
+
+```{r, purl = FALSE}
+hawks %>%
+  count(Sex) 
+```
+
+The `count()` function is shorthand for something we've already seen: grouping
+by a variable, and summarizing it by counting the number of observations in that
+group. In other words, `hawks %>% count(Sex)` is equivalent to:  
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Sex) %>%
+  summarize(n = n())
+```
+
+We can also combine `count()` with other functions such as `filter()`. Here
+we will count the number of each species with weights above 800 g.
+
+```{r, purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species)
+```
+
+The example above shows the use of `count()` to count the number of
+rows/observations for *one* factor (i.e., `Species`). If we wanted to
+count *combination of factors*, such as `Species` and `Sex`, we would
+specify the first and the second factor as the arguments of `count()`:
+
+```{r purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species, Sex)
+```
+
+With the above code, we can proceed with `arrange()` to sort the table according
+to a number of criteria so that we have a better comparison. For instance, we
+might want to arrange the table above in (i) an alphabetical order of the levels
+of the sex and (ii) in descending order of the count:
+
+```{r purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species, Sex) %>% 
+  arrange(Sex, desc(n))
+```
+
+
+> ## Challenge 3.4
+>
+> * For each year in the `hawks` data frame, how many captured birds have 
+>   a weigh greater than 500 g?
+>
+>> ## Solution
+>>
+>> ```{r, purl=FALSE}
+>> hawks %>%
+>>  filter(Weight > 500) %>%
+>>  count(Year)
+>> ```
+> {: .solution}
+>
+> * Use `group_by()` and `summarize()` to find the mean and standard deviation
+>   of the weight for each species and sex.
+>
+>   **Hint:** calculate the standard deviation with the `sd()` function.
+>
+>> ## Solution
+>>
+>> ```{r, message = FALSE, purl=FALSE}
+>> hawks %>%
+>>     group_by(Species, Sex) %>%
+>>     summarize(mean = mean(Weight),
+>>               stdev = sd(Weight))
+>> ```
+> {: .solution}
+{: .challenge}
+
+
+# Exporting data
+
+Now that you have learned how to use **`dplyr`** to extract information from
+or summarize your raw data, you may want to export these new data sets to share
+them with your collaborators or for archival.
+
+Similar to the `read_csv()` function used for reading CSV files into R, there is
+a `write_csv()` function that generates CSV files from data frames.
+
+Before using `write_csv()`, we are going to create a new folder, `data`, in our
+working directory that will store this generated dataset. We don't want to write
+generated datasets in the same directory as our raw data. It's good practice to
+keep them separate. The `data_raw` folder should only contain the raw, unaltered
+data, and should be left alone to make sure we don't delete or modify it. In
+contrast, our script will generate the contents of the `data` directory, so even
+if the files it contains are deleted, we can always re-generate them.
+
+We will conclude this episode by generating a CSV file with a small dataset
+that contain only measurements for Red-tailed hawk females:
+
+```{r, purl=FALSE, eval=FALSE}
+# Filter out observations
+hawks_rt_f <- hawks %>% 
+  filter(Species == "RT" & Sex == "F")
+
+# Write data frame to CSV
+write_csv(hawks_rt_f, file = "data_processed/Hawks_Red-Tailed_female.csv")
+```
