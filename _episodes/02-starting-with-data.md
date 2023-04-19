@@ -127,11 +127,23 @@ Let's use `read_csv()` to read the data into a data frame
 
 ~~~
 Rows: 908 Columns: 19
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+~~~
+{: .output}
+
+
+
+~~~
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...
 time  (1): ReleaseTime
+~~~
+{: .output}
+
+
+
+~~~
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -239,9 +251,9 @@ head(hawks)
 4     9    23  1992 10:50          NA       745-49508  CH      I     F       265
 5     9    27  1992 11:15          NA       1253-98801 SS      I     F       205
 6     9    28  1992 11:25          NA       1207-55910 RT      I     <NA>    412
-# ℹ 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>
+# … with 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
+#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
+#   KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -301,7 +313,7 @@ str(hawks)
 
 
 ~~~
-spc_tbl_ [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+spec_tbl_df [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
  $ Month       : num [1:908] 9 9 9 9 9 9 9 9 9 9 ...
  $ Day         : num [1:908] 19 22 23 23 27 28 28 29 29 30 ...
  $ Year        : num [1:908] 1992 1992 1992 1992 1992 ...
@@ -397,7 +409,7 @@ objects besides `data.frame`.
 >> 
 >> 
 >> ~~~
->> spc_tbl_ [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+>> spec_tbl_df [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 >>  $ Month       : num [1:908] 9 9 9 9 9 9 9 9 9 9 ...
 >>  $ Day         : num [1:908] 19 22 23 23 27 28 28 29 29 30 ...
 >>  $ Year        : num [1:908] 1992 1992 1992 1992 1992 ...
@@ -514,7 +526,7 @@ hawks[, 1]
  8     9
  9     9
 10     9
-# ℹ 898 more rows
+# … with 898 more rows
 ~~~
 {: .output}
 
@@ -542,7 +554,7 @@ hawks[1]
  8     9
  9     9
 10     9
-# ℹ 898 more rows
+# … with 898 more rows
 ~~~
 {: .output}
 
@@ -581,9 +593,9 @@ hawks[3, ]
   Month   Day  Year CaptureTime ReleaseTime BandNumber Species Age   Sex    Wing
   <dbl> <dbl> <dbl> <chr>       <time>      <chr>      <chr>   <chr> <chr> <dbl>
 1     9    23  1992 12:45          NA       877-76319  RT      I     <NA>    381
-# ℹ 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>
+# … with 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
+#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
+#   KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -622,10 +634,9 @@ hawks[, -1]  # the whole data frame, except the first column
  8    29  1992 11:45          NA       877-76321  RT      A     <NA>    375
  9    29  1992 15:35          NA       877-76322  RT      A     <NA>    412
 10    30  1992 13:45          NA       1207-55911 RT      I     <NA>    405
-# ℹ 898 more rows
-# ℹ 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>
+# … with 898 more rows, and 9 more variables: Weight <dbl>, Culmen <dbl>,
+#   Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -648,9 +659,9 @@ hawks[-(7:908), ]  # equivalent to head(hawks)
 4     9    23  1992 10:50          NA       745-49508  CH      I     F       265
 5     9    27  1992 11:15          NA       1253-98801 SS      I     F       205
 6     9    28  1992 11:25          NA       1207-55910 RT      I     <NA>    412
-# ℹ 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>
+# … with 9 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
+#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
+#   KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -679,7 +690,7 @@ hawks["Year"]
  8  1992
  9  1992
 10  1992
-# ℹ 898 more rows
+# … with 898 more rows
 ~~~
 {: .output}
 
@@ -706,7 +717,7 @@ hawks[, "Year"]
  8  1992
  9  1992
 10  1992
-# ℹ 898 more rows
+# … with 898 more rows
 ~~~
 {: .output}
 
@@ -1248,7 +1259,7 @@ plot(hawks$Sex)
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-02-barplot-1-1.png" alt="plot of chunk barplot-1" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-02-barplot-1-1.png" title="plot of chunk barplot-1" alt="plot of chunk barplot-1" width="432" style="display: block; margin: auto;" />
 
 However, as we saw when we used `summary(hawks$Sex)`, there are
 576 individuals for which the information hasn't been recorded. To show them in
@@ -1307,7 +1318,7 @@ levels(sex)
 
 Now we can plot the data again, using `plot(sex)`.
 
-<img src="../fig/rmd-02-barplot-2-1.png" alt="plot of chunk barplot-2" width="432" style="display: block; margin: auto;" />
+<img src="../fig/rmd-02-barplot-2-1.png" title="plot of chunk barplot-2" alt="plot of chunk barplot-2" width="432" style="display: block; margin: auto;" />
 
 > ## Challenge 2.4
 >
@@ -1327,7 +1338,7 @@ Now we can plot the data again, using `plot(sex)`.
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-02-barplot-3-1.png" alt="plot of chunk barplot-3" width="432" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-02-barplot-3-1.png" title="plot of chunk barplot-3" alt="plot of chunk barplot-3" width="432" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 

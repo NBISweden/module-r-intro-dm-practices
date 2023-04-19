@@ -102,6 +102,63 @@ source: Rmd
 > {: .solution}
 {: .challenge}
 
+
+> ## Challenge 1.4
+>
+> 1. Using this vector of heights in inches, create a new vector,
+>    `heights_no_na`, with the NAs removed.
+>
+>     ```r
+>     heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+>     ```
+> 2. Use the function `median()` to calculate the median of the `heights` vector.
+>
+> 3. Use R to figure out how many people in the set are taller than 67 inches.
+>
+>> ## Solution
+>>
+>> 
+>> ~~~
+>> heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+>> 
+>> # 1.
+>> heights_no_na <- heights[!is.na(heights)] 
+>> # or
+>> heights_no_na <- na.omit(heights)
+>> # or
+>> heights_no_na <- heights[complete.cases(heights)]
+>> 
+>> # 2.
+>> median(heights, na.rm = TRUE)
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> [1] 64
+>> ~~~
+>> {: .output}
+>> 
+>> 
+>> 
+>> ~~~
+>> # 3.
+>> heights_above_67 <- heights_no_na[heights_no_na > 67]
+>> length(heights_above_67)
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> [1] 6
+>> ~~~
+>> {: .output}
+> {: .solution}
+{: .challenge}
+
+
 ## 2. Starting with data
 
 ### Loading the samples data
@@ -176,7 +233,7 @@ objects besides `data.frame`.
 >> 
 >> 
 >> ~~~
->> spc_tbl_ [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+>> spec_tbl_df [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 >>  $ Month       : num [1:908] 9 9 9 9 9 9 9 9 9 9 ...
 >>  $ Day         : num [1:908] 19 22 23 23 27 28 28 29 29 30 ...
 >>  $ Year        : num [1:908] 1992 1992 1992 1992 1992 ...
@@ -330,7 +387,7 @@ objects besides `data.frame`.
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-barplot-3-1.png" alt="plot of chunk barplot-3" width="432" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-barplot-3-1.png" title="plot of chunk barplot-3" alt="plot of chunk barplot-3" width="432" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -419,10 +476,9 @@ objects besides `data.frame`.
 >> 
 >> 
 >> ~~~
->> Error in `filter()`:
->> ℹ In argument: `sex == "M" & Weight > 500`.
->> Caused by error:
->> ! object 'sex' not found
+>> Error: Problem with `filter()` input `..1`.
+>> ℹ Input `..1` is `sex == "M" & Weight > 500`.
+>> ✖ object 'sex' not found
 >> ~~~
 >> {: .error}
 > {: .solution}
@@ -575,11 +631,11 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> 
 >> 
 >> ~~~
->> Warning: Removed 7 rows containing missing values (`geom_point()`).
+>> Warning: Removed 7 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-05-scatter-challenge-1-answer-1.png" alt="plot of chunk scatter-challenge-1-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-scatter-challenge-1-answer-1.png" title="plot of chunk scatter-challenge-1-answer" alt="plot of chunk scatter-challenge-1-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -603,11 +659,11 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing missing values (`geom_point()`).
+>> Warning: Removed 1 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-05-scatter-challenge-2-answer-1.png" alt="plot of chunk scatter-challenge-2-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-scatter-challenge-2-answer-1.png" title="plot of chunk scatter-challenge-2-answer" alt="plot of chunk scatter-challenge-2-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -642,18 +698,18 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing non-finite values (`stat_ydensity()`).
+>> Warning: Removed 1 rows containing non-finite values (stat_ydensity).
 >> ~~~
 >> {: .warning}
 >> 
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing missing values (`geom_point()`).
+>> Warning: Removed 1 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-05-violinplot-with-points-1.png" alt="plot of chunk violinplot-with-points" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-violinplot-with-points-1.png" title="plot of chunk violinplot-with-points" alt="plot of chunk violinplot-with-points" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
 > In many types of data, it is important to consider the *scale* of the
@@ -684,11 +740,11 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> 
 >> 
 >> ~~~
->> Warning: Removed 11 rows containing missing values (`geom_point()`).
+>> Warning: Removed 11 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-05-logscale-answer-1.png" alt="plot of chunk logscale-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-logscale-answer-1.png" title="plot of chunk logscale-answer" alt="plot of chunk logscale-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
 > * Add color to the data points on your plot according to the Species.
@@ -706,11 +762,11 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> 
 >> 
 >> ~~~
->> Warning: Removed 11 rows containing missing values (`geom_point()`).
+>> Warning: Removed 11 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-05-logscale-color-by-species-answer-1.png" alt="plot of chunk logscale-color-by-species-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-logscale-color-by-species-answer-1.png" title="plot of chunk logscale-color-by-species-answer" alt="plot of chunk logscale-color-by-species-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -733,7 +789,7 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() + ...
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-05-facet-challenge-1.png" alt="plot of chunk facet-challenge" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-05-facet-challenge-1.png" title="plot of chunk facet-challenge" alt="plot of chunk facet-challenge" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 

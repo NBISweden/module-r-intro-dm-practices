@@ -109,11 +109,11 @@ ggplot(data = hawks, mapping = aes(x = Weight, y = Wing)) +
 
 
 ~~~
-Warning: Removed 11 rows containing missing values (`geom_point()`).
+Warning: Removed 11 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-first-ggplot-1.png" alt="plot of chunk first-ggplot" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-first-ggplot-1.png" title="plot of chunk first-ggplot" alt="plot of chunk first-ggplot" width="612" style="display: block; margin: auto;" />
 
 The `+` in the **`ggplot2`** package is particularly useful because it allows 
 you to modify existing `ggplot` objects. This means you can easily set up plot
@@ -175,11 +175,11 @@ weight_vs_wing_plot
 >> 
 >> 
 >> ~~~
->> Warning: Removed 7 rows containing missing values (`geom_point()`).
+>> Warning: Removed 7 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-04-scatter-challenge-1-answer-1.png" alt="plot of chunk scatter-challenge-1-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-scatter-challenge-1-answer-1.png" title="plot of chunk scatter-challenge-1-answer" alt="plot of chunk scatter-challenge-1-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -198,11 +198,11 @@ ggplot(data = hawks, mapping = aes(x = Weight, y = Wing)) +
 
 
 ~~~
-Warning: Removed 11 rows containing missing values (`geom_point()`).
+Warning: Removed 11 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-create-ggplot-object-1.png" alt="plot of chunk create-ggplot-object" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-create-ggplot-object-1.png" title="plot of chunk create-ggplot-object" alt="plot of chunk create-ggplot-object" width="612" style="display: block; margin: auto;" />
 
 Then, we start modifying this plot to extract more information from it. For
 instance, we can add transparency (`alpha`) to avoid overplotting:
@@ -217,11 +217,11 @@ ggplot(data = hawks, mapping = aes(x = Weight, y = Wing)) +
 
 
 ~~~
-Warning: Removed 11 rows containing missing values (`geom_point()`).
+Warning: Removed 11 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-adding-transparency-1.png" alt="plot of chunk adding-transparency" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-adding-transparency-1.png" title="plot of chunk adding-transparency" alt="plot of chunk adding-transparency" width="612" style="display: block; margin: auto;" />
 
 We can also add colors for all the points:
 
@@ -235,11 +235,11 @@ ggplot(data = hawks, mapping = aes(x = Weight, y = Wing)) +
 
 
 ~~~
-Warning: Removed 11 rows containing missing values (`geom_point()`).
+Warning: Removed 11 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-adding-colors-1.png" alt="plot of chunk adding-colors" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-adding-colors-1.png" title="plot of chunk adding-colors" alt="plot of chunk adding-colors" width="612" style="display: block; margin: auto;" />
 
 Or to color each point in the plot differently, you could use a vector as an
 input to the argument **color**. **`ggplot2`** will provide a different color
@@ -257,11 +257,11 @@ ggplot(data = hawks, mapping = aes(x = Weight, y = Wing)) +
 
 
 ~~~
-Warning: Removed 11 rows containing missing values (`geom_point()`).
+Warning: Removed 11 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-color-by-species-1-1.png" alt="plot of chunk color-by-species-1" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-color-by-species-1-1.png" title="plot of chunk color-by-species-1" alt="plot of chunk color-by-species-1" width="612" style="display: block; margin: auto;" />
 
 > ## Challenge 4.2
 >
@@ -282,11 +282,11 @@ Warning: Removed 11 rows containing missing values (`geom_point()`).
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing missing values (`geom_point()`).
+>> Warning: Removed 1 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-04-scatter-challenge-2-answer-1.png" alt="plot of chunk scatter-challenge-2-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-scatter-challenge-2-answer-1.png" title="plot of chunk scatter-challenge-2-answer" alt="plot of chunk scatter-challenge-2-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -306,11 +306,11 @@ ggplot(data = hawks, mapping = aes(x = Species, y = Wing)) +
 
 
 ~~~
-Warning: Removed 1 rows containing non-finite values (`stat_boxplot()`).
+Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-boxplot-1.png" alt="plot of chunk boxplot" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-boxplot-1.png" title="plot of chunk boxplot" alt="plot of chunk boxplot" width="612" style="display: block; margin: auto;" />
 
 By adding points to the boxplot, we can have a better idea of the number of
 counts and of their distribution:
@@ -326,18 +326,18 @@ ggplot(data = hawks, mapping = aes(x = Species, y = Wing)) +
 
 
 ~~~
-Warning: Removed 1 rows containing non-finite values (`stat_boxplot()`).
+Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ~~~
 {: .warning}
 
 
 
 ~~~
-Warning: Removed 1 rows containing missing values (`geom_point()`).
+Warning: Removed 1 rows containing missing values (geom_point).
 ~~~
 {: .warning}
 
-<img src="../fig/rmd-04-boxplot-with-points-1.png" alt="plot of chunk boxplot-with-points" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-boxplot-with-points-1.png" title="plot of chunk boxplot-with-points" alt="plot of chunk boxplot-with-points" width="612" style="display: block; margin: auto;" />
 
 Notice how the boxplot layer is behind the jitter layer? What do you need to
 change in the code to put the boxplot in front of the points such that it's not
@@ -373,18 +373,18 @@ hidden?
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing non-finite values (`stat_ydensity()`).
+>> Warning: Removed 1 rows containing non-finite values (stat_ydensity).
 >> ~~~
 >> {: .warning}
 >> 
 >> 
 >> 
 >> ~~~
->> Warning: Removed 1 rows containing missing values (`geom_point()`).
+>> Warning: Removed 1 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-04-violinplot-with-points-1.png" alt="plot of chunk violinplot-with-points" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-violinplot-with-points-1.png" title="plot of chunk violinplot-with-points" alt="plot of chunk violinplot-with-points" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
 > In many types of data, it is important to consider the *scale* of the
@@ -415,11 +415,11 @@ hidden?
 >> 
 >> 
 >> ~~~
->> Warning: Removed 11 rows containing missing values (`geom_point()`).
+>> Warning: Removed 11 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-04-logscale-answer-1.png" alt="plot of chunk logscale-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-logscale-answer-1.png" title="plot of chunk logscale-answer" alt="plot of chunk logscale-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 >
 > * Add color to the data points on your plot according to the Species.
@@ -437,11 +437,11 @@ hidden?
 >> 
 >> 
 >> ~~~
->> Warning: Removed 11 rows containing missing values (`geom_point()`).
+>> Warning: Removed 11 rows containing missing values (geom_point).
 >> ~~~
 >> {: .warning}
 >> 
->> <img src="../fig/rmd-04-logscale-color-by-species-answer-1.png" alt="plot of chunk logscale-color-by-species-answer" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-logscale-color-by-species-answer-1.png" title="plot of chunk logscale-color-by-species-answer" alt="plot of chunk logscale-color-by-species-answer" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -479,7 +479,7 @@ ggplot(sex_counts, aes(x = Sex, y = n)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-barplot1-1.png" alt="plot of chunk barplot1" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-barplot1-1.png" title="plot of chunk barplot1" alt="plot of chunk barplot1" width="612" style="display: block; margin: auto;" />
 
 In the code above, we used the argument `stat = "identity"` instead of the
 default value `bin`. This means that the height of the bar will be represented
@@ -494,7 +494,7 @@ ggplot(sex_counts, aes(x = Sex, y = n, fill = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-barplot2-1.png" alt="plot of chunk barplot2" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-barplot2-1.png" title="plot of chunk barplot2" alt="plot of chunk barplot2" width="612" style="display: block; margin: auto;" />
 
 We could also have added this configuration to the `geom_bar()` layer instead:
 
@@ -505,7 +505,7 @@ ggplot(sex_counts, aes(x = Sex, y = n)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-barplot3-1.png" alt="plot of chunk barplot3" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-barplot3-1.png" title="plot of chunk barplot3" alt="plot of chunk barplot3" width="612" style="display: block; margin: auto;" />
 
 ## Plotting time series data
 
@@ -530,7 +530,7 @@ ggplot(data = yearly_sp_counts, aes(x = Year, y = n)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-timeseries1-1.png" alt="plot of chunk timeseries1" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-timeseries1-1.png" title="plot of chunk timeseries1" alt="plot of chunk timeseries1" width="612" style="display: block; margin: auto;" />
 
 Unfortunately, this does not work because we plotted data for both the species 
 together. We need to tell ggplot to draw a line for each species by modifying the 
@@ -544,7 +544,7 @@ ggplot(data = yearly_sp_counts, aes(x = Year, y = n, group = Species)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-timeseries2-1.png" alt="plot of chunk timeseries2" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-timeseries2-1.png" title="plot of chunk timeseries2" alt="plot of chunk timeseries2" width="612" style="display: block; margin: auto;" />
 
 We will be able to distinguish the species in the plot if we add colors (using 
 `color` also automatically groups the data):
@@ -556,7 +556,7 @@ ggplot(data = yearly_sp_counts, aes(x = Year, y = n, color = Species)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-timeseries3-1.png" alt="plot of chunk timeseries3" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-timeseries3-1.png" title="plot of chunk timeseries3" alt="plot of chunk timeseries3" width="612" style="display: block; margin: auto;" />
 
 ## Integrating the pipe operator with ggplot2
 
@@ -573,7 +573,7 @@ yearly_sp_counts %>% ggplot(aes(x = Year, y = n, color = Species)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-integrating-the-pipe-1.png" alt="plot of chunk integrating-the-pipe" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-integrating-the-pipe-1.png" title="plot of chunk integrating-the-pipe" alt="plot of chunk integrating-the-pipe" width="612" style="display: block; margin: auto;" />
 
 The pipe operator can also be used to link data manipulation with consequent
 data visualization.
@@ -590,7 +590,7 @@ yearly_sp_plot
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-pipes-and-manipulation-1.png" alt="plot of chunk pipes-and-manipulation" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-pipes-and-manipulation-1.png" title="plot of chunk pipes-and-manipulation" alt="plot of chunk pipes-and-manipulation" width="612" style="display: block; margin: auto;" />
 
 ## Faceting
 
@@ -606,7 +606,7 @@ ggplot(data = yearly_sp_counts, aes(x = Year, y = n)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-facet1-1.png" alt="plot of chunk facet1" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-facet1-1.png" title="plot of chunk facet1" alt="plot of chunk facet1" width="612" style="display: block; margin: auto;" />
 Now we would like to split the line in each plot by the sex of each individual 
 measured. To do that we need to make counts in the data frame grouped by `Year`, 
 `Species`, and `Sex`. We will also drop rows with `NA` in any of these three columns.
@@ -632,7 +632,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-facet2-1.png" alt="plot of chunk facet2" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-facet2-1.png" title="plot of chunk facet2" alt="plot of chunk facet2" width="612" style="display: block; margin: auto;" />
 
 
 It is also possible to create more advanced layouts using the `facet_grid()`
@@ -646,7 +646,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex, group = Se
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-facet3-1.png" alt="plot of chunk facet3" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-facet3-1.png" title="plot of chunk facet3" alt="plot of chunk facet3" width="612" style="display: block; margin: auto;" />
 
 You can also organise the panels only by rows (or only by columns):
 
@@ -659,7 +659,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-facet-in-rows-1.png" alt="plot of chunk facet-in-rows" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-facet-in-rows-1.png" title="plot of chunk facet-in-rows" alt="plot of chunk facet-in-rows" width="612" style="display: block; margin: auto;" />
 
 >> ## Note 
 >> `ggplot2` before version 3.0.0 used formulas to specify how plots are faceted.
@@ -686,7 +686,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-first-facet-white-bg-1.png" alt="plot of chunk first-facet-white-bg" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-first-facet-white-bg-1.png" title="plot of chunk first-facet-white-bg" alt="plot of chunk first-facet-white-bg" width="612" style="display: block; margin: auto;" />
 
 In addition to `theme_bw()`, which changes the plot background to white,
 **`ggplot2`** comes with several other themes which can be useful to quickly
@@ -716,7 +716,7 @@ provides a wide variety of options.
 >> ~~~
 >> {: .language-r}
 >> 
->> <img src="../fig/rmd-04-facet-challenge-1.png" alt="plot of chunk facet-challenge" width="612" style="display: block; margin: auto;" />
+>> <img src="../fig/rmd-04-facet-challenge-1.png" title="plot of chunk facet-challenge" alt="plot of chunk facet-challenge" width="612" style="display: block; margin: auto;" />
 > {: .solution}
 {: .challenge}
 
@@ -740,7 +740,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-customization-with-right-labels-1.png" alt="plot of chunk customization-with-right-labels" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-customization-with-right-labels-1.png" title="plot of chunk customization-with-right-labels" alt="plot of chunk customization-with-right-labels" width="612" style="display: block; margin: auto;" />
 
 The axes have more informative names, but their readability can be improved by
 increasing the font size. This can be done with the generic `theme()` function:
@@ -758,7 +758,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-customization-with-right-labels-xfont-size-1.png" alt="plot of chunk customization-with-right-labels-xfont-size" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-customization-with-right-labels-xfont-size-1.png" title="plot of chunk customization-with-right-labels-xfont-size" alt="plot of chunk customization-with-right-labels-xfont-size" width="612" style="display: block; margin: auto;" />
 
 To alter the species and sex labels, we create factors and modify the levels:
 
@@ -790,7 +790,7 @@ ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-04-adjust-figure-legend-1.png" alt="plot of chunk adjust-figure-legend" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-04-adjust-figure-legend-1.png" title="plot of chunk adjust-figure-legend" alt="plot of chunk adjust-figure-legend" width="612" style="display: block; margin: auto;" />
 
 Note that it is also possible to change the fonts of your plots. If you are on
 Windows, you may have to install the [**`extrafont`** package](https://github.com/wch/extrafont),

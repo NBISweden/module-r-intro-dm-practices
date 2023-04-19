@@ -101,6 +101,42 @@ knitr_fig_path("05-")
 > {: .solution}
 {: .challenge}
 
+
+> ## Challenge 1.4
+>
+> 1. Using this vector of heights in inches, create a new vector,
+>    `heights_no_na`, with the NAs removed.
+>
+>     ```r
+>     heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+>     ```
+> 2. Use the function `median()` to calculate the median of the `heights` vector.
+>
+> 3. Use R to figure out how many people in the set are taller than 67 inches.
+>
+>> ## Solution
+>>
+>> ```{r}
+>> heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+>> 
+>> # 1.
+>> heights_no_na <- heights[!is.na(heights)] 
+>> # or
+>> heights_no_na <- na.omit(heights)
+>> # or
+>> heights_no_na <- heights[complete.cases(heights)]
+>> 
+>> # 2.
+>> median(heights, na.rm = TRUE)
+>> 
+>> # 3.
+>> heights_above_67 <- heights_no_na[heights_no_na > 67]
+>> length(heights_above_67)
+>> ```
+> {: .solution}
+{: .challenge}
+
+
 ## 2. Starting with data
 
 ### Loading the samples data

@@ -110,11 +110,23 @@ hawks <- read_csv("data_raw/Hawks.csv")
 
 ~~~
 Rows: 908 Columns: 19
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+~~~
+{: .output}
+
+
+
+~~~
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...
 time  (1): ReleaseTime
+~~~
+{: .output}
+
+
+
+~~~
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -132,7 +144,7 @@ str(hawks)
 
 
 ~~~
-spc_tbl_ [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+spec_tbl_df [908 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
  $ Month       : num [1:908] 9 9 9 9 9 9 9 9 9 9 ...
  $ Day         : num [1:908] 19 22 23 23 27 28 28 29 29 30 ...
  $ Year        : num [1:908] 1992 1992 1992 1992 1992 ...
@@ -243,10 +255,9 @@ filter(hawks, Sex == "F")
  8     9     8  1994 12:10          NA       1423-16201 SS      I     F    
  9     9     9  1994 9:02           NA       2003-58433 SS      I     F    
 10     9    20  1994 9:05           NA       2003-58435 SS      A     F    
-# ℹ 164 more rows
-# ℹ 10 more variables: Wing <dbl>, Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
-#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
-#   KeelFat <dbl>, Crop <dbl>
+# … with 164 more rows, and 10 more variables: Wing <dbl>, Weight <dbl>,
+#   Culmen <dbl>, Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -274,10 +285,9 @@ filter(hawks, !is.na(Sex) & !is.na(Weight))
  8    10     1  1993 10:20          NA       745-49512  CH      I     F    
  9    10     1  1993 10:45          NA       745-49513  CH      A     M    
 10    10    11  1993 11:35          NA       1173-19906 SS      I     M    
-# ℹ 317 more rows
-# ℹ 10 more variables: Wing <dbl>, Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
-#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
-#   KeelFat <dbl>, Crop <dbl>
+# … with 317 more rows, and 10 more variables: Wing <dbl>, Weight <dbl>,
+#   Culmen <dbl>, Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -307,10 +317,9 @@ drop_na(hawks, Sex, Weight)
  8    10     1  1993 10:20          NA       745-49512  CH      I     F    
  9    10     1  1993 10:45          NA       745-49513  CH      A     M    
 10    10    11  1993 11:35          NA       1173-19906 SS      I     M    
-# ℹ 317 more rows
-# ℹ 10 more variables: Wing <dbl>, Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
-#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
-#   KeelFat <dbl>, Crop <dbl>
+# … with 317 more rows, and 10 more variables: Wing <dbl>, Weight <dbl>,
+#   Culmen <dbl>, Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>
 ~~~
 {: .output}
 
@@ -379,7 +388,7 @@ hawks %>%
  8 SS      F        194
  9 SS      F        159
 10 SS      F        168
-# ℹ 164 more rows
+# … with 164 more rows
 ~~~
 {: .output}
 
@@ -426,7 +435,7 @@ hawks_female
  8 SS      F        194
  9 SS      F        159
 10 SS      F        168
-# ℹ 164 more rows
+# … with 164 more rows
 ~~~
 {: .output}
 
@@ -451,10 +460,9 @@ Note that the final data frame is the leftmost part of this expression.
 >> 
 >> 
 >> ~~~
->> Error in `filter()`:
->> ℹ In argument: `sex == "M" & Weight > 500`.
->> Caused by error:
->> ! object 'sex' not found
+>> Error: Problem with `filter()` input `..1`.
+>> ℹ Input `..1` is `sex == "M" & Weight > 500`.
+>> ✖ object 'sex' not found
 >> ~~~
 >> {: .error}
 > {: .solution}
@@ -493,10 +501,9 @@ hawks %>%
  8     9    29  1992 11:45          NA       877-76321  RT      A     <NA> 
  9     9    29  1992 15:35          NA       877-76322  RT      A     <NA> 
 10     9    30  1992 13:45          NA       1207-55911 RT      I     <NA> 
-# ℹ 898 more rows
-# ℹ 11 more variables: Wing <dbl>, Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
-#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
-#   KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>
+# … with 898 more rows, and 11 more variables: Wing <dbl>, Weight <dbl>,
+#   Culmen <dbl>, Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>
 ~~~
 {: .output}
 
@@ -526,10 +533,10 @@ hawks %>%
  8     9    29  1992 11:45          NA       877-76321  RT      A     <NA> 
  9     9    29  1992 15:35          NA       877-76322  RT      A     <NA> 
 10     9    30  1992 13:45          NA       1207-55911 RT      I     <NA> 
-# ℹ 898 more rows
-# ℹ 12 more variables: Wing <dbl>, Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
-#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
-#   KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>, Weight_lb <dbl>
+# … with 898 more rows, and 12 more variables: Wing <dbl>, Weight <dbl>,
+#   Culmen <dbl>, Hallux <dbl>, Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>,
+#   WingPitFat <dbl>, KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>,
+#   Weight_lb <dbl>
 ~~~
 {: .output}
 
@@ -557,9 +564,9 @@ hawks %>%
 4     9    23  1992 10:50          NA       745-49508  CH      I     F       265
 5     9    27  1992 11:15          NA       1253-98801 SS      I     F       205
 6     9    28  1992 11:25          NA       1207-55910 RT      I     <NA>    412
-# ℹ 10 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>, Weight_kg <dbl>
+# … with 10 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
+#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
+#   KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>
 ~~~
 {: .output}
 
@@ -587,9 +594,9 @@ hawks %>%
 4     9    23  1992 10:50          NA       745-49508  CH      I     F       265
 5     9    27  1992 11:15          NA       1253-98801 SS      I     F       205
 6     9    28  1992 11:25          NA       1207-55910 RT      I     <NA>    412
-# ℹ 10 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>, Tail <dbl>,
-#   StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>, KeelFat <dbl>,
-#   Crop <dbl>, Weight_kg <dbl>
+# … with 10 more variables: Weight <dbl>, Culmen <dbl>, Hallux <dbl>,
+#   Tail <dbl>, StandardTail <dbl>, Tarsus <dbl>, WingPitFat <dbl>,
+#   KeelFat <dbl>, Crop <dbl>, Weight_kg <dbl>
 ~~~
 {: .output}
 
