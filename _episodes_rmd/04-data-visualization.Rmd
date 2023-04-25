@@ -24,6 +24,7 @@ source: Rmd
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("04-")
+set.seed(123321) ## make sure that code produce the exact same result
 ```
 We start by loading the required packages. **`ggplot2`** is included in
 the **`tidyverse`** package.
