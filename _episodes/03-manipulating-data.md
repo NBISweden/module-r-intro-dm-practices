@@ -116,7 +116,7 @@ Rows: 908 Columns: 19
 
 
 ~~~
-── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...
@@ -452,7 +452,7 @@ Note that the final data frame is the leftmost part of this expression.
 >> 
 >> ~~~
 >> hawks %>%
->>  filter(sex == "M" & Weight > 500) %>%
+>>  filter(Sex == "M" & Weight > 500) %>%
 >>  select(Species, Weight)
 >> ~~~
 >> {: .language-r}
@@ -460,17 +460,21 @@ Note that the final data frame is the leftmost part of this expression.
 >> 
 >> 
 >> ~~~
->> Error: Problem with `filter()` input `..1`.
->> ℹ Input `..1` is `sex == "M" & Weight > 500`.
->> ✖ object 'sex' not found
+>> # A tibble: 5 × 2
+>>   Species Weight
+>>   <chr>    <dbl>
+>> 1 CH         550
+>> 2 SS         550
+>> 3 CH         742
+>> 4 SS        1094
+>> 5 RT        1080
 >> ~~~
->> {: .error}
+>> {: .output}
 > {: .solution}
 {: .challenge}
 
 
 ### Mutate
-
 
 Frequently you'll want to create new columns based on the values in existing
 columns, for example to do unit conversions, or to find the ratio of values in two
@@ -608,8 +612,8 @@ symbol negates the result, so we're asking for every row where weight *is not* a
 >  Create a new data frame from the `hawks` data that meets the following
 >  criteria: contains only the `Species` column and a new column called
 >  `Tarsus_cm` containing the `Tarsus` values (currently in mm)
->  converted to centimeters. Furthermore, the `Tarsus_cm` column should have no
-> `NA`s and all values must be less than 6 cm.
+>  converted to centimeters. Furthermore, include only values in the `Tarsus_cm`
+>  column that are less than 6 cm.
 >
 >  **Hint**: think about how the commands should be ordered to produce this data
 >  frame!
@@ -619,7 +623,6 @@ symbol negates the result, so we're asking for every row where weight *is not* a
 >> 
 >> ~~~
 >> hawks_tarsus_cm <- hawks %>%
->>     filter(!is.na(Tarsus)) %>%
 >>     mutate(Tarsus_cm = Tarsus / 10) %>%
 >>     filter(Tarsus_cm < 6) %>%
 >>     select(Species, Tarsus_cm)
