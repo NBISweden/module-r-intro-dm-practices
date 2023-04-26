@@ -7,7 +7,6 @@ exercises: 10
 questions:
 - "How do I get started with tabular data (e.g. spreadsheets) in R?"
 - "What are some good practices for reading data into R?"
-- "How do I save tabular data generated in R?"
 objectives:
 - "Load external data from a .csv file into a data frame."
 - "Describe what a data frame is."
@@ -146,7 +145,7 @@ Rows: 908 Columns: 19
 
 
 ~~~
-── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...

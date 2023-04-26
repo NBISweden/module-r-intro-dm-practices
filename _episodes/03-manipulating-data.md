@@ -6,6 +6,7 @@ teaching: 40
 exercises: 15
 questions:
 - "How can I manipulate dataframes without repeating myself?"
+- "How do I save tabular data generated in R?"
 objectives:
 - "Describe the purpose of the **`dplyr`** and **`tidyr`** packages."
 - "Select certain columns in a data frame with the **`dplyr`** function
@@ -116,7 +117,7 @@ Rows: 908 Columns: 19
 
 
 ~~~
-── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...
