@@ -7,7 +7,6 @@ exercises: 10
 questions:
 - "How do I get started with tabular data (e.g. spreadsheets) in R?"
 - "What are some good practices for reading data into R?"
-- "How do I save tabular data generated in R?"
 objectives:
 - "Load external data from a .csv file into a data frame."
 - "Describe what a data frame is."
@@ -92,6 +91,19 @@ download.file(
 {: .language-r}
 
 
+If you wish, you can also download the the data dictionary describing the 
+dataset. This code will download the file (in markdown) to the `data_raw` folder:
+
+
+~~~
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks-data-dictionary.md",
+  destfile = "data_raw/Hawks-data-dictionary.md"
+)
+~~~
+{: .language-r}
+
+
 ### Reading the data into R
 
 The file has now been downloaded to the destination you specified, but R has not 
@@ -133,7 +145,7 @@ Rows: 908 Columns: 19
 
 
 ~~~
-── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr   (5): CaptureTime, BandNumber, Species, Age, Sex
 dbl  (13): Month, Day, Year, Wing, Weight, Culmen, Hallux, Tail, StandardTai...

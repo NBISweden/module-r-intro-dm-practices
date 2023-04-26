@@ -5,7 +5,6 @@ exercises: 10
 questions:
 - "How do I get started with tabular data (e.g. spreadsheets) in R?"
 - "What are some good practices for reading data into R?"
-- "How do I save tabular data generated in R?"
 objectives:
 - "Load external data from a .csv file into a data frame."
 - "Describe what a data frame is."
@@ -87,6 +86,17 @@ folder named "data_raw".
 download.file(
   url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks.csv",
   destfile = "data_raw/Hawks.csv"
+)
+```
+
+
+If you wish, you can also download the the data dictionary describing the 
+dataset. This code will download the file (in markdown) to the `data_raw` folder:
+
+```{r, eval=FALSE, purl=TRUE}
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks-data-dictionary.md",
+  destfile = "data_raw/Hawks-data-dictionary.md"
 )
 ```
 

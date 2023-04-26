@@ -17,6 +17,7 @@ title: Setup
 >
 > The following files are used in this lesson:
 > * [Hawks.csv](data/Hawks.csv)
+> * [Hawks dataset data dictionary](https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks-data-dictionary.md)
 >
 > The "Hawks" dataset is available from the 
 > [RDatasets website](https://vincentarelbundock.github.io/Rdatasets/).
