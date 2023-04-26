@@ -92,6 +92,19 @@ download.file(
 {: .language-r}
 
 
+If you wish, you can also download the the data dictionary describing the 
+dataset. This code will download the file (in markdown) to the `data_raw` folder:
+
+
+~~~
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks-data-dictionary.md",
+  destfile = "data_raw/Hawks-data-dictionary.md"
+)
+~~~
+{: .language-r}
+
+
 ### Reading the data into R
 
 The file has now been downloaded to the destination you specified, but R has not 
