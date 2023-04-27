@@ -1,5 +1,5 @@
 ---
-title: Exercises
+title: All exercises
 teaching: 0
 exercises: 0
 questions:
@@ -16,6 +16,10 @@ source("../bin/chunk-options.R")
 knitr_fig_path("05-")
 set.seed(123321) ## make sure that code produce the exact same result
 ```
+
+All exercises in this lesson are listed below. The exercises is also included in
+the different episodes.
+
 
 ## 1. First steps in R
 
