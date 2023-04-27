@@ -1,5 +1,5 @@
 ---
-title: Exercises
+title: All exercises
 teaching: 0
 exercises: 0
 questions:
