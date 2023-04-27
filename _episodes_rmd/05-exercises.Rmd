@@ -17,6 +17,10 @@ knitr_fig_path("05-")
 set.seed(123321) ## make sure that code produce the exact same result
 ```
 
+All exercises in this lesson are listed below. The exercises is also included in
+the different episodes.
+
+
 ## 1. First steps in R
 
 > ## Challenge 1.1

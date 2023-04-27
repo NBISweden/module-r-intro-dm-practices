@@ -15,6 +15,10 @@ source: Rmd
 
 
 
+All exercises in this lesson are listed below. The exercises is also included in
+the different episodes.
+
+
 ## 1. First steps in R
 
 > ## Challenge 1.1
