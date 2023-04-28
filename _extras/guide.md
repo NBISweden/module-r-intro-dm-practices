@@ -43,7 +43,9 @@ The dataset used in this lesson can be downloaded from the [setup page](../setup
 
 The module was split over two days. This was mainly because there are so many new, and sometimes difficult, concepts to learn. For the same reason, we decided also to teach R before lunch on the two days.
 
-### Part 1: First steps in R (effective time: 45 min)
+### Part 1: First steps in R
+
+**Scheduled time:** 60 min; **effective time:** 45 min
 
 After the separate module that introduced RStudio.
 
@@ -55,7 +57,9 @@ After the separate module that introduced RStudio.
 
 -   Skipped exercise 1.3 and did not have time for exercise 1.4
 
-### Part 2: Working with tabular data (effective time: 60 min)
+### Part 2: Analysis of tabular data in R
+
+**Scheduled time:** 60 min; **effective time:** 90 min
 
 Starting with data + Manipulating, analyzing and exporting data with tidyverse
 
@@ -67,11 +71,11 @@ Starting with data + Manipulating, analyzing and exporting data with tidyverse
 
     -   Skipped exercise 2.2-2.4
 
-    -   Skipped factors: Just briefly mentioned that there is something called factors that one can use for categorical variables and that they serve two purposes:
+    -   Skipped factors: Just briefly mentioned that there is something called factor that one can use for categorical variables. We also mentioned that they serve two major purposes:
 
-        -   making computation more efficient (less memory)
+        -   making computation more efficient (requiring less memory)
 
-        -   give better control over the behaviour of categorical variables (e.g. order categorical values)
+        -   give better control over the behavior of categorical variables (it is for example possible to order categorical values in a factor)
 
 -   Manipulating, analyzing and exporting data with tidyverse
 
@@ -81,12 +85,14 @@ Starting with data + Manipulating, analyzing and exporting data with tidyverse
 
     -   Skipped exercise 3.4
 
-### Part 3: Data visualization with ggplot2 (effective time: 30 min)
+### Part 3: Data visualization with ggplot2
+
+**Scheduled time:** 100 min; **effective time:** 40 min
 
 -   Skipped all exercises but 4.2
 
 -   Skipped section on barplots
 
--   Skipped section on time series data, but demonstrad how to add layers and how to customize plots by for example adding a theme
+-   Skipped section on time series data, but demonstrated how to add layers, how to customize plots, and how to add a theme
 
--   There was unfortunately no time for demonstrating how one can save a plot
+-   There was unfortunately no time to demonstrate how to save plots
