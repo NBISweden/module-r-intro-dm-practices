@@ -17,7 +17,7 @@ RStudio for Genomics" and to some extent also on the Software Carpentry's lesson
 
 > ## Getting Started
 >
-> To get started, follow the directions on the **[Setup page](setup.html)** 
+> To get started, follow the directions on the **[Setup page]({% link setup.md %})** 
 > to download data and install required software. To most effectively use these
 > materials, please make sure to install everything *before* working through
 > the content.
