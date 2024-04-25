@@ -1,0 +1,659 @@
+---
+title: "Brief overview in R"
+author: "Nima Rafati"
+date: "2024-04-21"
+output: 
+  html_document: 
+    fig_width: 5
+    fig_height: 4
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{bash}
+echo "This is a test"
+
+```
+
+ 
+# Starting with data
+  - Description of the data
+  - draw a table with index
+  - data_raw
+  - c(), round()
+```{r, message = FALSE, purl = FALSE}
+## load the tidyverse packages, incl. dplyr
+library(tidyverse)
+```
+When you load tidyverse:
+- dplyr: collection of tools t easily manipulate the data 
+- tidyr: reshaping the data for plotting
+- ggplot2: for advanced plotting
+- tibble: modern dataframe
+
+
+**[`dplyr` cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)**      
+**[`tidyr` cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf)**  
+
+
+```{r, eval=FALSE, purl=TRUE}
+download.file(
+  url = "https://nbisweden.github.io/module-r-intro-dm-practices/data/Hawks.csv",
+  destfile = "data_raw/Hawks.csv"
+)
+```
+
+
+read_csv from `tidyverse` package == read.csv from base R.  
+
+```{r, echo = FALSE, eval = TRUE, purl = FALSE}
+# silently read in CSV file with data
+hawks <- read_csv("data_raw/Hawks.csv") #, col_names = T)
+```
+
+When you execute `read_csv` on a data file, it looks through the first 1000 rows 
+of each column and guesses its data type. Use the function `spec()` to view the
+full column specification:
+
+## Dataframes
+columns = vector (datatype)
+
+## Inspecting the dataframes
+
+```{r, eval=TRUE,  purl=FALSE}
+view(hawks) 
+hawks
+head(hawks)
+tail(hawks)
+str(hawks)#structure
+spec(hawks)
+summary(hawks)
+
+nrow(hawks)
+ncol(hawks)
+dim(hawks)
+```
+
+```{r}
+
+hawks$CaptureTimeptureTime[!is.character(hawks$CaptureTime)]
+```
+
+>>>>>>>>>>Challenge 2.1 
+
+## Indexing and subsetting dataframes 
+
+```{r, purl=FALSE}
+# first element in the first column of the data frame
+hawks[1, 1]   
+# first element in the 6th column
+hawks[1, 6]   
+# first column of the data frame
+hawks[, 1]    
+# first column of the data frame
+hawks[1]      
+# first three rows of the 6th column
+hawks[1:3, 6] 
+# the 3rd row of the data frame
+hawks[3, ]    
+# equivalent to head_hawks <- head(hawks)
+head_hawks <- hawks[1:6, ] 
+
+# select columns by name
+hawks$Month[1:6]
+hawks[,'Month']
+``` 
+
+```{r}
+hawks[1,c('Year', "ReleaseTime", 'Sex')]
+sum(!is.na(hawks$Sex))
+
+hawks$Sex[!is.na(hawks$Sex[1:6])]
+
+hawks[1:6,][is.na(hawks$Sex[1:6]),]
+
+hawks_known_sex <- hawks[!is.na(hawks$Sex),]
+dim(hawks_known_sex)
+```
+
+## Factor
+Categorical data
+```{r}
+levels(hawks$Sex)
+hawks$Sex <- factor(x = hawks$Sex, levels = c('M', 'F'), labels = c('Male', 'Female'))
+levels(hawks$Sex)
+summary(hawks$Sex)
+```
+
+## Plotting
+```{r fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+plot(hawks$Sex)
+```
+
+```{r}
+sex <- hawks$Sex
+levels(sex)
+sex <- addNA(sex)
+levels(sex)
+levels(sex)[3] <- 'Unknown'
+'Unknown1' -> levels(sex)[3] 
+```
+
+```{r barplot-1, fig.height = 6, fig.width = 6, fig.align = "center", purl = FALSE}
+plot(sex)
+```
+
+
+## Bonus
+
+```{r}
+x <- 1:10
+exp_x <- exp(x)
+plot(exp_x, type = 'l', xlab = 'time', ylab = 'progress')
+lines(x * 500, col = 'red')
+```
+
+# Data manipulation
+```{r}
+hawks <- read_csv("data_raw/Hawks.csv") #, col_names = T)
+```
+
+## select columns
+
+```{r}
+select(hawks, Species, Sex, Weight)
+select(hawks, -BandNumber, -Culmen)
+```
+
+
+```{r, purl = FALSE}
+filter(hawks, Sex == "F")
+```
+
+We can also filter rows that do not contain missing data in some columns:
+
+```{r, purl = FALSE}
+filter(hawks, !is.na(Sex) & !is.na(Weight))
+```
+
+This will return all rows that have a value in both the `Sex` column and the
+`Weight` column. In **`Tidyverse`**, there is also a special functions `drop_na` 
+that can be used to filter out rows with missing data:
+
+```{r, purl = FALSE}
+drop_na(hawks, Sex, Weight)
+```
+
+
+## Pipes (`%>%`)
+
+Ctrl + Shift + M
+Cmd + Shift + M
+
+
+x %>% f ==> f(x)
+x %>% f(y) ==> f(x,y)
+
+
+```{r}
+hawks[1:5,]
+head(hawks, n = 5)
+hawks %>% head(n = 5)
+hawks %>% head(n=5) %>% tail(n=1)
+
+hawks %>%
+  filter(Sex == "F" | Weight > 500) %>%
+  select(Species, Sex, Weight)
+```
+
+>>>>>>>> Challenge 3.1
+
+## Mutate
+
+Frequently you'll want to create new columns based on the values in existing
+columns, for example to do unit conversions, or to find the ratio of values in two
+columns. For this we'll use `mutate()`.
+
+```{r, purl = FALSE}
+colnames(hawks)
+hawks %>%
+  mutate(Weight_kg = Weight / 1000)
+```
+
+You can also create a second new column based on the first new column within the same call of `mutate()`:
+
+```{r, purl = FALSE}
+hawks %>%
+  mutate(Weight_kg = Weight / 1000,
+         Weight_lb = Weight_kg * 2.2)
+```
+
+The first few rows of the output are full of `NA`s, so if we wanted to remove
+those we could insert a `filter()` in the chain:
+
+```{r, purl = FALSE}
+hawks %>%
+  filter(!is.na(Weight)) %>%
+  mutate(Weight_kg = Weight / 1000) %>%
+  head()
+```
+
+
+>>>>>>>> Challenge 3.2
+
+## Split-apply-combine data analysis and the `summarize()` function
+
+Many data analysis tasks can be approached using the *split-apply-combine*
+paradigm: split the data into groups, apply some analysis to each group, and
+then combine the results. **`dplyr`** makes this very easy through the use of
+the `group_by()` function.
+
+### `summarize`
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE))
+```
+
+You can also group by multiple columns:
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE))
+```
+
+More metrics 
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE))
+```
+
+It is sometimes useful to rearrange the result of a query to inspect the values.
+For instance, we can sort on `min` to put the lowest numbers first:
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE)) %>% 
+  arrange(min)
+```
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Species, Sex) %>%
+  summarize(mean = mean(Weight, na.rm = TRUE),
+            min = min(Weight, na.rm = TRUE)) %>% 
+  arrange(desc(min))
+```
+
+### Counting
+When working with data, we often want to know the number of observations found
+for each factor or combination of factors. For this task, **`dplyr`** provides
+`count()`. For example, if we wanted to count the number of rows of data for
+each Sex, we would do:
+
+```{r, purl = FALSE}
+hawks %>%
+  count(Sex) 
+```
+
+The `count()` function is shorthand for something we've already seen: grouping
+by a variable, and summarizing it by counting the number of observations in that
+group. In other words, `hawks %>% count(Sex)` is equivalent to:  
+
+```{r, message = FALSE, purl = FALSE}
+hawks %>%
+  group_by(Sex) %>%
+  summarize(n = n())
+```
+
+We can also combine `count()` with other functions such as `filter()`. Here
+we will count the number of each species with weights above 800 g.
+
+```{r, purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species)
+```
+
+The example above shows the use of `count()` to count the number of
+rows/observations for *one* factor (i.e., `Species`). If we wanted to
+count *combination of factors*, such as `Species` and `Sex`, we would
+specify the first and the second factor as the arguments of `count()`:
+
+```{r purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species, Sex)
+```
+
+With the above code, we can proceed with `arrange()` to sort the table according
+to a number of criteria so that we have a better comparison. For instance, we
+might want to arrange the table above in (i) an alphabetical order of the levels
+of the sex and (ii) in descending order of the count:
+
+```{r purl = FALSE}
+hawks %>%
+  filter(Weight > 500) %>%
+  count(Species, Sex) %>% 
+  arrange(Sex, desc(n))
+```
+
+
+>>>>>>>> Challenge 3.4
+
+
+
+# Data Visualization with ggplot2
+
+- Data: Input data
+- Aesthetic: Visual characteristics of the geometry. Size, Color, Shape etc
+- Geom: A geometry representing data. Points, Lines etc
+- Scale: How visual characteristics are converted to display values
+- Statistics: Statistical transformations. Counts, Means etc
+- Coordinates: Numeric system to determine position of geometry. Cartesian, Polar etc
+- Facets: Split data into subsets
+```
+ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>() ......
+```
+
+- Stepwise (iteratively)
+
+## points
+```{r}
+colnames(hawks)
+ggplot(mapping = aes(x = Weight, y = Wing),
+       data = hawks)
+# size, color, shape,
+
+ggplot(data = hawks, 
+       mapping = aes(x = Weight, y = Wing)) + 
+  geom_point()
+```
+
+## coloring
+```{r}
+ggplot(data = hawks, 
+       mapping = aes(x = Weight, y = Wing, dill)) + 
+  geom_point( color = 'blue')
+
+ggplot(data = hawks, 
+       mapping = aes(x = Weight, y = Wing)) + 
+  geom_point( color = 'blue', alpha = 0.5)
+
+ggplot(data = hawks, 
+       mapping = aes(x = Weight, y = Wing)) + 
+  geom_point( aes(color = Species), alpha = 0.5)
+```
+
+
+>>>>>>>>> Challenge 4.2
+
+## Boxplot
+
+```{r}
+ggplot(data = hawks, mapping = aes(x = Species, y = Wing)) +
+    geom_boxplot()
+```
+
+
+```{r boxplot-with-points, purl=FALSE}
+ggplot(data = hawks, mapping = aes(x = Species, y = Wing)) +
+    geom_boxplot(alpha = 0) +
+    geom_jitter(alpha = 0.5, color = "tomato")
+```
+
+
+
+>>>>>>> Challenge 4.3
+
+```{r}
+
+```
+
+## Barplot
+
+```{r}
+# filter
+hawks %>% head( n = 5) %>% 
+  filter(Species == 'CH' | Species == 'RT')
+
+# count table
+hawks %>% head( n = 5) %>% 
+  filter(Species == 'CH' | Species == 'RT') %>%
+  count(Year, Species)
+
+```
+
+
+```{r}
+sex_counts <- hawks %>% count(Sex)
+sex_counts
+
+ggplot(data = sex_counts, aes(x = Sex, y = n)) + geom_bar(stat = 'identity')
+
+# color each bar by sex ==> fill
+
+```
+
+
+## Time series data
+
+```{r, purl = FALSE}
+yearly_sp_counts <- hawks %>%
+  filter(Species  == "CH" | Species == "SS") %>% 
+  count(Year, Species)
+```
+
+```{r timeseries1, purl = FALSE}
+ggplot(data = yearly_sp_counts, aes(x = Year, y = n)) +
+  geom_line()
+
+# What is the problem?
+# pipe to ggplot
+```
+
+```{r timeseries2, purl=FALSE}
+ggplot(data = yearly_sp_counts, aes(x = Year, y = n, group = Species)) +
+  geom_line()
+```
+
+
+
+```{r timeseries3, purl=FALSE}
+ggplot(data = yearly_sp_counts, aes(x = Year, y = n, color = Species)) +
+  geom_line()
+```
+
+## Faceting
+Split the data 
+```{r facet1, purl = FALSE}
+ggplot(data = yearly_sp_counts, aes(x = Year, y = n)) +
+    geom_line() +
+  facet_wrap(facets = vars(Species))
+```
+
+Now we would like to split the line in each plot by the sex of each individual 
+measured. To do that we need to make counts in the data frame grouped by `Year`, 
+`Species`, and `Sex`. We will also drop rows with `NA` in any of these three columns.
+
+
+```{r, purl = FALSE}
+yearly_sp_sex_counts <- hawks %>%
+  filter(Species  == "CH" | Species == "SS") %>% 
+  drop_na(Year, Species, Sex) %>% 
+  count(Year, Species, Sex)
+```
+
+We can now make the faceted plot by splitting further by sex using `color` 
+(within a single plot):
+
+```{r facet2, purl = FALSE}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+    geom_line() +
+  facet_wrap(facets = vars(Species))
+```
+You can also organise the panels only by rows (or only by columns):
+
+```{r facet-in-rows, purl = FALSE}
+# One row, facet by column
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+    geom_line() +
+    facet_grid(rows = vars(Species))
+```
+
+It is also possible to create more advanced layouts using the `facet_grid()`
+function. We can for example facet both by species and sex:
+
+```{r facet3, purl = FALSE}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex, group = Sex)) +
+    geom_line() +
+  facet_grid(rows = vars(Sex), cols = vars(Species))
+```
+## Themes
+
+```{r}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+    geom_line() +
+    facet_wrap(facets = vars(Species)) +
+    theme_bw() # theme_void, theme_minimal, theme_light
+```
+
+>>>>>>> Challenge 4.4
+
+```{r}
+
+```
+
+## Customisation 
+
+- Cheats heet
+
+```{r}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+  geom_line() +
+  facet_wrap(vars(Species)) +
+  labs(title = "Captured individuals through time",
+     x = "Year of capture",
+     y = "Number of individuals") +
+  theme_bw()
+```
+
+
+```{r}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+  geom_line() +
+  facet_wrap(vars(Species)) +
+  labs(title = "Captured individuals through time",
+     x = "Year of capture",
+     y = "Number of individuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+Increase the font size of the axis
+
+```{r}
+ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+  geom_line() +
+  facet_wrap(vars(Species)) +
+  labs(title = "Captured individuals through time",
+     x = "Year of capture",
+     y = "Number of individuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5), text = element_text(size = 16))
+```
+
+## Questions if not Challenge 4.5
+
+## Bonus: Arranging plots
+
+- `patchwork`
+- `cowplot`
+```{r}
+library(patchwork)
+p1 <- ggplot(data = hawks, mapping = aes(x = Species, y = Wing)) +
+    geom_boxplot(alpha = 0) +
+    geom_jitter(alpha = 0.5, color = "tomato")
+p2 <- ggplot(data = yearly_sp_sex_counts, aes(x = Year, y = n, color = Sex)) +
+  geom_line() +
+  facet_wrap(vars(Species)) +
+  labs(title = "Captured individuals through time",
+     x = "Year of capture",
+     y = "Number of individuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(text = element_text(size = 16))
+p1 | p2
+```
+
+```{r}
+library(cowplot)
+p3 <- cowplot::plot_grid(p1,p2,ncol = 1)
+
+ggsave('summary_plots.png', p3, width = 25, height = 10)
+```
+
+## Bonus 
+
+```{r}
+# Load ggplot2 library
+library(ggplot2)
+
+# Assume the dataset is already loaded and named 'Hawks'
+# If you need to load data from a file:
+# Hawks <- read.csv("path_to_hawks_data.csv")
+
+# Plotting weight versus wing span with density color
+ggplot(data = hawks, aes(x = Weight, y = Wing)) +
+  geom_point(aes(color = ..density..), stat = "density2d", size = 3) +  # Using density2d to color points by density
+  scale_color_gradient(low = "yellow", high = "red") +  # Color gradient from yellow (low density) to red (high density)
+  labs(title = "Weight vs. Wing Span in Hawks",
+       x = "Wing Span (cm)",
+       y = "Weight (g)",
+       color = "Point Density") +
+  theme_minimal()
+
+```
+
+
+
+```{r}
+# Library
+library(ggplot2)
+
+# Dummy data
+x <- LETTERS[1:20]
+y <- paste0("var", seq(1,20))
+data <- expand.grid(X=x, Y=y)
+data$Z <- runif(400, 0, 5)
+ 
+# Heatmap 
+ggplot(data, aes(X, Y, fill= Z)) + 
+  geom_tile()
+
+
+# Reshape the data into a matrix
+mat <- matrix(data$Z, ncol = length(unique(data$X)), byrow = TRUE)
+
+# Create heatmap
+heatmap(mat, Rowv = NA, Colv = NA, xlab = "X", ylab = "Y", col = heat.colors(20))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
