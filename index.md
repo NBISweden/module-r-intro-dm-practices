@@ -1,7 +1,6 @@
 ---
 layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
-permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
 
 This lesson gives an introduction to R and how to work with tidy data.
